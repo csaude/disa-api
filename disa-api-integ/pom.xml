@@ -15,6 +15,7 @@
 
 	<properties>
 		<java.version>1.8</java.version>
+		<jar.deployment.dir>/opt/disa/data/</jar.deployment.dir>
 	</properties>
 
 	<dependencies>
@@ -55,6 +56,9 @@
 	</dependencies>
 
 	<build>
+
+		<finalName>disa-api-integ</finalName>
+		
 		<plugins>
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
@@ -64,6 +68,26 @@
 						<goals>
 							<goal>repackage</goal>
 						</goals>
+					</execution>
+				</executions>
+			</plugin>
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-antrun-plugin</artifactId>
+				<executions>
+					<execution>
+						<phase>install</phase>
+						<goals>
+							<goal>run</goal>
+						</goals>
+						<configuration>
+							<tasks>
+								<delete file="${jar.deployment.dir}*.jar" />
+								<copy file="${project.basedir}/target/disa-api-integ.jar"
+									todir="${jar.deployment.dir}" />
+							</tasks>
+						</configuration>
 					</execution>
 				</executions>
 			</plugin>
