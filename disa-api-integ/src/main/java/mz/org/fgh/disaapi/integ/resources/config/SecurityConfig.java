@@ -3,8 +3,6 @@
  */
 package mz.org.fgh.disaapi.integ.resources.config;
 
-import javax.ws.rs.HttpMethod;
-
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -30,9 +28,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 	@Override
 	protected void configure(final HttpSecurity http) throws Exception {
-		http.csrf().disable().authorizeRequests().antMatchers(HttpMethod.OPTIONS, "**").permitAll().anyRequest()
-		        .authenticated().and().httpBasic().and().sessionManagement()
-		        .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+		http.csrf().disable().authorizeRequests().anyRequest().authenticated().and().httpBasic().and()
+		        .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 	}
 
 	@Bean
