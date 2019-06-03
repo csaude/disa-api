@@ -4,6 +4,7 @@
 package mz.org.fgh.disaapi.core.viralload.model;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -53,19 +54,19 @@ public class ViralLoad extends GenericEntity {
 	private String reasonForTest;
 
 	@Column(name = "SpecimenDatetime")
-	private LocalDate harvestDate;
+	private LocalDateTime harvestDate;
 
 	@Column(name = "TypeOfSampleCollection")
 	private String harvestType;
 
 	@Column(name = "ReceivedDateTime")
-	private LocalDate dateOfSampleReceive;
+	private LocalDateTime dateOfSampleReceive;
 
 	@Column(name = "LIMSRejectionDesc")
 	private String rejectedReason;
 
 	@Column(name = "AnalysisDateTime")
-	private LocalDate processingDate;
+	private LocalDateTime processingDate;
 
 	@Column(name = "LIMSSpecimenSourceDesc")
 	private String sampleType;
@@ -80,7 +81,7 @@ public class ViralLoad extends GenericEntity {
 	private String viralLoadResultQualitative;
 
 	@Column(name = "AuthorisedDateTime")
-	private LocalDate viralLoadResultDate;
+	private LocalDateTime viralLoadResultDate;
 
 	@Column(name = "AuthorisedBy")
 	private String aprovedBy;
@@ -144,44 +145,12 @@ public class ViralLoad extends GenericEntity {
 		this.requestingFacilityName = requestingFacilityName;
 	}
 
-	public LocalDate getHarvestDate() {
-		return harvestDate;
-	}
-
-	public void setHarvestDate(LocalDate harvestDate) {
-		this.harvestDate = harvestDate;
-	}
-
-	public LocalDate getDateOfSampleReceive() {
-		return dateOfSampleReceive;
-	}
-
-	public void setDateOfSampleReceive(LocalDate dateOfSampleReceive) {
-		this.dateOfSampleReceive = dateOfSampleReceive;
-	}
-
 	public String getRejectedReason() {
 		return rejectedReason;
 	}
 
 	public void setRejectedReason(String rejectedReason) {
 		this.rejectedReason = rejectedReason;
-	}
-
-	public LocalDate getProcessingDate() {
-		return processingDate;
-	}
-
-	public void setProcessingDate(LocalDate processingDate) {
-		this.processingDate = processingDate;
-	}
-
-	public LocalDate getViralLoadResultDate() {
-		return viralLoadResultDate;
-	}
-
-	public void setViralLoadResultDate(LocalDate viralLoadResultDate) {
-		this.viralLoadResultDate = viralLoadResultDate;
 	}
 
 	public String getHarvestType() {
@@ -258,6 +227,38 @@ public class ViralLoad extends GenericEntity {
 
 	public void setDateOfBirth(final LocalDate dateOfBirth) {
 		this.dateOfBirth = dateOfBirth;
+	}
+
+	public LocalDateTime getHarvestDate() {
+		return harvestDate;
+	}
+
+	public void setHarvestDate(LocalDateTime harvestDate) {
+		this.harvestDate = harvestDate;
+	}
+
+	public LocalDateTime getDateOfSampleReceive() {
+		return dateOfSampleReceive;
+	}
+
+	public void setDateOfSampleReceive(LocalDateTime dateOfSampleReceive) {
+		this.dateOfSampleReceive = dateOfSampleReceive;
+	}
+
+	public LocalDateTime getProcessingDate() {
+		return processingDate;
+	}
+
+	public void setProcessingDate(LocalDateTime processingDate) {
+		this.processingDate = processingDate;
+	}
+
+	public LocalDateTime getViralLoadResultDate() {
+		return viralLoadResultDate;
+	}
+
+	public void setViralLoadResultDate(LocalDateTime viralLoadResultDate) {
+		this.viralLoadResultDate = viralLoadResultDate;
 	}
 
 }

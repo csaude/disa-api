@@ -4,6 +4,7 @@
 package mz.co.fgh.disaapi.core.fixturefactory;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 import br.com.six2six.fixturefactory.Fixture;
 import br.com.six2six.fixturefactory.Rule;
@@ -32,16 +33,16 @@ public class ViralLoadTemplate implements TemplateLoader {
 				this.add("pregnant", "Unreported");
 				this.add("breastFeeding", "Yes");
 				this.add("reasonForTest", "Routine");
-				this.add("harvestDate", LocalDate.now());
+				this.add("harvestDate", LocalDateTime.now());
 				this.add("harvestType", "Unreported");
-				this.add("dateOfSampleReceive", LocalDate.now());
+				this.add("dateOfSampleReceive", LocalDateTime.now());
 				this.add("rejectedReason", "N/A");
-				this.add("processingDate", LocalDate.now());
+				this.add("processingDate", LocalDateTime.now());
 				this.add("sampleType", "Dry Blood Spot");
 				this.add("viralLoadResultCopies", "1000");
 				this.add("viralLoadResultLog", "133");
 				this.add("viralLoadResultQualitative", "Suppressed");
-				this.add("viralLoadResultDate", LocalDate.now());
+				this.add("viralLoadResultDate", LocalDateTime.now());
 				this.add("aprovedBy", "ITALIDA");
 				this.add("labComments", "N/A");
 			}
