@@ -31,6 +31,219 @@ public class ViralLoad extends GenericEntity {
 	@Column(name = "DOB")
 	private LocalDate dateOfBirth;
 
+	@Column(name = "TestingFacilityCode")
+	private String healthFacilityLabCode;
+
+	@Column(name = "RequestingFacilityName")
+	private String requestingFacilityName;
+
+	@Column(name = "AttendingDoctor")
+	private String nameOfTechnicianRequestingTest;
+
+	@Column(name = "WARD")
+	private String encounter;
+
+	@Column(name = "Pregnant")
+	private String pregnant;
+
+	@Column(name = "BreastFeeding")
+	private String breastFeeding;
+
+	@Column(name = "ReasonForTest")
+	private String reasonForTest;
+
+	@Column(name = "SpecimenDatetime")
+	private LocalDate harvestDate;
+
+	@Column(name = "TypeOfSampleCollection")
+	private String harvestType;
+
+	@Column(name = "ReceivedDateTime")
+	private LocalDate dateOfSampleReceive;
+
+	@Column(name = "LIMSRejectionDesc")
+	private String rejectedReason;
+
+	@Column(name = "AnalysisDateTime")
+	private LocalDate processingDate;
+
+	@Column(name = "LIMSSpecimenSourceDesc")
+	private String sampleType;
+
+	@Column(name = "HIVVL_ViralLoadCAPCTM")
+	private String viralLoadResultCopies;
+
+	@Column(name = "HIVVL_VRLogValue")
+	private String viralLoadResultLog;
+
+	@Column(name = "ViralLoadResultCategory")
+	private String viralLoadResultQualitative;
+
+	@Column(name = "AuthorisedDateTime")
+	private LocalDate viralLoadResultDate;
+
+	@Column(name = "AuthorisedBy")
+	private String aprovedBy;
+
+	@Column(name = "ClinicalInfo")
+	private String labComments;
+
+	public String getNameOfTechnicianRequestingTest() {
+		return nameOfTechnicianRequestingTest;
+	}
+
+	public void setNameOfTechnicianRequestingTest(String nameOfTechnicianRequestingTest) {
+		this.nameOfTechnicianRequestingTest = nameOfTechnicianRequestingTest;
+	}
+
+	public String getHealthFacilityLabCode() {
+		return healthFacilityLabCode;
+	}
+
+	public void setHealthFacilityLabCode(String healthFacilityLabCode) {
+		this.healthFacilityLabCode = healthFacilityLabCode;
+	}
+
+	public String getEncounter() {
+		return encounter;
+	}
+
+	public void setEncounter(String encounter) {
+		this.encounter = encounter;
+	}
+
+	public String getPregnant() {
+		return pregnant;
+	}
+
+	public void setPregnant(String pregnant) {
+		this.pregnant = pregnant;
+	}
+
+	public String getBreastFeeding() {
+		return breastFeeding;
+	}
+
+	public void setBreastFeeding(String breastFeeding) {
+		this.breastFeeding = breastFeeding;
+	}
+
+	public String getReasonForTest() {
+		return reasonForTest;
+	}
+
+	public void setReasonForTest(String reasonForTest) {
+		this.reasonForTest = reasonForTest;
+	}
+
+	public String getRequestingFacilityName() {
+		return requestingFacilityName;
+	}
+
+	public void setRequestingFacilityName(String requestingFacilityName) {
+		this.requestingFacilityName = requestingFacilityName;
+	}
+
+	public LocalDate getHarvestDate() {
+		return harvestDate;
+	}
+
+	public void setHarvestDate(LocalDate harvestDate) {
+		this.harvestDate = harvestDate;
+	}
+
+	public LocalDate getDateOfSampleReceive() {
+		return dateOfSampleReceive;
+	}
+
+	public void setDateOfSampleReceive(LocalDate dateOfSampleReceive) {
+		this.dateOfSampleReceive = dateOfSampleReceive;
+	}
+
+	public String getRejectedReason() {
+		return rejectedReason;
+	}
+
+	public void setRejectedReason(String rejectedReason) {
+		this.rejectedReason = rejectedReason;
+	}
+
+	public LocalDate getProcessingDate() {
+		return processingDate;
+	}
+
+	public void setProcessingDate(LocalDate processingDate) {
+		this.processingDate = processingDate;
+	}
+
+	public LocalDate getViralLoadResultDate() {
+		return viralLoadResultDate;
+	}
+
+	public void setViralLoadResultDate(LocalDate viralLoadResultDate) {
+		this.viralLoadResultDate = viralLoadResultDate;
+	}
+
+	public String getHarvestType() {
+		return harvestType;
+	}
+
+	public void setHarvestType(String harvestType) {
+		this.harvestType = harvestType;
+	}
+
+	public String getSampleType() {
+		return sampleType;
+	}
+
+	public void setSampleType(String sampleType) {
+		this.sampleType = sampleType;
+	}
+
+	public String getViralLoadResultCopies() {
+		return viralLoadResultCopies;
+	}
+
+	public void setViralLoadResultCopies(String viralLoadResultCopies) {
+		this.viralLoadResultCopies = viralLoadResultCopies;
+	}
+
+	public String getViralLoadResultLog() {
+		return viralLoadResultLog;
+	}
+
+	public void setViralLoadResultLog(String viralLoadResultLog) {
+		this.viralLoadResultLog = viralLoadResultLog;
+	}
+
+	public String getViralLoadResultQualitative() {
+		return viralLoadResultQualitative;
+	}
+
+	public void setViralLoadResultQualitative(String viralLoadResultQualitative) {
+		this.viralLoadResultQualitative = viralLoadResultQualitative;
+	}
+
+	public String getAprovedBy() {
+		return aprovedBy;
+	}
+
+	public void setAprovedBy(String aprovedBy) {
+		this.aprovedBy = aprovedBy;
+	}
+
+	public String getLabComments() {
+		return labComments;
+	}
+
+	public void setLabComments(String labComments) {
+		this.labComments = labComments;
+	}
+
+	public static long getSerialversionuid() {
+		return serialVersionUID;
+	}
+
 	public String getNid() {
 		return this.nid;
 	}
