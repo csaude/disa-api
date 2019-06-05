@@ -8,7 +8,6 @@
 		<groupId>mz.org.fgh</groupId>
 		<artifactId>disa-api</artifactId>
 		<version>0.0.1-SNAPSHOT</version>
-		<relativePath />
 	</parent>
 
 	<artifactId>disa-api-integ</artifactId>
