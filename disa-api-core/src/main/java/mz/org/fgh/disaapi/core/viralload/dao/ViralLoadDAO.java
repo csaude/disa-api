@@ -18,7 +18,7 @@ import mz.org.fgh.disaapi.core.viralload.model.ViralLoadStatus;
 public interface ViralLoadDAO extends GenericDAO<ViralLoad, Long> {
 	class QUERY {
 		public static final String findByLocationCodeAndStatus = "SELECT vl FROM ViralLoad vl WHERE vl.healthFacilityLabCode IN (:locationCodes)and vl.viralLoadStatus = :viralLoadStatus AND vl.entityStatus = :entityStatus";
-		public static final String findViralLoadByNid = "SELECT vl FROM ViralLoad vl WHERE vl.nid IN (:viralLoadStatus) AND vl.entityStatus = :entityStatus";
+		public static final String findViralLoadByNid = "SELECT vl FROM ViralLoad vl WHERE vl.nid IN (:nids) AND vl.entityStatus = :entityStatus";
 
 	}
 

@@ -35,6 +35,6 @@ public class ViralLoadDAOImpl extends GenericDAOImpl<ViralLoad, Long> implements
 	@Override
 	public List<ViralLoad> findViralLoadByNid(List<String> nids, EntityStatus entityStatus) throws BusinessException {
 		return this.findByNamedQuery(ViralLoadDAO.QUERY_NAME.findViralLoadByNid,
-				new ParamBuilder().add("viralLoadStatus", nids).add("entityStatus", entityStatus).process());
+				new ParamBuilder().add("nids", nids).add("entityStatus", entityStatus).process());
 	}
 }
