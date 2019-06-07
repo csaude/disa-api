@@ -15,4 +15,6 @@ public interface ViralLoadService {
 
 	ViralLoad createViralLoad(UserContext context, ViralLoad viralLoad) throws BusinessException;
 
+	ViralLoad updateViralLoad(UserContext context, ViralLoad viralLoad) throws BusinessException;
+
 }

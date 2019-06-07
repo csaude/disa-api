@@ -8,6 +8,8 @@ import java.time.LocalDateTime;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
@@ -19,7 +21,9 @@ import mz.org.fgh.disaapi.core.viralload.dao.ViralLoadDAO;
  * @author Stélio Moiane
  *
  */
-@NamedQueries({ @NamedQuery(name = ViralLoadDAO.QUERY_NAME.findAll, query = ViralLoadDAO.QUERY.findAll) })
+@NamedQueries({
+		@NamedQuery(name = ViralLoadDAO.QUERY_NAME.findByLocationCodeAndStatus, query = ViralLoadDAO.QUERY.findByLocationCodeAndStatus),
+		@NamedQuery(name = ViralLoadDAO.QUERY_NAME.findViralLoadByNid, query = ViralLoadDAO.QUERY.findViralLoadByNid) })
 @Entity
 @Table(name = "VlData")
 public class ViralLoad extends GenericEntity {
@@ -88,6 +92,10 @@ public class ViralLoad extends GenericEntity {
 
 	@Column(name = "ClinicalInfo")
 	private String labComments;
+
+	@Enumerated(EnumType.STRING)
+	@Column(name = "VIRAL_LOAD_STATUS")
+	private ViralLoadStatus viralLoadStatus;
 
 	public String getNameOfTechnicianRequestingTest() {
 		return nameOfTechnicianRequestingTest;
@@ -261,4 +269,19 @@ public class ViralLoad extends GenericEntity {
 		this.viralLoadResultDate = viralLoadResultDate;
 	}
 
+	public ViralLoadStatus getViralLoadStatus() {
+		return viralLoadStatus;
+	}
+
+	public void setViralLoadStatus(ViralLoadStatus viralLoadStatus) {
+		this.viralLoadStatus = viralLoadStatus;
+	}
+
+	public void setNotProcessed() {
+		viralLoadStatus = ViralLoadStatus.NOT_PROCESSED;
+	}
+
+	public void setProcessed() {
+		viralLoadStatus = ViralLoadStatus.PROCESSED;
+	}
 }

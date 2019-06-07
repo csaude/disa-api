@@ -4,7 +4,10 @@
 package mz.co.fgh.disaapi.core.viralload.integ;
 
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -32,29 +35,55 @@ public class ViralLoadQueryServiceTest extends AbstractIntegServiceTest {
 	@Inject
 	private ViralLoadService viralLoadService;
 
+	private ViralLoad viralLoad;
+
+	private List<String> nids;
+
+	private List<String> locationCodes;
+
 	@Before
 	public void before() throws BusinessException {
+
+		this.viralLoad = EntityFactory.gimme(ViralLoad.class, ViralLoadTemplate.VALID);
+
 		final List<ViralLoad> viralLoads = EntityFactory.gimme(ViralLoad.class, 10, ViralLoadTemplate.VALID);
+		nids = new ArrayList<String>();
+		locationCodes = new ArrayList<String>();
 
 		viralLoads.forEach(viralLoad -> {
-			this.createViralLoad(viralLoad);
+			createViralLoad(viralLoad);
 		});
+
 	}
 
-	private void createViralLoad(final ViralLoad viralLoad) {
+	private ViralLoad createViralLoad(final ViralLoad viralLoad) {
 		try {
 			this.viralLoadService.createViralLoad(this.getUserContext(), viralLoad);
-		}
-		catch (final BusinessException e) {
+		} catch (final BusinessException e) {
 			e.printStackTrace();
 		}
+		return viralLoad;
 	}
 
 	@Test
-	public void shouldFindAllViralLoad() throws BusinessException {
+	public void shouldFindByLocationCodeAndStatus() throws BusinessException {
 
-		final List<ViralLoad> viralLoads = this.viralLoadQueryService.findAllViralLoad();
+		locationCodes.addAll(Arrays.asList("01041137", "01041137"));
+
+		final List<ViralLoad> viralLoads = this.viralLoadQueryService.findByLocationCodeAndStatus(locationCodes);
 
 		assertFalse(viralLoads.isEmpty());
+	}
+
+	@Test
+	public void shouldFindViralLoadByNid() throws BusinessException {
+
+		nids.addAll(Arrays.asList("0091A", "01041137"));
+
+		viralLoad.setNid("0091A");
+
+		viralLoadService.createViralLoad(getUserContext(), viralLoad);
+
+		assertTrue(!this.viralLoadQueryService.findViralLoadByNid(nids).isEmpty());
 	}
 }
