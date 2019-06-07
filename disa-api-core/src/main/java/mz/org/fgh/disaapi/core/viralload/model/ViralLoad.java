@@ -284,4 +284,5 @@ public class ViralLoad extends GenericEntity {
 	public void setProcessed() {
 		viralLoadStatus = ViralLoadStatus.PROCESSED;
 	}
+
 }
