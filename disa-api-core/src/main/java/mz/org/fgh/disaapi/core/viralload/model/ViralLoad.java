@@ -36,7 +36,7 @@ public class ViralLoad extends GenericEntity {
 	@Column(name = "DOB")
 	private LocalDate dateOfBirth;
 
-	@Column(name = "TestingFacilityCode")
+	@Column(name = "RequestingFacilityCode")
 	private String healthFacilityLabCode;
 
 	@Column(name = "RequestingFacilityName")
