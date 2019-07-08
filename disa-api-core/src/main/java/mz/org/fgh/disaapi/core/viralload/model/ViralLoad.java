@@ -97,6 +97,9 @@ public class ViralLoad extends GenericEntity {
 	@Column(name = "VIRAL_LOAD_STATUS")
 	private ViralLoadStatus viralLoadStatus;
 
+	@Column(name = "HIVVL_ViralLoadResult")
+	private String hivViralLoadResult;
+
 	public String getNameOfTechnicianRequestingTest() {
 		return nameOfTechnicianRequestingTest;
 	}
@@ -285,4 +288,11 @@ public class ViralLoad extends GenericEntity {
 		viralLoadStatus = ViralLoadStatus.PROCESSED;
 	}
 
+	public String getHivViralLoadResult() {
+		return hivViralLoadResult;
+	}
+
+	public void setHivViralLoadResult(String hivViralLoadResult) {
+		this.hivViralLoadResult = hivViralLoadResult;
+	}
 }
