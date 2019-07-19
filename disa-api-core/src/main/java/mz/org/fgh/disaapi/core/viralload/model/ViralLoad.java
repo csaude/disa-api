@@ -30,7 +30,7 @@ public class ViralLoad extends GenericEntity {
 
 	private static final long serialVersionUID = 1L;
 
-	@Column(name = "REFNO")
+	@Column(name = "UNIQUEID")
 	private String nid;
 
 	@Column(name = "DOB")
