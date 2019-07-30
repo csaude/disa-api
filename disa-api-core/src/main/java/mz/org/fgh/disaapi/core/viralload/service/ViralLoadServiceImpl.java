@@ -30,4 +30,10 @@ public class ViralLoadServiceImpl extends AbstractService implements ViralLoadSe
 		this.viralLoadDAO.create(context, viralLoad);
 		return viralLoad;
 	}
+
+	@Override
+	public ViralLoad updateViralLoad(UserContext context, ViralLoad viralLoad) throws BusinessException {
+		this.viralLoadDAO.update(context, viralLoad);
+		return viralLoad;
+	}
 }

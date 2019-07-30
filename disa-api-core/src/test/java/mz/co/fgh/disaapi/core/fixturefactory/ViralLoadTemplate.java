@@ -10,6 +10,7 @@ import br.com.six2six.fixturefactory.Fixture;
 import br.com.six2six.fixturefactory.Rule;
 import br.com.six2six.fixturefactory.loader.TemplateLoader;
 import mz.org.fgh.disaapi.core.viralload.model.ViralLoad;
+import mz.org.fgh.disaapi.core.viralload.model.ViralLoadStatus;
 
 /**
  * @author Stélio Moiane
@@ -45,6 +46,8 @@ public class ViralLoadTemplate implements TemplateLoader {
 				this.add("viralLoadResultDate", LocalDateTime.now());
 				this.add("aprovedBy", "ITALIDA");
 				this.add("labComments", "N/A");
+				this.add("viralLoadStatus", ViralLoadStatus.PENDING);
+
 			}
 		});
 	}

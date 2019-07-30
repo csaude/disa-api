@@ -3,6 +3,7 @@
  */
 package mz.org.fgh.disaapi.core.viralload.service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -10,8 +11,10 @@ import javax.inject.Inject;
 import org.springframework.stereotype.Service;
 
 import mz.co.msaude.boot.frameworks.exception.BusinessException;
+import mz.co.msaude.boot.frameworks.model.EntityStatus;
 import mz.org.fgh.disaapi.core.viralload.dao.ViralLoadDAO;
 import mz.org.fgh.disaapi.core.viralload.model.ViralLoad;
+import mz.org.fgh.disaapi.core.viralload.model.ViralLoadStatus;
 
 /**
  * @author Stélio Moiane
@@ -26,7 +29,23 @@ public class ViralLoadQueryServiceImpl implements ViralLoadQueryService {
 	private ViralLoadDAO viralLoadDAO;
 
 	@Override
-	public List<ViralLoad> findAllViralLoad() throws BusinessException {
-		return this.viralLoadDAO.findAll();
+	public List<ViralLoad> findByLocationCodeAndStatus(List<String> locationCodes) throws BusinessException {
+
+		if (locationCodes.isEmpty()) {
+
+			return new ArrayList<ViralLoad>();
+		}
+		return this.viralLoadDAO.findByLocationCodeAndStatus(locationCodes, ViralLoadStatus.PENDING,
+				EntityStatus.ACTIVE);
+	}
+
+	@Override
+	public List<ViralLoad> findViralLoadByNid(List<String> nids) throws BusinessException {
+
+		if (nids.isEmpty()) {
+
+			return new ArrayList<ViralLoad>();
+		}
+		return viralLoadDAO.findViralLoadByNid(nids, EntityStatus.ACTIVE);
 	}
 }
