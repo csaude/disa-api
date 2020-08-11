@@ -19,6 +19,7 @@ import org.springframework.stereotype.Service;
 import mz.co.msaude.boot.frameworks.exception.BusinessException;
 import mz.org.fgh.disaapi.core.viralload.config.AbstractUserContext;
 import mz.org.fgh.disaapi.core.viralload.model.ViralLoad;
+import mz.org.fgh.disaapi.core.viralload.model.ViralLoadStatus;
 import mz.org.fgh.disaapi.core.viralload.service.ViralLoadQueryService;
 import mz.org.fgh.disaapi.core.viralload.service.ViralLoadService;
 
@@ -47,6 +48,15 @@ public class ViralLoadResource extends AbstractUserContext {
 		viralLoads = this.viralLoadQueryService.findByLocationCodeAndStatus(locationCodes);
 		return Response.ok(viralLoads).build();
 
+	}
+	
+	@GET
+	@Path("viral-status") 
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response findViralLoadsByStatus(@QueryParam("locationCodes") final List<String> locationCodes, @QueryParam("viralLoadStatus") final ViralLoadStatus viralLoadStatus) 
+			throws BusinessException {
+		viralLoads = this.viralLoadQueryService.findByStatus(locationCodes, viralLoadStatus);
+		return Response.ok(viralLoads).build();
 	}
 
 	@PUT

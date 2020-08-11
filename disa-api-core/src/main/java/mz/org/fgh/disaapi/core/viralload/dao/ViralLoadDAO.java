@@ -30,6 +30,9 @@ public interface ViralLoadDAO extends GenericDAO<ViralLoad, Long> {
 
 	List<ViralLoad> findByLocationCodeAndStatus(List<String> locationCodes, ViralLoadStatus viralLoadStatus,
 			EntityStatus entityStatus) throws BusinessException;
+	
+	List<ViralLoad> findByStatus(List<String> locationCodes, ViralLoadStatus viralLoadStatus, 
+			EntityStatus entityStatus) throws BusinessException;
 
 	List<ViralLoad> findViralLoadByNid(List<String> nids, EntityStatus entityStatus) throws BusinessException;
 

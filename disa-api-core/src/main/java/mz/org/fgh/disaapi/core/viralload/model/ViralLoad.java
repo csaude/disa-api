@@ -32,6 +32,9 @@ public class ViralLoad extends GenericEntity {
 
 	@Column(name = "UNIQUEID")
 	private String nid;
+	
+	@Column(name = "RequestID")
+	private String requestId;
 
 	@Column(name = "DOB")
 	private LocalDate dateOfBirth;
