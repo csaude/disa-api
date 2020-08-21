@@ -32,7 +32,7 @@ public class ViralLoad extends GenericEntity {
 
 	@Column(name = "UNIQUEID")
 	private String nid;
-	
+
 	@Column(name = "RequestID")
 	private String requestId;
 
@@ -297,5 +297,13 @@ public class ViralLoad extends GenericEntity {
 
 	public void setHivViralLoadResult(String hivViralLoadResult) {
 		this.hivViralLoadResult = hivViralLoadResult;
+	}
+
+	public String getRequestId() {
+		return requestId;
+	}
+
+	public void setRequestId(String requestId) {
+		this.requestId = requestId;
 	}
 }
