@@ -32,10 +32,19 @@ public class ViralLoad extends GenericEntity {
 
 	@Column(name = "UNIQUEID")
 	private String nid;
-
+	
 	@Column(name = "RequestID")
 	private String requestId;
-
+	
+	@Column(name = "FIRSTNAME")
+	private String firstName;
+	
+	@Column(name = "SURNAME")
+	private String lastName;
+	
+	@Column(name = "HL7SexCode")
+	private char gender;
+	
 	@Column(name = "DOB")
 	private LocalDate dateOfBirth;
 
@@ -102,6 +111,38 @@ public class ViralLoad extends GenericEntity {
 
 	@Column(name = "HIVVL_ViralLoadResult")
 	private String hivViralLoadResult;
+
+	public char getGender() {
+		return gender;
+	}
+
+	public void setGender(char gender) {
+		this.gender = gender;
+	}
+
+	public String getLastName() {
+		return lastName;
+	}
+
+	public void setLastName(String lastName) {
+		this.lastName = lastName;
+	}
+
+	public String getFirstName() {
+		return firstName;
+	}
+
+	public void setFirstName(String firstName) {
+		this.firstName = firstName;
+	}
+
+	public String getRequestId() {
+		return requestId;
+	}
+
+	public void setRequestId(String requestId) {
+		this.requestId = requestId;
+	}
 
 	public String getNameOfTechnicianRequestingTest() {
 		return nameOfTechnicianRequestingTest;
@@ -297,13 +338,5 @@ public class ViralLoad extends GenericEntity {
 
 	public void setHivViralLoadResult(String hivViralLoadResult) {
 		this.hivViralLoadResult = hivViralLoadResult;
-	}
-
-	public String getRequestId() {
-		return requestId;
-	}
-
-	public void setRequestId(String requestId) {
-		this.requestId = requestId;
 	}
 }
