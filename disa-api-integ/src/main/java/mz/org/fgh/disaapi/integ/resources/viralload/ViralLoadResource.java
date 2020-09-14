@@ -49,12 +49,12 @@ public class ViralLoadResource extends AbstractUserContext {
 		return Response.ok(viralLoads).build();
 
 	}
-	
+
 	@GET
-	@Path("viral-status") 
+	@Path("viral-status")
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response findViralLoadsByStatus(@QueryParam("locationCodes") final List<String> locationCodes, @QueryParam("viralLoadStatus") final ViralLoadStatus viralLoadStatus) 
-			throws BusinessException {
+	public Response findViralLoadsByStatus(@QueryParam("locationCodes") final List<String> locationCodes,
+			@QueryParam("viralLoadStatus") final ViralLoadStatus viralLoadStatus) throws BusinessException {
 		viralLoads = this.viralLoadQueryService.findByStatus(locationCodes, viralLoadStatus);
 		return Response.ok(viralLoads).build();
 	}
@@ -93,6 +93,22 @@ public class ViralLoadResource extends AbstractUserContext {
 
 		viralLoads.forEach(viralLoad -> {
 			viralLoad.setProcessed();
+			updateViralLoad(viralLoad);
+		});
+
+		return Response.ok(viralLoads).build();
+	}
+
+	@PUT
+	@Path("pending")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response updateViralLoadPendingViralLoad(@QueryParam("pendingNids") final List<String> pendingNids)
+			throws BusinessException {
+
+		viralLoads = viralLoadQueryService.findViralLoadByNid(pendingNids);
+
+		viralLoads.forEach(viralLoad -> {
+			viralLoad.setPending();
 			updateViralLoad(viralLoad);
 		});
 

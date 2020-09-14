@@ -32,19 +32,19 @@ public class ViralLoad extends GenericEntity {
 
 	@Column(name = "UNIQUEID")
 	private String nid;
-	
+
 	@Column(name = "RequestID")
 	private String requestId;
-	
+
 	@Column(name = "FIRSTNAME")
 	private String firstName;
-	
+
 	@Column(name = "SURNAME")
 	private String lastName;
-	
+
 	@Column(name = "HL7SexCode")
 	private char gender;
-	
+
 	@Column(name = "DOB")
 	private LocalDate dateOfBirth;
 
@@ -330,6 +330,10 @@ public class ViralLoad extends GenericEntity {
 
 	public void setProcessed() {
 		viralLoadStatus = ViralLoadStatus.PROCESSED;
+	}
+
+	public void setPending() {
+		viralLoadStatus = ViralLoadStatus.PENDING;
 	}
 
 	public String getHivViralLoadResult() {
