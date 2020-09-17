@@ -23,7 +23,9 @@ import mz.org.fgh.disaapi.core.viralload.dao.ViralLoadDAO;
  */
 @NamedQueries({
 		@NamedQuery(name = ViralLoadDAO.QUERY_NAME.findByLocationCodeAndStatus, query = ViralLoadDAO.QUERY.findByLocationCodeAndStatus),
-		@NamedQuery(name = ViralLoadDAO.QUERY_NAME.findViralLoadByNid, query = ViralLoadDAO.QUERY.findViralLoadByNid) })
+		@NamedQuery(name = ViralLoadDAO.QUERY_NAME.findViralLoadByNid, query = ViralLoadDAO.QUERY.findViralLoadByNid),
+		@NamedQuery(name = ViralLoadDAO.QUERY_NAME.findByStatusAndDates, query = ViralLoadDAO.QUERY.findByStatusAndDates),
+		@NamedQuery(name = ViralLoadDAO.QUERY_NAME.findByLocationCodeStatusAndNotProcessingCause, query = ViralLoadDAO.QUERY.findByLocationCodeStatusAndNotProcessingCause) })
 @Entity
 @Table(name = "VlData")
 public class ViralLoad extends GenericEntity {
@@ -111,6 +113,10 @@ public class ViralLoad extends GenericEntity {
 
 	@Column(name = "HIVVL_ViralLoadResult")
 	private String hivViralLoadResult;
+
+	@Enumerated(EnumType.STRING)
+	@Column(name = "NOT_PROCESSING_CAUSE")
+	private NotProcessingCause notProcessingCause;
 
 	public char getGender() {
 		return gender;
@@ -342,5 +348,21 @@ public class ViralLoad extends GenericEntity {
 
 	public void setHivViralLoadResult(String hivViralLoadResult) {
 		this.hivViralLoadResult = hivViralLoadResult;
+	}
+
+	public NotProcessingCause getNotProcessingCause() {
+		return notProcessingCause;
+	}
+
+	public void setNotProcessingCause(NotProcessingCause notProcessingCause) {
+		this.notProcessingCause = notProcessingCause;
+	}
+
+	public void setCauseNoNID() {
+		notProcessingCause = NotProcessingCause.NID_NOT_FOUND;
+	}
+
+	public void setCauseNoResult() {
+		notProcessingCause = NotProcessingCause.NO_RESULT;
 	}
 }
