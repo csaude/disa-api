@@ -3,6 +3,7 @@
  */
 package mz.org.fgh.disaapi.core.viralload.service;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -50,11 +51,23 @@ public class ViralLoadQueryServiceImpl implements ViralLoadQueryService {
 	}
 
 	@Override
-	public List<ViralLoad> findByStatus(List<String> locationCodes, ViralLoadStatus viralLoadStatus) throws BusinessException {
-		
+	public List<ViralLoad> findByStatus(List<String> locationCodes, ViralLoadStatus viralLoadStatus)
+			throws BusinessException {
+
 		if (locationCodes.isEmpty()) {
-			return new ArrayList<ViralLoad>(); 
+			return new ArrayList<ViralLoad>();
 		}
-		return viralLoadDAO.findByStatus(locationCodes, viralLoadStatus, EntityStatus.ACTIVE); 
+		return viralLoadDAO.findByStatus(locationCodes, viralLoadStatus, EntityStatus.ACTIVE);
+	}
+
+	@Override
+	public List<ViralLoad> findByStatusAndDates(List<String> locationCodes, ViralLoadStatus viralLoadStatus,
+			LocalDateTime startDate, LocalDateTime endDate) throws BusinessException {
+
+		if (locationCodes.isEmpty()) {
+			return new ArrayList<ViralLoad>();
+		}
+		return viralLoadDAO.findByStatusAndDates(locationCodes, viralLoadStatus, EntityStatus.ACTIVE, startDate,
+				endDate);
 	}
 }

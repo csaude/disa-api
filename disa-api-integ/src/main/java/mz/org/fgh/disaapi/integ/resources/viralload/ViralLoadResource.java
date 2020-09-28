@@ -3,6 +3,8 @@
  */
 package mz.org.fgh.disaapi.integ.resources.viralload;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -59,16 +61,34 @@ public class ViralLoadResource extends AbstractUserContext {
 		return Response.ok(viralLoads).build();
 	}
 
+	@GET
+	@Path("viral-status-dates")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response findViralLoadsByStatusAndDates(@QueryParam("locationCodes") final List<String> locationCodes,
+			@QueryParam("viralLoadStatus") final ViralLoadStatus viralLoadStatus,
+			@QueryParam("startDate") final String strStartDate, @QueryParam("endDate") final String strEndDate)
+			throws BusinessException {
+		viralLoads = this.viralLoadQueryService.findByStatusAndDates(locationCodes, viralLoadStatus,
+				convertToLocalDateTime(strStartDate), convertToLocalDateTime(strEndDate));
+		return Response.ok(viralLoads).build();
+	}
+
 	@PUT
 	@Path("not-processed")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response updateViralLoadNotProcessedViralLoad(
-			@QueryParam("notProcessedNids") final List<String> notProcessedNids) throws BusinessException {
+			@QueryParam("notProcessedNids") final List<String> notProcessedNids,
+			@QueryParam("reasonForNotProcessing") final String reasonForNotProcessing) throws BusinessException {
 
 		viralLoads = viralLoadQueryService.findViralLoadByNid(notProcessedNids);
 
 		viralLoads.forEach(viralLoad -> {
 			viralLoad.setNotProcessed();
+			if (reasonForNotProcessing.equals("nid")) {
+				viralLoad.setCauseNoNID();
+			} else if (reasonForNotProcessing.equals("result")) {
+				viralLoad.setCauseNoResult();
+			}
 			updateViralLoad(viralLoad);
 		});
 
@@ -113,6 +133,12 @@ public class ViralLoadResource extends AbstractUserContext {
 		});
 
 		return Response.ok(viralLoads).build();
+	}
+
+	private LocalDateTime convertToLocalDateTime(final String date) {
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+
+		return LocalDateTime.parse(date, formatter);
 	}
 
 }
