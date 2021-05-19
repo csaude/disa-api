@@ -80,7 +80,7 @@ public class ViralLoadResource extends AbstractUserContext {
 			@QueryParam("notProcessedNids") final List<String> notProcessedNids,
 			@QueryParam("reasonForNotProcessing") final String reasonForNotProcessing) throws BusinessException {
 
-		viralLoads = viralLoadQueryService.findViralLoadByNid(notProcessedNids);
+		viralLoads = viralLoadQueryService.findViralLoadByRequestId(notProcessedNids);
 
 		viralLoads.forEach(viralLoad -> {
 			viralLoad.setNotProcessed();
@@ -109,7 +109,7 @@ public class ViralLoadResource extends AbstractUserContext {
 	public Response updateViralLoadProcessedViralLoad(@QueryParam("processedNids") final List<String> processedNids)
 			throws BusinessException {
 
-		viralLoads = viralLoadQueryService.findViralLoadByNid(processedNids);
+		viralLoads = viralLoadQueryService.findViralLoadByRequestId(processedNids);
 
 		viralLoads.forEach(viralLoad -> {
 			viralLoad.setProcessed();
@@ -125,7 +125,7 @@ public class ViralLoadResource extends AbstractUserContext {
 	public Response updateViralLoadPendingViralLoad(@QueryParam("pendingNids") final List<String> pendingNids)
 			throws BusinessException {
 
-		viralLoads = viralLoadQueryService.findViralLoadByNid(pendingNids);
+		viralLoads = viralLoadQueryService.findViralLoadByRequestId(pendingNids);
 
 		viralLoads.forEach(viralLoad -> {
 			viralLoad.setPending();

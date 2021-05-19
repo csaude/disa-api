@@ -49,6 +49,15 @@ public class ViralLoadQueryServiceImpl implements ViralLoadQueryService {
 		}
 		return viralLoadDAO.findViralLoadByNid(nids, EntityStatus.ACTIVE);
 	}
+	
+	@Override
+	public List<ViralLoad> findViralLoadByRequestId(List<String> requestIds) throws BusinessException {
+		if (requestIds.isEmpty()) {
+
+			return new ArrayList<ViralLoad>();
+		}
+		return viralLoadDAO.findViralLoadByRequestId(requestIds, EntityStatus.ACTIVE);
+	}
 
 	@Override
 	public List<ViralLoad> findByStatus(List<String> locationCodes, ViralLoadStatus viralLoadStatus)

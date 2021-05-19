@@ -24,7 +24,7 @@ CREATE TABLE `VlData` (
   `DOB` date DEFAULT NULL,
   `DOBType` varchar(25) DEFAULT NULL,
   `AgeInDays` int(11) DEFAULT NULL,
-  `HL7SexCode` char(1) DEFAULT NULL,
+  `HL7SexCode` varchar(1) DEFAULT NULL,
   `SpecimenDatetime` datetime DEFAULT NULL,
   `ReceivedDateTime` datetime DEFAULT NULL,
   `RegisteredDateTime` datetime DEFAULT NULL,

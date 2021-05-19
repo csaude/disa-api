@@ -24,6 +24,7 @@ import mz.org.fgh.disaapi.core.viralload.dao.ViralLoadDAO;
 @NamedQueries({
 		@NamedQuery(name = ViralLoadDAO.QUERY_NAME.findByLocationCodeAndStatus, query = ViralLoadDAO.QUERY.findByLocationCodeAndStatus),
 		@NamedQuery(name = ViralLoadDAO.QUERY_NAME.findViralLoadByNid, query = ViralLoadDAO.QUERY.findViralLoadByNid),
+		@NamedQuery(name = ViralLoadDAO.QUERY_NAME.findViralLoadByRequestId, query = ViralLoadDAO.QUERY.findViralLoadByRequestId),
 		@NamedQuery(name = ViralLoadDAO.QUERY_NAME.findByStatusAndDates, query = ViralLoadDAO.QUERY.findByStatusAndDates),
 		@NamedQuery(name = ViralLoadDAO.QUERY_NAME.findByLocationCodeStatusAndNotProcessingCause, query = ViralLoadDAO.QUERY.findByLocationCodeStatusAndNotProcessingCause) })
 @Entity
@@ -45,7 +46,7 @@ public class ViralLoad extends GenericEntity {
 	private String lastName;
 
 	@Column(name = "HL7SexCode")
-	private char gender;
+	private String gender;
 
 	@Column(name = "DOB")
 	private LocalDate dateOfBirth;
@@ -118,11 +119,11 @@ public class ViralLoad extends GenericEntity {
 	@Column(name = "NOT_PROCESSING_CAUSE")
 	private NotProcessingCause notProcessingCause;
 
-	public char getGender() {
+	public String getGender() {
 		return gender;
 	}
 
-	public void setGender(char gender) {
+	public void setGender(String gender) {
 		this.gender = gender;
 	}
 

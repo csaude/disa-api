@@ -19,6 +19,8 @@ public interface ViralLoadQueryService {
 	List<ViralLoad> findByLocationCodeAndStatus(List<String> locationCodes) throws BusinessException;
 
 	List<ViralLoad> findViralLoadByNid(List<String> nids) throws BusinessException;
+	
+	List<ViralLoad> findViralLoadByRequestId(List<String> nids) throws BusinessException;
 
 	List<ViralLoad> findByStatus(List<String> locationCodes, ViralLoadStatus viralLoadStatus) throws BusinessException;
 
