@@ -17,6 +17,8 @@ import mz.org.fgh.disaapi.core.viralload.model.ViralLoadStatus;
 public interface ViralLoadQueryService {
 
 	List<ViralLoad> findByLocationCodeAndStatus(List<String> locationCodes) throws BusinessException;
+	
+	List<ViralLoad> findByForm(List<String> requestId) throws BusinessException;
 
 	List<ViralLoad> findViralLoadByNid(List<String> nids) throws BusinessException;
 	

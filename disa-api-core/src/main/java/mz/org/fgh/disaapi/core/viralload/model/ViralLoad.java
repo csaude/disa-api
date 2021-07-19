@@ -23,6 +23,7 @@ import mz.org.fgh.disaapi.core.viralload.dao.ViralLoadDAO;
  */
 @NamedQueries({
 		@NamedQuery(name = ViralLoadDAO.QUERY_NAME.findByLocationCodeAndStatus, query = ViralLoadDAO.QUERY.findByLocationCodeAndStatus),
+		@NamedQuery(name = ViralLoadDAO.QUERY_NAME.findByForm, query = ViralLoadDAO.QUERY.findByForm),
 		@NamedQuery(name = ViralLoadDAO.QUERY_NAME.findViralLoadByNid, query = ViralLoadDAO.QUERY.findViralLoadByNid),
 		@NamedQuery(name = ViralLoadDAO.QUERY_NAME.findViralLoadByRequestId, query = ViralLoadDAO.QUERY.findViralLoadByRequestId),
 		@NamedQuery(name = ViralLoadDAO.QUERY_NAME.findByStatusAndDates, query = ViralLoadDAO.QUERY.findByStatusAndDates),

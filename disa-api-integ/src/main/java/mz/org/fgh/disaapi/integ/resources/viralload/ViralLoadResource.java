@@ -51,6 +51,15 @@ public class ViralLoadResource extends AbstractUserContext {
 		return Response.ok(viralLoads).build();
 
 	}
+	
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response findViralLoadsByForm(@QueryParam("requestId") final List<String> requestId)
+			throws BusinessException {
+		viralLoads = this.viralLoadQueryService.findByForm(requestId);
+		return Response.ok(viralLoads).build();
+
+	}
 
 	@GET
 	@Path("viral-status")

@@ -20,6 +20,7 @@ import mz.org.fgh.disaapi.core.viralload.model.ViralLoadStatus;
 public interface ViralLoadDAO extends GenericDAO<ViralLoad, Long> {
 	class QUERY {
 		public static final String findByLocationCodeAndStatus = "SELECT vl FROM ViralLoad vl WHERE vl.healthFacilityLabCode IN (:locationCodes)and vl.viralLoadStatus = :viralLoadStatus AND vl.entityStatus = :entityStatus";
+		public static final String findByForm = "SELECT vl FROM ViralLoad vl WHERE vl.requestId = :requestId AND vl.entityStatus = :entityStatus";
 		public static final String findByStatusAndDates = "SELECT vl FROM ViralLoad vl WHERE vl.healthFacilityLabCode IN (:locationCodes)and vl.viralLoadStatus = :viralLoadStatus AND vl.entityStatus = :entityStatus and vl.createdAt between :startDate and :endDate";
 		public static final String findViralLoadByNid = "SELECT vl FROM ViralLoad vl WHERE vl.nid IN (:nids) AND vl.entityStatus = :entityStatus";
 		public static final String findViralLoadByRequestId = "SELECT vl FROM ViralLoad vl WHERE vl.requestId IN (:requestIds) AND vl.entityStatus = :entityStatus";
@@ -29,6 +30,7 @@ public interface ViralLoadDAO extends GenericDAO<ViralLoad, Long> {
 
 	class QUERY_NAME {
 		public static final String findByLocationCodeAndStatus = "ViralLoad.findByLocationCodeAndStatus";
+		public static final String findByForm = "ViralLoad.findByForm"; 
 		public static final String findByStatusAndDates = "ViralLoad.findByStatusAndDates";
 		public static final String findViralLoadByNid = "ViralLoad.findViralLoadByNid";
 		public static final String findViralLoadByRequestId = "ViralLoad.findViralLoadByRequestId";
@@ -38,6 +40,8 @@ public interface ViralLoadDAO extends GenericDAO<ViralLoad, Long> {
 
 	List<ViralLoad> findByLocationCodeAndStatus(List<String> locationCodes, ViralLoadStatus viralLoadStatus,
 			EntityStatus entityStatus) throws BusinessException;
+	
+	List<ViralLoad> findByForm(List<String> requestId, EntityStatus entityStatus) throws BusinessException;
 
 	List<ViralLoad> findByStatus(List<String> locationCodes, ViralLoadStatus viralLoadStatus, EntityStatus entityStatus)
 			throws BusinessException;

@@ -33,6 +33,13 @@ public class ViralLoadDAOImpl extends GenericDAOImpl<ViralLoad, Long> implements
 				new ParamBuilder().add("viralLoadStatus", viralLoadStatus).add("entityStatus", entityStatus)
 						.add("locationCodes", locationCodes).process());
 	}
+	
+	@Override
+	public List<ViralLoad> findByForm(List<String> requestId, EntityStatus entityStatus) throws BusinessException {
+
+		return this.findByNamedQuery(ViralLoadDAO.QUERY_NAME.findByForm,
+				new ParamBuilder().add("entityStatus", entityStatus).add("requestId", requestId).process());
+	}
 
 	@Override
 	public List<ViralLoad> findViralLoadByNid(List<String> nids, EntityStatus entityStatus) throws BusinessException {
