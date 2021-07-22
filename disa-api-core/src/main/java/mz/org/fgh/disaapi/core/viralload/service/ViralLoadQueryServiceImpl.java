@@ -14,11 +14,13 @@ import org.springframework.stereotype.Service;
 import mz.co.msaude.boot.frameworks.exception.BusinessException;
 import mz.co.msaude.boot.frameworks.model.EntityStatus;
 import mz.org.fgh.disaapi.core.viralload.dao.ViralLoadDAO;
+import mz.org.fgh.disaapi.core.viralload.model.NotProcessingCause;
 import mz.org.fgh.disaapi.core.viralload.model.ViralLoad;
 import mz.org.fgh.disaapi.core.viralload.model.ViralLoadStatus;
 
 /**
  * @author Stélio Moiane
+ * @author Hélio Machabane
  *
  */
 @Service(ViralLoadQueryServiceImpl.NAME)
@@ -41,11 +43,12 @@ public class ViralLoadQueryServiceImpl implements ViralLoadQueryService {
 	}
 	
 	@Override
-	public List<ViralLoad> findByForm(List<String> requestId) throws BusinessException {
-		if (requestId.isEmpty()) {
-			return new ArrayList<ViralLoad>();
-		}
-		return this.viralLoadDAO.findByForm(requestId, EntityStatus.ACTIVE);
+	public List<ViralLoad> findByForm(String requestId, String nid, String location, 
+			String healthFacilityLabCode, String requestingFacilityName, 
+			String referringRequestID, ViralLoadStatus viralLoadStatus, NotProcessingCause notProcessingCause) throws BusinessException {
+
+		return this.viralLoadDAO.findByForm(requestId, nid, location, 
+				healthFacilityLabCode, requestingFacilityName, referringRequestID, viralLoadStatus, notProcessingCause, EntityStatus.ACTIVE);
 	}
 
 	@Override

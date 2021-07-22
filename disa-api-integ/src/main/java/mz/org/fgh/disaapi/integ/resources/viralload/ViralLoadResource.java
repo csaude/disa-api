@@ -20,6 +20,7 @@ import org.springframework.stereotype.Service;
 
 import mz.co.msaude.boot.frameworks.exception.BusinessException;
 import mz.org.fgh.disaapi.core.viralload.config.AbstractUserContext;
+import mz.org.fgh.disaapi.core.viralload.model.NotProcessingCause;
 import mz.org.fgh.disaapi.core.viralload.model.ViralLoad;
 import mz.org.fgh.disaapi.core.viralload.model.ViralLoadStatus;
 import mz.org.fgh.disaapi.core.viralload.service.ViralLoadQueryService;
@@ -27,6 +28,7 @@ import mz.org.fgh.disaapi.core.viralload.service.ViralLoadService;
 
 /**
  * @author Stélio Moiane
+ * @author Hélio Machabane
  *
  */
 @Path("viralloads")
@@ -53,10 +55,21 @@ public class ViralLoadResource extends AbstractUserContext {
 	}
 	
 	@GET
+	@Path("search-form")
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response findViralLoadsByForm(@QueryParam("requestId") final List<String> requestId)
+	public Response findViralLoadsByForm(
+										 @QueryParam("requestId") final String requestId, 
+										 @QueryParam("nid") final String nid,
+	                                     @QueryParam("location") final String location,
+	                                     @QueryParam("healthFacilityLabCode") final String healthFacilityLabCode,
+	                                     @QueryParam("requestingFacilityName") final String requestingFacilityName,
+	                                     @QueryParam("referringRequestID") final String referringRequestID,
+	                                     @QueryParam("viralLoadStatus") final ViralLoadStatus viralLoadStatus,
+	                                     @QueryParam("notProcessingCause") final NotProcessingCause notProcessingCause
+	                                     )
 			throws BusinessException {
-		viralLoads = this.viralLoadQueryService.findByForm(requestId);
+		viralLoads = this.viralLoadQueryService.findByForm(requestId, nid, location, 
+				healthFacilityLabCode, requestingFacilityName, referringRequestID, viralLoadStatus, notProcessingCause);
 		return Response.ok(viralLoads).build();
 
 	}

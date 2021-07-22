@@ -6,6 +6,7 @@ package mz.org.fgh.disaapi.core.viralload.model;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
+import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -19,6 +20,7 @@ import mz.org.fgh.disaapi.core.viralload.dao.ViralLoadDAO;
 
 /**
  * @author Stélio Moiane
+ * @author Hélio Machabane
  *
  */
 @NamedQueries({
@@ -39,6 +41,9 @@ public class ViralLoad extends GenericEntity {
 
 	@Column(name = "RequestID")
 	private String requestId;
+	
+	@Column(name = "ReferringRequestID")
+	private String referringRequestID; 
 
 	@Column(name = "FIRSTNAME")
 	private String firstName;
@@ -51,6 +56,9 @@ public class ViralLoad extends GenericEntity {
 
 	@Column(name = "DOB")
 	private LocalDate dateOfBirth;
+	
+	@Column(name = "LOCATION")
+	private String location;
 
 	@Column(name = "RequestingFacilityCode")
 	private String healthFacilityLabCode;
@@ -109,8 +117,9 @@ public class ViralLoad extends GenericEntity {
 	@Column(name = "ClinicalInfo")
 	private String labComments;
 
+	@Basic(optional = false)
+	@Column(name = "VIRAL_LOAD_STATUS", columnDefinition = "enum('PENDING','PROCESSED','NOT_PROCESSED')")
 	@Enumerated(EnumType.STRING)
-	@Column(name = "VIRAL_LOAD_STATUS")
 	private ViralLoadStatus viralLoadStatus;
 
 	@Column(name = "HIVVL_ViralLoadResult")
@@ -367,4 +376,21 @@ public class ViralLoad extends GenericEntity {
 	public void setCauseNoResult() {
 		notProcessingCause = NotProcessingCause.NO_RESULT;
 	}
+
+	public String getLocation() {
+		return location;
+	}
+
+	public void setLocation(String location) {
+		this.location = location;
+	}
+
+	public String getReferringRequestID() {
+		return referringRequestID;
+	}
+
+	public void setReferringRequestID(String referringRequestID) {
+		this.referringRequestID = referringRequestID;
+	}
+	
 }
