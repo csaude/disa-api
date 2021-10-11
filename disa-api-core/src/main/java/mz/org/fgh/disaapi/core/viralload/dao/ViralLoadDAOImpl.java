@@ -36,21 +36,20 @@ public class ViralLoadDAOImpl extends GenericDAOImpl<ViralLoad, Long> implements
 	}
 	
 	@Override
-	public List<ViralLoad> findByForm(String requestId, String nid, String location, 
-			String healthFacilityLabCode, String requestingFacilityName, String referringRequestID, 
-			ViralLoadStatus viralLoadStatus, NotProcessingCause notProcessingCause, EntityStatus entityStatus) throws BusinessException {
+	public List<ViralLoad> findByForm(String requestId, String nid, 
+			String healthFacilityLabCode, String referringRequestID, 
+			ViralLoadStatus viralLoadStatus, LocalDateTime startDate, LocalDateTime endDate, EntityStatus entityStatus) throws BusinessException {
 
 		return this.findByNamedQuery(ViralLoadDAO.QUERY_NAME.findByForm,
 				new ParamBuilder()
 								  .add("entityStatus", entityStatus)
 								  .add("requestId", requestId)
 								  .add("nid", nid)
-								  .add("location", location)
 								  .add("healthFacilityLabCode", healthFacilityLabCode)
-								  .add("requestingFacilityName", requestingFacilityName)
 								  .add("referringRequestID", referringRequestID)
 								  .add("viralLoadStatus", viralLoadStatus)
-								  .add("notProcessingCause", notProcessingCause) 
+								  .add("startDate", startDate)
+								  .add("endDate", endDate)
 								  .process());
 	}
 

@@ -22,13 +22,12 @@ public interface ViralLoadDAO extends GenericDAO<ViralLoad, Long> {
 	class QUERY {
 		public static final String findByLocationCodeAndStatus = "SELECT vl FROM ViralLoad vl WHERE vl.healthFacilityLabCode IN (:locationCodes)and vl.viralLoadStatus = :viralLoadStatus AND vl.entityStatus = :entityStatus";
 		public static final String findByForm = "SELECT vl FROM ViralLoad vl "
-											  + "WHERE vl.requestId = :requestId "
-				                              + "OR vl.nid = :nid "
-				                              + "OR vl.location = :location "
-				                              + "OR vl.healthFacilityLabCode = :healthFacilityLabCode "
-				                              + "OR vl.requestingFacilityName = :requestingFacilityName "
-				                              + "OR vl.referringRequestID = :referringRequestID "
-				                              + "OR vl.viralLoadStatus = :viralLoadStatus "
+											  + "WHERE (COALESCE(:requestId, null) is null or vl.requestId = :requestId) "
+				                              + "AND (COALESCE(:nid, null) is null or vl.nid = :nid) "
+				                              + "AND (COALESCE(:healthFacilityLabCode, null) is null or vl.healthFacilityLabCode = :healthFacilityLabCode) "
+				                              + "AND (COALESCE(:referringRequestID, null) is null or vl.referringRequestID = :referringRequestID) "
+				                              + "AND (COALESCE(:viralLoadStatus, null) is null or vl.viralLoadStatus = :viralLoadStatus) "
+											  + "AND vl.createdAt between :startDate and :endDate "
 				                              + "AND vl.entityStatus = :entityStatus";
 		public static final String findByStatusAndDates = "SELECT vl FROM ViralLoad vl WHERE vl.healthFacilityLabCode IN (:locationCodes)and vl.viralLoadStatus = :viralLoadStatus AND vl.entityStatus = :entityStatus and vl.createdAt between :startDate and :endDate";
 		public static final String findViralLoadByNid = "SELECT vl FROM ViralLoad vl WHERE vl.nid IN (:nids) AND vl.entityStatus = :entityStatus";
@@ -50,9 +49,10 @@ public interface ViralLoadDAO extends GenericDAO<ViralLoad, Long> {
 	List<ViralLoad> findByLocationCodeAndStatus(List<String> locationCodes, ViralLoadStatus viralLoadStatus,
 			EntityStatus entityStatus) throws BusinessException;
 	
-	List<ViralLoad> findByForm(String requestId, String nid, String location, 
-			String healthFacilityLabCode, String requestingFacilityName, String referringRequestID, 
-			ViralLoadStatus viralLoadStatus, NotProcessingCause notProcessingCause, EntityStatus entityStatus) throws BusinessException;
+	List<ViralLoad> findByForm(String requestId, String nid, 
+			String healthFacilityLabCode, String referringRequestID, 
+			ViralLoadStatus viralLoadStatus, LocalDateTime startDate, LocalDateTime endDate, 
+			EntityStatus entityStatus) throws BusinessException;
 
 	List<ViralLoad> findByStatus(List<String> locationCodes, ViralLoadStatus viralLoadStatus, EntityStatus entityStatus)
 			throws BusinessException;

@@ -391,6 +391,5 @@ public class ViralLoad extends GenericEntity {
 
 	public void setReferringRequestID(String referringRequestID) {
 		this.referringRequestID = referringRequestID;
-	}
-	
+	}	
 }
