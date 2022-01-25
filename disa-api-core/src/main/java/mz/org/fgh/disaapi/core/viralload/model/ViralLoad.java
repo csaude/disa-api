@@ -128,6 +128,9 @@ public class ViralLoad extends GenericEntity {
 	@Enumerated(EnumType.STRING)
 	@Column(name = "NOT_PROCESSING_CAUSE")
 	private NotProcessingCause notProcessingCause;
+	
+	@Column(name = "RequestingProvinceName")
+	private String requestingProvinceName;
 
 	public String getGender() {
 		return gender;
@@ -391,5 +394,15 @@ public class ViralLoad extends GenericEntity {
 
 	public void setReferringRequestID(String referringRequestID) {
 		this.referringRequestID = referringRequestID;
-	}	
+	}
+
+	public String getRequestingProvinceName() {
+		return requestingProvinceName;
+	}
+
+	public void setRequestingProvinceName(String requestingProvinceName) {
+		this.requestingProvinceName = requestingProvinceName;
+	}
+	
+	
 }

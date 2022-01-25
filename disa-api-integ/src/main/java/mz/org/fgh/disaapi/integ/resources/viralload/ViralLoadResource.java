@@ -46,11 +46,10 @@ public class ViralLoadResource extends AbstractUserContext {
 
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response findViralLoads(@QueryParam("locationCodes") final List<String> locationCodes)
+	public Response findViralLoads(@QueryParam("locationCodes") final List<String> locationCodes, @QueryParam("requestingProvinceName")  String requestingProvinceName)
 			throws BusinessException {
-		viralLoads = this.viralLoadQueryService.findByLocationCodeAndStatus(locationCodes);
+		viralLoads = this.viralLoadQueryService.findByLocationCodeAndStatus(locationCodes,requestingProvinceName);
 		return Response.ok(viralLoads).build();
-
 	}
 	
 	@GET

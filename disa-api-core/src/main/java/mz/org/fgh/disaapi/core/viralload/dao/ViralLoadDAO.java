@@ -20,7 +20,7 @@ import mz.org.fgh.disaapi.core.viralload.model.ViralLoadStatus;
  */
 public interface ViralLoadDAO extends GenericDAO<ViralLoad, Long> { 
 	class QUERY {
-		public static final String findByLocationCodeAndStatus = "SELECT vl FROM ViralLoad vl WHERE vl.healthFacilityLabCode IN (:locationCodes)and vl.viralLoadStatus = :viralLoadStatus AND vl.entityStatus = :entityStatus";
+		public static final String findByLocationCodeAndStatus = "SELECT vl FROM ViralLoad vl WHERE vl.healthFacilityLabCode IN (:locationCodes)and vl.viralLoadStatus = :viralLoadStatus AND vl.entityStatus = :entityStatus AND vl.requestingProvinceName = :requestingProvinceName";
 		public static final String findByForm = "SELECT vl FROM ViralLoad vl "
 											  + "WHERE (COALESCE(:requestId, null) is null or vl.requestId = :requestId) "
 				                              + "AND (COALESCE(:nid, null) is null or vl.nid = :nid) "
@@ -47,7 +47,7 @@ public interface ViralLoadDAO extends GenericDAO<ViralLoad, Long> {
 	}
 
 	List<ViralLoad> findByLocationCodeAndStatus(List<String> locationCodes, ViralLoadStatus viralLoadStatus,
-			EntityStatus entityStatus) throws BusinessException;
+			EntityStatus entityStatus,String requestingProvinceName) throws BusinessException;
 	
 	List<ViralLoad> findByForm(String requestId, String nid, 
 			String healthFacilityLabCode, String referringRequestID, 

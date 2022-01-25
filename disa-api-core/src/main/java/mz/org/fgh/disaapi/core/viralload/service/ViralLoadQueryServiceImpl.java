@@ -32,14 +32,14 @@ public class ViralLoadQueryServiceImpl implements ViralLoadQueryService {
 	private ViralLoadDAO viralLoadDAO;
 
 	@Override
-	public List<ViralLoad> findByLocationCodeAndStatus(List<String> locationCodes) throws BusinessException {
+	public List<ViralLoad> findByLocationCodeAndStatus(List<String> locationCodes,String requestingProvinceName) throws BusinessException {
 
 		if (locationCodes.isEmpty()) {
 
 			return new ArrayList<ViralLoad>();
 		}
 		return this.viralLoadDAO.findByLocationCodeAndStatus(locationCodes, ViralLoadStatus.PENDING,
-				EntityStatus.ACTIVE);
+				EntityStatus.ACTIVE,requestingProvinceName);
 	}
 	
 	@Override
