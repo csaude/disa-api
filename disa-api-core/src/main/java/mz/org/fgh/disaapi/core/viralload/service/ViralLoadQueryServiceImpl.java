@@ -14,7 +14,6 @@ import org.springframework.stereotype.Service;
 import mz.co.msaude.boot.frameworks.exception.BusinessException;
 import mz.co.msaude.boot.frameworks.model.EntityStatus;
 import mz.org.fgh.disaapi.core.viralload.dao.ViralLoadDAO;
-import mz.org.fgh.disaapi.core.viralload.model.NotProcessingCause;
 import mz.org.fgh.disaapi.core.viralload.model.ViralLoad;
 import mz.org.fgh.disaapi.core.viralload.model.ViralLoadStatus;
 
@@ -32,14 +31,14 @@ public class ViralLoadQueryServiceImpl implements ViralLoadQueryService {
 	private ViralLoadDAO viralLoadDAO;
 
 	@Override
-	public List<ViralLoad> findByLocationCodeAndStatus(List<String> locationCodes) throws BusinessException {
+	public List<ViralLoad> findByLocationCodeAndStatus(List<String> locationCodes, String requestingProvinceName) throws BusinessException {
 
 		if (locationCodes.isEmpty()) {
 
 			return new ArrayList<ViralLoad>();
 		}
 		return this.viralLoadDAO.findByLocationCodeAndStatus(locationCodes, ViralLoadStatus.PENDING,
-				EntityStatus.ACTIVE);
+				EntityStatus.ACTIVE, requestingProvinceName);
 	}
 	
 	@Override

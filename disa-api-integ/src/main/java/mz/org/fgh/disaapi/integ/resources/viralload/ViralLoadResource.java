@@ -46,9 +46,9 @@ public class ViralLoadResource extends AbstractUserContext {
 
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response findViralLoads(@QueryParam("locationCodes") final List<String> locationCodes)
+	public Response findViralLoads(@QueryParam("locationCodes") final List<String> locationCodes, @QueryParam("requestingProvinceName") String requestingProvinceName)
 			throws BusinessException {
-		viralLoads = this.viralLoadQueryService.findByLocationCodeAndStatus(locationCodes);
+		viralLoads = this.viralLoadQueryService.findByLocationCodeAndStatus(locationCodes, requestingProvinceName);
 		return Response.ok(viralLoads).build();
 
 	}
@@ -109,6 +109,8 @@ public class ViralLoadResource extends AbstractUserContext {
 				viralLoad.setCauseNoNID();
 			} else if (reasonForNotProcessing.equals("result")) {
 				viralLoad.setCauseNoResult();
+			} else if (reasonForNotProcessing.equals("review")) {
+				viralLoad.setCauseFlaggedForReview();
 			}
 			updateViralLoad(viralLoad);
 		});

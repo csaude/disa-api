@@ -1,5 +1,5 @@
 CREATE TABLE `VlData` (
-  `RequestID` varchar(26) DEFAULT NULL,
+  `RequestID` varchar(26) NOT NULL,
   `Versionstamp` varchar(30) DEFAULT NULL,
   `REFNO` varchar(56) DEFAULT NULL,
   `REGISTEREDDATE` datetime DEFAULT NULL,
@@ -112,7 +112,7 @@ CREATE TABLE `VlData` (
   `DateTimeStamp` datetime DEFAULT NULL,
   `HealthCareID` varchar(20) DEFAULT NULL,
   `FullFacilityCode` varchar(50) DEFAULT NULL,
-  `ID` bigint(20) NOT NULL AUTO_INCREMENT,
+  `ID` bigint(20) NOT NULL,
   `UUID` varchar(50) NOT NULL DEFAULT 'disa',
   `CREATED_AT` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `CREATED_BY` varchar(50) NOT NULL DEFAULT 'disa',
@@ -121,5 +121,7 @@ CREATE TABLE `VlData` (
   `UPDATED_BY` varchar(50) DEFAULT NULL,
   `VIRAL_LOAD_STATUS` varchar(50) DEFAULT 'PENDING',
   `NOT_PROCESSING_CAUSE` varchar(250) DEFAULT NULL,
-  PRIMARY KEY (`ID`)
-) ENGINE=InnoDB AUTO_INCREMENT=180 DEFAULT CHARSET=utf8;
+  `FinalViralLoadResult` varchar(100) DEFAULT NULL,
+  `IsPoc` tinyint(4) DEFAULT NULL,
+  PRIMARY KEY (`RequestID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;

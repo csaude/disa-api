@@ -11,6 +11,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
@@ -36,6 +37,7 @@ public class ViralLoad extends GenericEntity {
 
 	private static final long serialVersionUID = 1L;
 
+	@Id
 	@Column(name = "UNIQUEID")
 	private String nid;
 
@@ -96,7 +98,7 @@ public class ViralLoad extends GenericEntity {
 	@Column(name = "AnalysisDateTime")
 	private LocalDateTime processingDate;
 
-	@Column(name = "LIMSSpecimenSourceDesc")
+	@Column(name = "LIMSSpecimenSourceCode")
 	private String sampleType;
 
 	@Column(name = "HIVVL_ViralLoadCAPCTM")
@@ -128,6 +130,81 @@ public class ViralLoad extends GenericEntity {
 	@Enumerated(EnumType.STRING)
 	@Column(name = "NOT_PROCESSING_CAUSE")
 	private NotProcessingCause notProcessingCause;
+	
+	@Column(name = "LastViralLoadResult")
+	private String lastViralLoadResult;
+	
+	@Column(name = "LastViralLoadDate")
+	private String lastViralLoadDate;
+	
+	@Column(name = "ARTRegimen")
+	private String artRegimen;
+	
+	@Column(name = "PrimeiraLinha")
+	private String primeiraLinha;
+	
+	@Column(name = "SegundaLinha")
+	private String segundaLinha;
+	
+	@Column(name = "DataDeInicioDoTARV")
+	private String dataDeInicioDoTARV;
+	
+	@Column(name = "RequestingProvinceName")
+	private String requestingProvinceName;
+	
+	@Column(name = "FinalViralLoadResult")
+	private String finalViralLoadResult;
+	
+	@Column(name = "IsPoc")
+	private byte isPoc;
+	
+	public byte getIsPoc() {
+		return isPoc;
+	}
+
+	public void setIsPoc(byte isPoc) {
+		this.isPoc = isPoc;
+	}
+
+	public String getFinalViralLoadResult() {
+		return finalViralLoadResult;
+	}
+
+	public void setFinalViralLoadResult(String finalViralLoadResult) {
+		this.finalViralLoadResult = finalViralLoadResult;
+	}
+
+	public String getDataDeInicioDoTARV() {
+		return dataDeInicioDoTARV;
+	}
+
+	public void setDataDeInicioDoTARV(String dataDeInicioDoTARV) {
+		this.dataDeInicioDoTARV = dataDeInicioDoTARV;
+	}
+
+	public String getPrimeiraLinha() {
+		return primeiraLinha;
+	}
+
+	public void setPrimeiraLinha(String primeiraLinha) {
+		this.primeiraLinha = primeiraLinha;
+	}
+
+	public String getSegundaLinha() {
+		return segundaLinha;
+	}
+
+	public void setSegundaLinha(String segundaLinha) {
+		this.segundaLinha = segundaLinha;
+	}
+
+	public String getArtRegimen() {
+		return artRegimen;
+	}
+	
+	public void setArtRegimen(String artRegimen) {
+		this.artRegimen = artRegimen;
+	}
 
 	public String getGender() {
 		return gender;
@@ -376,6 +453,10 @@ public class ViralLoad extends GenericEntity {
 	public void setCauseNoResult() {
 		notProcessingCause = NotProcessingCause.NO_RESULT;
 	}
+	
+	public void setCauseFlaggedForReview() {
+		notProcessingCause = NotProcessingCause.FLAGGED_FOR_REVIEW;
+	}
 
 	public String getLocation() {
 		return location;
@@ -391,5 +472,29 @@ public class ViralLoad extends GenericEntity {
 
 	public void setReferringRequestID(String referringRequestID) {
 		this.referringRequestID = referringRequestID;
-	}	
+	}
+
+	public String getLastViralLoadResult() {
+		return lastViralLoadResult;
+	}
+
+	public void setLastViralLoadResult(String lastViralLoadResult) {
+		this.lastViralLoadResult = lastViralLoadResult;
+	}
+
+	public String getLastViralLoadDate() {
+		return lastViralLoadDate;
+	}
+
+	public void setLastViralLoadDate(String lastViralLoadDate) {
+		this.lastViralLoadDate = lastViralLoadDate;
+	}
+	
+	public String getRequestingProvinceName() {
+		return requestingProvinceName;
+	}
+
+	public void setRequestingProvinceName(String requestingProvinceName) {
+		this.requestingProvinceName = requestingProvinceName;
+	}
 }

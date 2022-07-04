@@ -28,11 +28,11 @@ public class ViralLoadDAOImpl extends GenericDAOImpl<ViralLoad, Long> implements
 
 	@Override
 	public List<ViralLoad> findByLocationCodeAndStatus(List<String> locationCodes, ViralLoadStatus viralLoadStatus,
-			EntityStatus entityStatus) throws BusinessException {
+			EntityStatus entityStatus, String requestingProvinceName) throws BusinessException {
 
 		return this.findByNamedQuery(ViralLoadDAO.QUERY_NAME.findByLocationCodeAndStatus,
 				new ParamBuilder().add("viralLoadStatus", viralLoadStatus).add("entityStatus", entityStatus)
-						.add("locationCodes", locationCodes).process());
+						.add("locationCodes", locationCodes).add("requestingProvinceName", requestingProvinceName).process());
 	}
 	
 	@Override

@@ -70,7 +70,7 @@ public class ViralLoadQueryServiceTest extends AbstractIntegServiceTest {
 
 		locationCodes.addAll(Arrays.asList("01041137", "01041137"));
 
-		final List<ViralLoad> viralLoads = this.viralLoadQueryService.findByLocationCodeAndStatus(locationCodes);
+		final List<ViralLoad> viralLoads = this.viralLoadQueryService.findByLocationCodeAndStatus(locationCodes,"Zambezia");
 
 		assertFalse(viralLoads.isEmpty());
 	}
