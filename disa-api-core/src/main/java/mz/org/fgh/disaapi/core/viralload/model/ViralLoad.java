@@ -11,7 +11,6 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
-import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
@@ -37,11 +36,10 @@ public class ViralLoad extends GenericEntity {
 
 	private static final long serialVersionUID = 1L;
 
-	@Id
 	@Column(name = "UNIQUEID")
 	private String nid;
-
-	@Column(name = "RequestID")
+	
+	@Column(name = "RequestID", unique = true)
 	private String requestId;
 	
 	@Column(name = "ReferringRequestID")
