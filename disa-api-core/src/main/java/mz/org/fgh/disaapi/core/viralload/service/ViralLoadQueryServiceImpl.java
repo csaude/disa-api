@@ -42,6 +42,17 @@ public class ViralLoadQueryServiceImpl implements ViralLoadQueryService {
 	}
 	
 	@Override
+	public List<ViralLoad> findByLocationCodeAndStatus(List<String> locationCodes) throws BusinessException {
+
+		if (locationCodes.isEmpty()) {
+
+			return new ArrayList<ViralLoad>();
+		}
+		return this.viralLoadDAO.findByLocationCodeAndStatus(locationCodes, ViralLoadStatus.PENDING,
+				EntityStatus.ACTIVE);
+	}
+	
+	@Override
 	public List<ViralLoad> findByForm(String requestId, String nid, 
 			String healthFacilityLabCode, 
 			String referringRequestID, ViralLoadStatus viralLoadStatus, LocalDateTime startDate, LocalDateTime endDate) throws BusinessException {

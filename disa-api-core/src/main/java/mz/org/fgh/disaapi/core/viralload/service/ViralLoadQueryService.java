@@ -19,6 +19,8 @@ public interface ViralLoadQueryService {
 
 	List<ViralLoad> findByLocationCodeAndStatus(List<String> locationCodes, String requestingProvinceName) throws BusinessException;
 	
+	List<ViralLoad> findByLocationCodeAndStatus(List<String> locationCodes) throws BusinessException;
+	
 	List<ViralLoad> findByForm(String requestId, String nid, 
 			String healthFacilityLabCode, String ReferringRequestID, 
 			ViralLoadStatus viralLoadStatus, LocalDateTime startDate, LocalDateTime endDate) throws BusinessException;

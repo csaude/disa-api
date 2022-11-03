@@ -45,6 +45,7 @@ public class ViralLoadResource extends AbstractUserContext {
 	private List<ViralLoad> viralLoads;
 
 	@GET
+	@Path("/requestProvince")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response findViralLoads(@QueryParam("locationCodes") final List<String> locationCodes, @QueryParam("requestingProvinceName") String requestingProvinceName)
 			throws BusinessException {
@@ -54,9 +55,38 @@ public class ViralLoadResource extends AbstractUserContext {
 	}
 	
 	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response findViralLoads(@QueryParam("locationCodes") final List<String> locationCodes)
+			throws BusinessException {
+		viralLoads = this.viralLoadQueryService.findByLocationCodeAndStatus(locationCodes);
+		return Response.ok(viralLoads).build();
+
+	}
+	
+	@GET
 	@Path("search-form")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response findViralLoadsByForm(
+										 @QueryParam("requestId") final String requestId, 
+										 @QueryParam("nid") final String nid,
+	                                     @QueryParam("healthFacilityLabCode") final String healthFacilityLabCode,
+	                                     @QueryParam("referringRequestID") final String referringRequestID,
+	                                     @QueryParam("viralLoadStatus") final ViralLoadStatus viralLoadStatus,
+	                                     @QueryParam("startDate") final String strStartDate, 
+	                                     @QueryParam("endDate") final String strEndDate
+	                                     )
+			throws BusinessException {
+		viralLoads = this.viralLoadQueryService.findByForm(requestId, nid, 
+				healthFacilityLabCode, referringRequestID, viralLoadStatus, 
+				convertToLocalDateTime(strStartDate), convertToLocalDateTime(strEndDate));
+		return Response.ok(viralLoads).build();
+
+	}
+	
+	@GET
+	@Path("/requestProvince/search-form")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response _findViralLoadsByForm(
 										 @QueryParam("requestId") final String requestId, 
 										 @QueryParam("nid") final String nid,
 	                                     @QueryParam("healthFacilityLabCode") final String healthFacilityLabCode,
@@ -81,11 +111,32 @@ public class ViralLoadResource extends AbstractUserContext {
 		viralLoads = this.viralLoadQueryService.findByStatus(locationCodes, viralLoadStatus);
 		return Response.ok(viralLoads).build();
 	}
+	
+	@GET
+	@Path("/requestProvince/viral-status")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response _findViralLoadsByStatus(@QueryParam("locationCodes") final List<String> locationCodes,
+			@QueryParam("viralLoadStatus") final ViralLoadStatus viralLoadStatus) throws BusinessException {
+		viralLoads = this.viralLoadQueryService.findByStatus(locationCodes, viralLoadStatus);
+		return Response.ok(viralLoads).build();
+	}
 
 	@GET
 	@Path("viral-status-dates")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response findViralLoadsByStatusAndDates(@QueryParam("locationCodes") final List<String> locationCodes,
+			@QueryParam("viralLoadStatus") final ViralLoadStatus viralLoadStatus,
+			@QueryParam("startDate") final String strStartDate, @QueryParam("endDate") final String strEndDate)
+			throws BusinessException {
+		viralLoads = this.viralLoadQueryService.findByStatusAndDates(locationCodes, viralLoadStatus,
+				convertToLocalDateTime(strStartDate), convertToLocalDateTime(strEndDate));
+		return Response.ok(viralLoads).build();
+	}
+	
+	@GET
+	@Path("/requestProvince/viral-status-dates")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response _findViralLoadsByStatusAndDates(@QueryParam("locationCodes") final List<String> locationCodes,
 			@QueryParam("viralLoadStatus") final ViralLoadStatus viralLoadStatus,
 			@QueryParam("startDate") final String strStartDate, @QueryParam("endDate") final String strEndDate)
 			throws BusinessException {
@@ -111,6 +162,32 @@ public class ViralLoadResource extends AbstractUserContext {
 				viralLoad.setCauseNoResult();
 			} else if (reasonForNotProcessing.equals("review")) {
 				viralLoad.setCauseFlaggedForReview();
+			} 
+			updateViralLoad(viralLoad);
+		});
+
+		return Response.ok(viralLoads).build();
+	}
+	
+	@PUT
+	@Path("/requestProvince/not-processed")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response _updateViralLoadNotProcessedViralLoad(
+			@QueryParam("notProcessedNids") final List<String> notProcessedNids,
+			@QueryParam("reasonForNotProcessing") final String reasonForNotProcessing) throws BusinessException {
+
+		viralLoads = viralLoadQueryService.findViralLoadByRequestId(notProcessedNids);
+
+		viralLoads.forEach(viralLoad -> {
+			viralLoad.setNotProcessed();
+			if (reasonForNotProcessing.equals("nid")) {
+				viralLoad.setCauseNoNID();
+			} else if (reasonForNotProcessing.equals("result")) {
+				viralLoad.setCauseNoResult();
+			} else if (reasonForNotProcessing.equals("review")) {
+				viralLoad.setCauseFlaggedForReview();
+			} else if (reasonForNotProcessing.equals("duplicate")) {
+				viralLoad.setCauseDuplicateNid();
 			}
 			updateViralLoad(viralLoad);
 		});
@@ -141,11 +218,43 @@ public class ViralLoadResource extends AbstractUserContext {
 
 		return Response.ok(viralLoads).build();
 	}
+	
+	@PUT
+	@Path("/requestProvince/processed")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response _updateViralLoadProcessedViralLoad(@QueryParam("processedNids") final List<String> processedNids)
+			throws BusinessException {
+
+		viralLoads = viralLoadQueryService.findViralLoadByRequestId(processedNids);
+
+		viralLoads.forEach(viralLoad -> {
+			viralLoad.setProcessed();
+			updateViralLoad(viralLoad);
+		});
+
+		return Response.ok(viralLoads).build();
+	}
 
 	@PUT
 	@Path("pending")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response updateViralLoadPendingViralLoad(@QueryParam("pendingNids") final List<String> pendingNids)
+			throws BusinessException {
+
+		viralLoads = viralLoadQueryService.findViralLoadByRequestId(pendingNids);
+
+		viralLoads.forEach(viralLoad -> {
+			viralLoad.setPending();
+			updateViralLoad(viralLoad);
+		});
+
+		return Response.ok(viralLoads).build();
+	}
+	
+	@PUT
+	@Path("/requestProvince/pending")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response _updateViralLoadPendingViralLoad(@QueryParam("pendingNids") final List<String> pendingNids)
 			throws BusinessException {
 
 		viralLoads = viralLoadQueryService.findViralLoadByRequestId(pendingNids);

@@ -22,6 +22,7 @@ public interface ViralLoadDAO extends GenericDAO<ViralLoad, Long> {
 	class QUERY {
 		public static final String findByLocationCodeAndStatus = "SELECT vl FROM ViralLoad vl WHERE vl.healthFacilityLabCode IN (:locationCodes)and vl.viralLoadStatus = :viralLoadStatus AND vl.entityStatus = :entityStatus "
 																+ "AND vl.requestingProvinceName = :requestingProvinceName";
+		public static final String findByLocationCodeAndStatusSimple = "SELECT vl FROM ViralLoad vl WHERE vl.healthFacilityLabCode IN (:locationCodes)and vl.viralLoadStatus = :viralLoadStatus AND vl.entityStatus = :entityStatus";
 		public static final String findByForm = "SELECT vl FROM ViralLoad vl "
 											  + "WHERE (COALESCE(:requestId, null) is null or vl.requestId = :requestId) "
 				                              + "AND (COALESCE(:nid, null) is null or vl.nid = :nid) "
@@ -39,6 +40,7 @@ public interface ViralLoadDAO extends GenericDAO<ViralLoad, Long> {
 
 	class QUERY_NAME {
 		public static final String findByLocationCodeAndStatus = "ViralLoad.findByLocationCodeAndStatus";
+		public static final String findByLocationCodeAndStatusSimple = "ViralLoad.findByLocationCodeAndStatusSimple";
 		public static final String findByForm = "ViralLoad.findByForm"; 
 		public static final String findByStatusAndDates = "ViralLoad.findByStatusAndDates";
 		public static final String findViralLoadByNid = "ViralLoad.findViralLoadByNid";
@@ -49,6 +51,9 @@ public interface ViralLoadDAO extends GenericDAO<ViralLoad, Long> {
 
 	List<ViralLoad> findByLocationCodeAndStatus(List<String> locationCodes, ViralLoadStatus viralLoadStatus,
 			EntityStatus entityStatus, String requestingProvinceName) throws BusinessException;
+	
+	List<ViralLoad> findByLocationCodeAndStatus(List<String> locationCodes, ViralLoadStatus viralLoadStatus,
+			EntityStatus entityStatus) throws BusinessException;
 	
 	List<ViralLoad> findByForm(String requestId, String nid, 
 			String healthFacilityLabCode, String referringRequestID, 
