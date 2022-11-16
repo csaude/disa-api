@@ -30,6 +30,7 @@ public class ViralLoadTemplate implements TemplateLoader {
 				this.add("healthFacilityLabCode", "01041137");
 				this.add("nameOfTechnicianRequestingTest", "ITALIDA");
 				this.add("requestingFacilityName", "CS 16 de Junho");
+				this.add("requestingProvinceName", "Zambezia");
 				this.add("encounter", "SMI");
 				this.add("pregnant", "Unreported");
 				this.add("breastFeeding", "Yes");

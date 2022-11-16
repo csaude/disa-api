@@ -57,7 +57,7 @@
 	<build>
 
 		<finalName>disa-api-integ</finalName>
-		
+
 		<plugins>
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
