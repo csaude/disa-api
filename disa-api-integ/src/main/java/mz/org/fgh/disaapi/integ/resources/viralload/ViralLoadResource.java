@@ -7,11 +7,14 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
 import javax.inject.Inject;
+import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.NotFoundException;
+import javax.ws.rs.PATCH;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
@@ -21,8 +24,10 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import mz.co.msaude.boot.frameworks.exception.BusinessException;
+import mz.org.fgh.disaapi.core.exception.NotFoundBusinessException;
 import mz.org.fgh.disaapi.core.viralload.config.AbstractUserContext;
 import mz.org.fgh.disaapi.core.viralload.model.ViralLoad;
 import mz.org.fgh.disaapi.core.viralload.model.ViralLoadStatus;
@@ -286,6 +291,24 @@ public class ViralLoadResource extends AbstractUserContext {
 		updateViralLoad(viralLoad);
 
 		return Response.ok().build();
+	}
+
+	@PATCH
+	@Path("/{requestId}")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response update(@PathParam("requestId") String requestId,
+			@RequestBody Map<String, Object> propertyValues) throws BusinessException {
+
+		try {
+			ViralLoad viralLoad = new ViralLoad();
+			viralLoad.setRequestId(requestId);
+			ViralLoad updatedVl = this.viralLoadService.updateViralLoad(getUserContext(), viralLoad, propertyValues);
+			return Response.ok(updatedVl).build();
+		} catch (NotFoundBusinessException e) {
+			throw new NotFoundException("Viral load not found");
+		}
+
 	}
 
 	private LocalDateTime convertToLocalDateTime(final String date) {
