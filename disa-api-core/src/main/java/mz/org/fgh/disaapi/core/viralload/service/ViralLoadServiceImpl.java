@@ -6,12 +6,14 @@ package mz.org.fgh.disaapi.core.viralload.service;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import javax.inject.Inject;
 
 import org.springframework.beans.BeanWrapper;
 import org.springframework.beans.PropertyAccessorFactory;
 import org.springframework.stereotype.Service;
+import org.springframework.util.ObjectUtils;
 
 import mz.co.msaude.boot.frameworks.exception.BusinessException;
 import mz.co.msaude.boot.frameworks.model.EntityStatus;
@@ -50,7 +52,6 @@ public class ViralLoadServiceImpl extends AbstractService implements ViralLoadSe
 	public ViralLoad updateViralLoad(UserContext context, ViralLoad viralLoad, Map<String, Object> propertyValues)
 			throws BusinessException {
 
-
 		List<String> requestIds = Arrays.asList(viralLoad.getRequestId());
 		List<ViralLoad> vls = this.viralLoadDAO.findViralLoadByRequestId(requestIds, EntityStatus.ACTIVE);
 
@@ -64,9 +65,28 @@ public class ViralLoadServiceImpl extends AbstractService implements ViralLoadSe
 		validateStatus(viralLoad, dbVl);
 
 		BeanWrapper bw = PropertyAccessorFactory.forBeanPropertyAccess(dbVl);
-		bw.setPropertyValues(propertyValues);
+		for (Entry<String, Object> entry : propertyValues.entrySet()) {
+			String key = entry.getKey();
+			Object value = entry.getValue();
+			if (getAllowedPropertiesForUpdate().contains(key)) {
+				if (ObjectUtils.isEmpty(value)) {
+					throw new BusinessException(key + " cannot be empty.");
+				}
+				bw.setPropertyValue(key, value);
+			}
+		}
 
 		return this.updateViralLoad(context, (ViralLoad) bw.getWrappedInstance());
+	}
+
+	@Override
+	public List<String> getAllowedPropertiesForUpdate() {
+		return Arrays.asList(
+				"viralLoadStatus",
+				"requestingProvinceName",
+				"requestingDistrictName",
+				"requestingFacilityName",
+				"healthFacilityLabCode");
 	}
 
 	private void validateStatus(ViralLoad viralLoad, ViralLoad dbVl) throws BusinessException {

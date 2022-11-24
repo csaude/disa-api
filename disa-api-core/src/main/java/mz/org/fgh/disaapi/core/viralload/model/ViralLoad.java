@@ -39,12 +39,12 @@ public class ViralLoad extends GenericEntity {
 
 	@Column(name = "UNIQUEID")
 	private String nid;
-	
+
 	@Column(name = "RequestID", unique = true)
 	private String requestId;
-	
+
 	@Column(name = "ReferringRequestID")
-	private String referringRequestID; 
+	private String referringRequestID;
 
 	@Column(name = "FIRSTNAME")
 	private String firstName;
@@ -57,7 +57,7 @@ public class ViralLoad extends GenericEntity {
 
 	@Column(name = "DOB")
 	private LocalDate dateOfBirth;
-	
+
 	@Column(name = "LOCATION")
 	private String location;
 
@@ -129,34 +129,37 @@ public class ViralLoad extends GenericEntity {
 	@Enumerated(EnumType.STRING)
 	@Column(name = "NOT_PROCESSING_CAUSE")
 	private NotProcessingCause notProcessingCause;
-	
+
 	@Column(name = "LastViralLoadResult")
 	private String lastViralLoadResult;
-	
+
 	@Column(name = "LastViralLoadDate")
 	private String lastViralLoadDate;
-	
+
 	@Column(name = "ARTRegimen")
 	private String artRegimen;
-	
+
 	@Column(name = "PrimeiraLinha")
 	private String primeiraLinha;
-	
+
 	@Column(name = "SegundaLinha")
 	private String segundaLinha;
-	
+
 	@Column(name = "DataDeInicioDoTARV")
 	private String dataDeInicioDoTARV;
-	
+
 	@Column(name = "RequestingProvinceName")
 	private String requestingProvinceName;
-	
+
+	@Column(name = "RequestingDistrictName")
+	private String requestingDistrictName;
+
 	@Column(name = "FinalViralLoadResult")
 	private String finalViralLoadResult;
-	
+
 	@Column(name = "IsPoc")
 	private byte isPoc;
-	
+
 	public byte getIsPoc() {
 		return isPoc;
 	}
@@ -200,7 +203,7 @@ public class ViralLoad extends GenericEntity {
 	public String getArtRegimen() {
 		return artRegimen;
 	}
-	
+
 	public void setArtRegimen(String artRegimen) {
 		this.artRegimen = artRegimen;
 	}
@@ -452,11 +455,11 @@ public class ViralLoad extends GenericEntity {
 	public void setCauseNoResult() {
 		notProcessingCause = NotProcessingCause.NO_RESULT;
 	}
-	
+
 	public void setCauseFlaggedForReview() {
 		notProcessingCause = NotProcessingCause.FLAGGED_FOR_REVIEW;
 	}
-	
+
 	public void setCauseDuplicateNid() {
 		notProcessingCause = NotProcessingCause.DUPLICATE_NID;
 	}
@@ -492,12 +495,20 @@ public class ViralLoad extends GenericEntity {
 	public void setLastViralLoadDate(String lastViralLoadDate) {
 		this.lastViralLoadDate = lastViralLoadDate;
 	}
-	
+
 	public String getRequestingProvinceName() {
 		return requestingProvinceName;
 	}
 
 	public void setRequestingProvinceName(String requestingProvinceName) {
 		this.requestingProvinceName = requestingProvinceName;
+	}
+
+	public String getRequestingDistrictName() {
+		return requestingDistrictName;
+	}
+
+	public void setRequestingDistrictName(String requestingDistrictName) {
+		this.requestingDistrictName = requestingDistrictName;
 	}
 }

@@ -275,6 +275,22 @@ public class ViralLoadResource extends AbstractUserContext {
 		return Response.ok(viralLoads).build();
 	}
 
+	@GET
+	@Path("/{requestId}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response get(@PathParam("requestId") String requestId) throws BusinessException {
+
+		viralLoads = viralLoadQueryService.findViralLoadByRequestId(Arrays.asList(requestId));
+
+		if (viralLoads.isEmpty()) {
+			throw new NotFoundException("Viral load not found");
+		}
+
+		ViralLoad viralLoad = viralLoads.get(0);
+
+		return Response.ok(viralLoad).build();
+	}
+
 	@DELETE
 	@Path("/{requestId}")
 	@Produces(MediaType.APPLICATION_JSON)

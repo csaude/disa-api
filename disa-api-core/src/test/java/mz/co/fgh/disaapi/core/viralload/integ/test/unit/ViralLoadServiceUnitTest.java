@@ -53,7 +53,26 @@ public class ViralLoadServiceUnitTest extends AbstractUnitServiceTest {
 
         assertThat(viralLoad.getViralLoadStatus()).isEqualTo(ViralLoadStatus.PENDING);
         assertThat(viralLoad.getHealthFacilityLabCode()).isEqualTo("1040107");
-        assertThat(viralLoad.getRequestingFacilityName()).isEqualTo("CS 24 de Julho");
+
+    }
+
+    @Test
+    public void updateViralLoadShouldUpdateAllowedViralLoadPropertyValues() throws BusinessException {
+
+        ViralLoad viralLoad = EntityFactory.gimme(ViralLoad.class, ViralLoadTemplate.NOT_PROCESSED);
+
+        List<String> requestIds = Arrays.asList(viralLoad.getRequestId());
+        Mockito.when(viralLoadDAO.findViralLoadByRequestId(requestIds, EntityStatus.ACTIVE))
+                .thenReturn(Arrays.asList(viralLoad));
+
+        Map<String, Object> propertyValues = new HashMap<>();
+        propertyValues.put("reasonForTest", "Suspected treatment failure");
+        this.viralLoadService.updateViralLoad(
+                getUserContext(),
+                viralLoad,
+                propertyValues);
+
+        assertThat(viralLoad.getReasonForTest()).isEqualTo("Routine");
 
     }
 
@@ -77,8 +96,25 @@ public class ViralLoadServiceUnitTest extends AbstractUnitServiceTest {
 
     }
 
+    @Test(expected = BusinessException.class)
+    public void updateViralLoadShouldFailWhenPropertyEmpty() throws BusinessException {
+
+        ViralLoad viralLoad = EntityFactory.gimme(ViralLoad.class, ViralLoadTemplate.NOT_PROCESSED);
+
+        List<String> requestIds = Arrays.asList(viralLoad.getRequestId());
+        Mockito.when(viralLoadDAO.findViralLoadByRequestId(requestIds, EntityStatus.ACTIVE))
+                .thenReturn(Arrays.asList(viralLoad));
+
+        Map<String, Object> propertyValues = new HashMap<>();
+        propertyValues.put("viralLoadStatus", "");
+        this.viralLoadService.updateViralLoad(
+                getUserContext(),
+                viralLoad,
+                propertyValues);
+    }
+
     @Test(expected = NotFoundBusinessException.class)
-    public void updateViralLoadShouldTFailWhenViralNotFound() throws BusinessException {
+    public void updateViralLoadShouldFailWhenViralNotFound() throws BusinessException {
 
         ViralLoad viralLoad = EntityFactory.gimme(ViralLoad.class, ViralLoadTemplate.PROCESSED);
 
