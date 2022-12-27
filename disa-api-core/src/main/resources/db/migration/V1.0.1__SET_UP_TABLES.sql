@@ -123,6 +123,5 @@ CREATE TABLE `VlData` (
   `NOT_PROCESSING_CAUSE` varchar(250) DEFAULT NULL,
   `FinalViralLoadResult` varchar(100) DEFAULT NULL,
   `IsPoc` tinyint(4) DEFAULT NULL,
-  `SYNCHRONIZED_BY` varchar(50) DEFAULT NULL,
   PRIMARY KEY (`RequestID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
