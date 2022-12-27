@@ -1,4 +1,4 @@
-package mz.org.fgh.disaapi.integ;
+package mz.org.fgh.disaapi.integ.test;
 
 import org.junit.Test;
 

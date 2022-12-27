@@ -18,16 +18,16 @@ import mz.org.fgh.disaapi.core.viralload.model.ViralLoadStatus;
 public interface ViralLoadQueryService {
 
 	List<ViralLoad> findByLocationCodeAndStatus(List<String> locationCodes, String requestingProvinceName) throws BusinessException;
-	
+
 	List<ViralLoad> findByLocationCodeAndStatus(List<String> locationCodes) throws BusinessException;
-	
-	List<ViralLoad> findByForm(String requestId, String nid, 
-			String healthFacilityLabCode, String ReferringRequestID, 
+
+	List<ViralLoad> findByForm(String requestId, String nid,
+			String healthFacilityLabCode, String ReferringRequestID,
 			ViralLoadStatus viralLoadStatus, LocalDateTime startDate, LocalDateTime endDate) throws BusinessException;
 
 	List<ViralLoad> findViralLoadByNid(List<String> nids) throws BusinessException;
-	
-	List<ViralLoad> findViralLoadByRequestId(List<String> nids) throws BusinessException;
+
+	List<ViralLoad> findViralLoadByRequestId(List<String> requestIds) throws BusinessException;
 
 	List<ViralLoad> findByStatus(List<String> locationCodes, ViralLoadStatus viralLoadStatus) throws BusinessException;
 

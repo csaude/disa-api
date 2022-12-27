@@ -52,12 +52,18 @@
 			<scope>test</scope>
 		</dependency>
 
+		<dependency>
+			<groupId>org.apache.httpcomponents</groupId>
+			<artifactId>httpclient</artifactId>
+			<version>4.5.13</version>
+		</dependency>
+
 	</dependencies>
 
 	<build>
 
 		<finalName>disa-api-integ</finalName>
-		
+
 		<plugins>
 			<plugin>
 				<groupId>org.springframework.boot</groupId>

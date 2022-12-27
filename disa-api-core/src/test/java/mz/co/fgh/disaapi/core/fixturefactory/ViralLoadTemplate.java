@@ -20,6 +20,10 @@ public class ViralLoadTemplate implements TemplateLoader {
 
 	public static final String VALID = "VALID";
 
+	public static final String NOT_PROCESSED = "NOT_PROCESSED";
+
+	public static final String PROCESSED = "PROCESSED";
+
 	@Override
 	public void load() {
 
@@ -30,6 +34,7 @@ public class ViralLoadTemplate implements TemplateLoader {
 				this.add("healthFacilityLabCode", "01041137");
 				this.add("nameOfTechnicianRequestingTest", "ITALIDA");
 				this.add("requestingFacilityName", "CS 16 de Junho");
+				this.add("requestingProvinceName", "Zambezia");
 				this.add("encounter", "SMI");
 				this.add("pregnant", "Unreported");
 				this.add("breastFeeding", "Yes");
@@ -48,6 +53,18 @@ public class ViralLoadTemplate implements TemplateLoader {
 				this.add("labComments", "N/A");
 				this.add("viralLoadStatus", ViralLoadStatus.PENDING);
 
+			}
+		});
+
+		Fixture.of(ViralLoad.class).addTemplate(NOT_PROCESSED).inherits(VALID, new Rule() {
+			{
+				this.add("viralLoadStatus", ViralLoadStatus.NOT_PROCESSED);
+			}
+		});
+
+		Fixture.of(ViralLoad.class).addTemplate(PROCESSED).inherits(VALID, new Rule() {
+			{
+				this.add("viralLoadStatus", ViralLoadStatus.PROCESSED);
 			}
 		});
 	}
