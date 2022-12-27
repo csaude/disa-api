@@ -182,12 +182,14 @@ public class ViralLoadResource extends AbstractUserContext {
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response _updateViralLoadNotProcessedViralLoad(
 			@QueryParam("notProcessedNids") final List<String> notProcessedNids,
-			@QueryParam("reasonForNotProcessing") final String reasonForNotProcessing) throws BusinessException {
+			@QueryParam("reasonForNotProcessing") final String reasonForNotProcessing,
+			@QueryParam("defaultLocationUuid") final String defaultLocationUuid) throws BusinessException {
 
 		viralLoads = viralLoadQueryService.findViralLoadByRequestId(notProcessedNids);
 
 		viralLoads.forEach(viralLoad -> {
 			viralLoad.setNotProcessed();
+			viralLoad.setSynchronizedBy(defaultLocationUuid);
 			if (reasonForNotProcessing.equals("nid")) {
 				viralLoad.setCauseNoNID();
 			} else if (reasonForNotProcessing.equals("result")) {
@@ -196,6 +198,8 @@ public class ViralLoadResource extends AbstractUserContext {
 				viralLoad.setCauseFlaggedForReview();
 			} else if (reasonForNotProcessing.equals("duplicate")) {
 				viralLoad.setCauseDuplicateNid();
+			} else if (reasonForNotProcessing.equals("duplicatedReqId")) {
+				viralLoad.setCauseDuplicateReqId();
 			}
 			updateViralLoad(viralLoad);
 		});
@@ -230,13 +234,15 @@ public class ViralLoadResource extends AbstractUserContext {
 	@PUT
 	@Path("/requestProvince/processed")
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response _updateViralLoadProcessedViralLoad(@QueryParam("processedNids") final List<String> processedNids)
+	public Response _updateViralLoadProcessedViralLoad(@QueryParam("processedNids") final List<String> processedNids,
+			@QueryParam("defaultLocationUuid") final String defaultLocationUuid)
 			throws BusinessException {
 
 		viralLoads = viralLoadQueryService.findViralLoadByRequestId(processedNids);
 
 		viralLoads.forEach(viralLoad -> {
 			viralLoad.setProcessed();
+			viralLoad.setSynchronizedBy(defaultLocationUuid);   
 			updateViralLoad(viralLoad);
 		});
 
