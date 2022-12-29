@@ -14,15 +14,15 @@
 	<description>Disa API core Module</description>
 
 	<properties>
-		<java.version>1.8</java.version>
+		<java.version>8</java.version>
 	</properties>
 
 	<dependencies>
 
 		<dependency>
-			<groupId>mz.co.msaude</groupId>
-			<artifactId>boot-frameworks</artifactId>
-			<version>1.0.1-SNAPSHOT</version>
+			<groupId>com.github.FriendsInGlobalHealth</groupId>
+			<artifactId>Boot-Frameworks</artifactId>
+			<version>a5d6d07</version>
 		</dependency>
 
 		<dependency>
