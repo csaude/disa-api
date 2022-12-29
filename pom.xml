@@ -24,6 +24,13 @@
 		<java.version>1.8</java.version>
 	</properties>
 
+	<repositories>
+		<repository>
+			<id>jitpack.io</id>
+			<url>https://jitpack.io</url>
+		</repository>
+	</repositories>
+
 	<pluginRepositories>
 		<pluginRepository>
 			<id>repository.spring.release</id>
@@ -34,8 +41,6 @@
 
 	<modules>
 		<module>disa-api-core</module>
-		
-		
 		<module>disa-api-integ</module>
 	</modules>
 </project>
