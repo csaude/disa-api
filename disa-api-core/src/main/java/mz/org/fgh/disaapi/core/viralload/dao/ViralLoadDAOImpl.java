@@ -46,7 +46,7 @@ public class ViralLoadDAOImpl extends GenericDAOImpl<ViralLoad, Long> implements
 	
 	@Override
 	public List<ViralLoad> findByForm(String requestId, String nid, 
-			String healthFacilityLabCode, String referringRequestID, 
+			final List<String> healthFacilityLabCode, String referringRequestID, 
 			ViralLoadStatus viralLoadStatus, LocalDateTime startDate, LocalDateTime endDate, EntityStatus entityStatus) throws BusinessException {
 
 		return this.findByNamedQuery(ViralLoadDAO.QUERY_NAME.findByForm,

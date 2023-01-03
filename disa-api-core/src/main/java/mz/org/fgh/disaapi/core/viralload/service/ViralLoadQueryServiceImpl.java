@@ -54,7 +54,7 @@ public class ViralLoadQueryServiceImpl implements ViralLoadQueryService {
 	
 	@Override
 	public List<ViralLoad> findByForm(String requestId, String nid, 
-			String healthFacilityLabCode, 
+			final List<String> healthFacilityLabCode, 
 			String referringRequestID, ViralLoadStatus viralLoadStatus, LocalDateTime startDate, LocalDateTime endDate) throws BusinessException {
 
 		return this.viralLoadDAO.findByForm(requestId, nid, 
