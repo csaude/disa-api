@@ -22,7 +22,7 @@ public interface ViralLoadQueryService {
 	List<ViralLoad> findByLocationCodeAndStatus(List<String> locationCodes) throws BusinessException;
 
 	List<ViralLoad> findByForm(String requestId, String nid,
-			String healthFacilityLabCode, String ReferringRequestID,
+			List<String> healthFacilityLabCode, String ReferringRequestID,
 			ViralLoadStatus viralLoadStatus, LocalDateTime startDate, LocalDateTime endDate) throws BusinessException;
 
 	List<ViralLoad> findViralLoadByNid(List<String> nids) throws BusinessException;

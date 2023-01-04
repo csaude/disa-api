@@ -79,7 +79,7 @@ public class ViralLoadResource extends AbstractUserContext {
 	public Response findViralLoadsByForm(
 			@QueryParam("requestId") final String requestId,
 			@QueryParam("nid") final String nid,
-			@QueryParam("healthFacilityLabCode") final String healthFacilityLabCode,
+			@QueryParam("healthFacilityLabCode") final List<String> healthFacilityLabCode,
 			@QueryParam("referringRequestID") final String referringRequestID,
 			@QueryParam("viralLoadStatus") final ViralLoadStatus viralLoadStatus,
 			@QueryParam("startDate") final String strStartDate,
@@ -98,7 +98,7 @@ public class ViralLoadResource extends AbstractUserContext {
 	public Response _findViralLoadsByForm(
 			@QueryParam("requestId") final String requestId,
 			@QueryParam("nid") final String nid,
-			@QueryParam("healthFacilityLabCode") final String healthFacilityLabCode,
+			@QueryParam("healthFacilityLabCode") final List<String> healthFacilityLabCode,
 			@QueryParam("referringRequestID") final String referringRequestID,
 			@QueryParam("viralLoadStatus") final ViralLoadStatus viralLoadStatus,
 			@QueryParam("startDate") final String strStartDate,

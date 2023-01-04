@@ -22,11 +22,11 @@ public interface ViralLoadDAO extends GenericDAO<ViralLoad, Long> {
 	class QUERY {
 		public static final String findByLocationCodeAndStatus = "SELECT vl FROM ViralLoad vl WHERE vl.healthFacilityLabCode IN (:locationCodes)and vl.viralLoadStatus = :viralLoadStatus AND vl.entityStatus = :entityStatus "
 																+ "AND vl.requestingProvinceName = :requestingProvinceName";
-		public static final String findByLocationCodeAndStatusSimple = "SELECT vl FROM ViralLoad vl WHERE vl.healthFacilityLabCode IN (:locationCodes)and vl.viralLoadStatus = :viralLoadStatus AND vl.entityStatus = :entityStatus";
+		public static final String findByLocationCodeAndStatusSimple = "SELECT vl FROM ViralLoad vl WHERE vl.healthFacilityLabCode IN (:locationCodes) and vl.viralLoadStatus = :viralLoadStatus AND vl.entityStatus = :entityStatus";
 		public static final String findByForm = "SELECT vl FROM ViralLoad vl "
 											  + "WHERE (COALESCE(:requestId, null) is null or vl.requestId = :requestId) "
 				                              + "AND (COALESCE(:nid, null) is null or vl.nid = :nid) "
-				                              + "AND (COALESCE(:healthFacilityLabCode, null) is null or vl.healthFacilityLabCode = :healthFacilityLabCode) "
+				                              + "AND (COALESCE(:healthFacilityLabCode, null) is null or vl.healthFacilityLabCode IN (:healthFacilityLabCode)) "
 				                              + "AND (COALESCE(:referringRequestID, null) is null or vl.referringRequestID = :referringRequestID) "
 				                              + "AND (COALESCE(:viralLoadStatus, null) is null or vl.viralLoadStatus = :viralLoadStatus) "
 											  + "AND vl.createdAt between :startDate and :endDate "
@@ -56,7 +56,7 @@ public interface ViralLoadDAO extends GenericDAO<ViralLoad, Long> {
 			EntityStatus entityStatus) throws BusinessException;
 	
 	List<ViralLoad> findByForm(String requestId, String nid, 
-			String healthFacilityLabCode, String referringRequestID, 
+			final List<String> healthFacilityLabCode, String referringRequestID, 
 			ViralLoadStatus viralLoadStatus, LocalDateTime startDate, LocalDateTime endDate, 
 			EntityStatus entityStatus) throws BusinessException;
 
