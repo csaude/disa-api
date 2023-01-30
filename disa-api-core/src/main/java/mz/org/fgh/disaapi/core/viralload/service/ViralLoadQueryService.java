@@ -7,6 +7,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import mz.co.msaude.boot.frameworks.exception.BusinessException;
+import mz.org.fgh.disaapi.core.viralload.model.NotProcessingCause;
 import mz.org.fgh.disaapi.core.viralload.model.ViralLoad;
 import mz.org.fgh.disaapi.core.viralload.model.ViralLoadStatus;
 
@@ -23,7 +24,8 @@ public interface ViralLoadQueryService {
 
 	List<ViralLoad> findByForm(String requestId, String nid,
 			List<String> healthFacilityLabCode, String ReferringRequestID,
-			ViralLoadStatus viralLoadStatus, LocalDateTime startDate, LocalDateTime endDate) throws BusinessException;
+			ViralLoadStatus viralLoadStatus, NotProcessingCause notProcessingCause,
+			LocalDateTime startDate, LocalDateTime endDate) throws BusinessException;
 
 	List<ViralLoad> findViralLoadByNid(List<String> nids) throws BusinessException;
 
