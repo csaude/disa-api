@@ -2,11 +2,11 @@ package mz.org.fgh.disaapi.integ.test.integration;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import java.util.Base64;
 import java.util.Collections;
 import java.util.Map;
 
 import javax.inject.Inject;
-import javax.ws.rs.NotFoundException;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -38,6 +38,8 @@ import mz.org.fgh.disaapi.integ.test.fixturefactory.ViralLoadTemplate;
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
 public class ViralLoadResourceTest {
+
+	private static final String RESULT_URL = "/viralloads/{requestId}";
 
 	private static boolean dataLoaded = false;
 
@@ -88,20 +90,22 @@ public class ViralLoadResourceTest {
 
 	@Test
 	public void deleteShouldReturnOk() {
+		HttpHeaders headers = createHttpContentTypeAndAuthorizationHeaders();
+		HttpEntity<String> httpEntity = new HttpEntity<>("", headers);
 		Map<String, String> uriVariable = Collections.singletonMap("requestId", vl.getRequestId());
-		ResponseEntity<String> response = restTemplate.withBasicAuth("disa", "disa")
-				.exchange("/viralloads/{requestId}", HttpMethod.DELETE, null, String.class,
-						uriVariable);
+		ResponseEntity<String> response = restTemplate.exchange(RESULT_URL, HttpMethod.DELETE, httpEntity, String.class,
+				uriVariable);
 
 		assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
 	}
 
 	@Test
 	public void deleteShouldReturnNotFound() {
+		HttpHeaders headers = createHttpContentTypeAndAuthorizationHeaders();
+		HttpEntity<String> httpEntity = new HttpEntity<>("", headers);
 		Map<String, String> uriVariable = Collections.singletonMap("requestId", "NON EXISTING REQUESTID");
-		ResponseEntity<String> response = restTemplate.withBasicAuth("disa", "disa")
-				.exchange("/viralloads/{requestId}", HttpMethod.DELETE, null, String.class,
-						uriVariable);
+		ResponseEntity<String> response = restTemplate.exchange(RESULT_URL, HttpMethod.DELETE, httpEntity, String.class,
+				uriVariable);
 
 		assertThat(response.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
 	}
@@ -109,18 +113,15 @@ public class ViralLoadResourceTest {
 	@Test
 	public void updateShouldUpdateTheViralLoad() throws JSONException {
 
-		HttpHeaders headers = new HttpHeaders();
-		headers.setContentType(MediaType.APPLICATION_JSON);
+		HttpHeaders headers = createHttpContentTypeAndAuthorizationHeaders();
 		JSONObject vlJson = new JSONObject();
 		vlJson.put("viralLoadStatus", "PENDING");
 		HttpEntity<String> pendingVlEntity = new HttpEntity<String>(vlJson.toString(), headers);
 
 		Map<String, String> uriVariable = Collections.singletonMap("requestId", notProcessedVl.getRequestId());
 
-		ResponseEntity<ViralLoad> response = restTemplate.withBasicAuth("disa", "disa")
-				.exchange("/viralloads/{requestId}", HttpMethod.PATCH, pendingVlEntity,
-						ViralLoad.class,
-						uriVariable);
+		ResponseEntity<ViralLoad> response = restTemplate.exchange(RESULT_URL, HttpMethod.PATCH, pendingVlEntity,
+				ViralLoad.class, uriVariable);
 
 		assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
 		assertThat(response.getBody().getViralLoadStatus()).isEqualTo(ViralLoadStatus.PENDING);
@@ -129,20 +130,29 @@ public class ViralLoadResourceTest {
 	@Test
 	public void updateShouldReturnNotFound() throws JSONException {
 
-		HttpHeaders headers = new HttpHeaders();
-		headers.setContentType(MediaType.APPLICATION_JSON);
+		HttpHeaders headers = createHttpContentTypeAndAuthorizationHeaders();
 		JSONObject vlJson = new JSONObject();
 		vlJson.put("viralLoadStatus", "PENDING");
 		HttpEntity<String> pendingVlEntity = new HttpEntity<String>(vlJson.toString(), headers);
 
 		Map<String, String> uriVariable = Collections.singletonMap("requestId", inactiveVl.getRequestId());
 
-		ResponseEntity<String> response = restTemplate.withBasicAuth("disa", "disa")
-				.exchange("/Strings/{requestId}", HttpMethod.PATCH, pendingVlEntity,
-						String.class,
-						uriVariable);
+		ResponseEntity<String> response = restTemplate.exchange(RESULT_URL, HttpMethod.PATCH, pendingVlEntity,
+				String.class, uriVariable);
 
 		assertThat(response.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
 	}
 
+	private HttpHeaders createHttpContentTypeAndAuthorizationHeaders() {
+		HttpHeaders httpHeaders = new HttpHeaders();
+		httpHeaders.setContentType(MediaType.APPLICATION_JSON);
+		httpHeaders.add(HttpHeaders.AUTHORIZATION, "Basic " + performBasicAuthEncoding("disa", "disa"));
+		return httpHeaders;
+	}
+
+	private String performBasicAuthEncoding(String user, String password) {
+		String combined = user + ":" + password;
+		byte[] encodedBytes = Base64.getEncoder().encode(combined.getBytes());
+		return new String(encodedBytes);
+	}
 }
