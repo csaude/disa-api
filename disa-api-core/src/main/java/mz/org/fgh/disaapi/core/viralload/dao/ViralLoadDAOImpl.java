@@ -4,14 +4,20 @@
 package mz.org.fgh.disaapi.core.viralload.dao;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
 
 import org.springframework.stereotype.Repository;
+import org.springframework.util.StringUtils;
 
 import mz.co.msaude.boot.frameworks.exception.BusinessException;
 import mz.co.msaude.boot.frameworks.model.EntityStatus;
@@ -19,6 +25,7 @@ import mz.co.msaude.boot.frameworks.model.UserContext;
 import mz.co.msaude.boot.frameworks.util.ParamBuilder;
 import mz.co.msaude.boot.frameworks.util.UuidFactory;
 import mz.org.fgh.disaapi.core.viralload.model.NotProcessingCause;
+import mz.org.fgh.disaapi.core.viralload.model.Page;
 import mz.org.fgh.disaapi.core.viralload.model.ViralLoad;
 import mz.org.fgh.disaapi.core.viralload.model.ViralLoadStatus;
 
@@ -53,23 +60,82 @@ public class ViralLoadDAOImpl implements ViralLoadDAO {
 				new ParamBuilder().add("viralLoadStatus", viralLoadStatus).add("entityStatus", entityStatus)
 						.add("locationCodes", locationCodes).process());
 	}
-	
-	@Override
-	public List<ViralLoad> findByForm(String requestId, String nid, 
-			final List<String> healthFacilityLabCode, String referringRequestID, 
-			ViralLoadStatus viralLoadStatus, LocalDateTime startDate, LocalDateTime endDate, EntityStatus entityStatus) throws BusinessException {
 
-		return this.findByNamedQuery(ViralLoadDAO.QUERY_NAME.findByForm,
-				new ParamBuilder()
-								  .add("entityStatus", entityStatus)
-								  .add("requestId", requestId)
-								  .add("nid", nid)
-								  .add("healthFacilityLabCode", healthFacilityLabCode)
-								  .add("referringRequestID", referringRequestID)
-								  .add("viralLoadStatus", viralLoadStatus)
-								  .add("startDate", startDate)
-								  .add("endDate", endDate)
-								  .process());
+	@Override
+	public Page<ViralLoad> findByForm(
+			String requestId,
+			String nid,
+			List<String> healthFacilityLabCode,
+			String referringRequestID,
+			ViralLoadStatus viralLoadStatus,
+			NotProcessingCause notProcessingCause,
+			LocalDateTime startDate,
+			LocalDateTime endDate,
+			int pageNumber,
+			int pageSize,
+			EntityStatus entityStatus) throws BusinessException {
+
+		String alias = "vl";
+
+		CriteriaBuilder cb = entityManager.getCriteriaBuilder();
+		CriteriaQuery<ViralLoad> criteriaQuery = cb.createQuery(ViralLoad.class);
+		Root<ViralLoad> vl = criteriaQuery.from(ViralLoad.class);
+
+		vl.alias(alias);
+
+		// Build query predicates
+		List<Predicate> predicates = new ArrayList<>();
+		predicates.add(cb.equal(vl.get("entityStatus"), entityStatus));
+		predicates.add(vl.get("healthFacilityLabCode").in(healthFacilityLabCode));
+
+		if (startDate != null) {
+			predicates.add(cb.greaterThan(vl.get("createdAt"), startDate));
+		}
+
+		if (endDate != null) {
+			predicates.add(cb.lessThan(vl.get("createdAt"), endDate));
+		}
+
+		if (!StringUtils.isEmpty(requestId)) {
+			predicates.add(cb.equal(vl.get("requestId"), requestId));
+		}
+
+		if (!StringUtils.isEmpty(referringRequestID)) {
+			predicates.add(cb.equal(vl.get("referringRequestID"), referringRequestID));
+		}
+
+		if (viralLoadStatus != null) {
+			predicates.add(cb.equal(vl.get("viralLoadStatus"), viralLoadStatus));
+		}
+
+		if (notProcessingCause != null) {
+			predicates.add(cb.equal(vl.get("notProcessingCause"), notProcessingCause));
+		}
+
+		if (!StringUtils.isEmpty(nid)) {
+			predicates.add(cb.equal(vl.get("nid"), nid));
+		}
+
+		Predicate restriction = cb.and(predicates.toArray(new Predicate[0]));
+
+		// Build count query
+		CriteriaQuery<Long> countQuery = cb.createQuery(Long.class);
+		Root<ViralLoad> vlCount = countQuery.from(ViralLoad.class);
+		// Use same alias so restrictions match
+		vlCount.alias(alias);
+		countQuery.select(cb.count(vlCount));
+		countQuery.where(restriction);
+		Long count = entityManager.createQuery(countQuery).getSingleResult();
+
+		// Get paginated results
+		criteriaQuery.select(vl);
+		criteriaQuery.where(restriction);
+		// TODO order by?
+		TypedQuery<ViralLoad> q = entityManager.createQuery(criteriaQuery);
+		q.setFirstResult((pageNumber -1) * pageSize);
+		q.setMaxResults(pageSize);
+
+		return new Page<>(pageNumber, pageSize, count.longValue(), q.getResultList());
 	}
 
 	@Override

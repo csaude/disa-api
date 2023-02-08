@@ -46,21 +46,18 @@ public class ViralLoadTemplate implements TemplateLoader {
                 this.add("aprovedBy", "ITALIDA");
                 this.add("labComments", "N/A");
                 this.add("viralLoadStatus", ViralLoadStatus.PENDING);
-                this.add("requestId", "MZDISAPQM1384890");
-
+                this.add("requestId", regex("MZDISAPQM\\d{7}"));
             }
         });
 
         Fixture.of(ViralLoad.class).addTemplate(NOT_PROCESSED).inherits(VALID, new Rule() {
             {
-                this.add("requestId", "MZDISAPQM1384891");
                 this.add("viralLoadStatus", ViralLoadStatus.NOT_PROCESSED);
             }
         });
 
         Fixture.of(ViralLoad.class).addTemplate(INACTIVE).inherits(VALID, new Rule() {
             {
-                this.add("requestId", "MZDISAPQM1384892");
                 this.add("entityStatus", EntityStatus.INACTIVE);
             }
         });

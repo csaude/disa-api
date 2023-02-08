@@ -10,6 +10,7 @@ import mz.co.msaude.boot.frameworks.exception.BusinessException;
 import mz.co.msaude.boot.frameworks.model.EntityStatus;
 import mz.co.msaude.boot.frameworks.model.UserContext;
 import mz.org.fgh.disaapi.core.viralload.model.NotProcessingCause;
+import mz.org.fgh.disaapi.core.viralload.model.Page;
 import mz.org.fgh.disaapi.core.viralload.model.ViralLoad;
 import mz.org.fgh.disaapi.core.viralload.model.ViralLoadStatus;
 
@@ -51,13 +52,20 @@ public interface ViralLoadDAO {
 
 	List<ViralLoad> findByLocationCodeAndStatus(List<String> locationCodes, ViralLoadStatus viralLoadStatus,
 			EntityStatus entityStatus, String requestingProvinceName) throws BusinessException;
-	
+
 	List<ViralLoad> findByLocationCodeAndStatus(List<String> locationCodes, ViralLoadStatus viralLoadStatus,
 			EntityStatus entityStatus) throws BusinessException;
-	
-	List<ViralLoad> findByForm(String requestId, String nid, 
-			final List<String> healthFacilityLabCode, String referringRequestID, 
-			ViralLoadStatus viralLoadStatus, LocalDateTime startDate, LocalDateTime endDate, 
+
+	Page<ViralLoad> findByForm(
+			String requestId, String nid,
+			List<String> healthFacilityLabCode,
+			String referringRequestID,
+			ViralLoadStatus viralLoadStatus,
+			NotProcessingCause notProcessingCause,
+			LocalDateTime startDate,
+			LocalDateTime endDate,
+			int pageNumber,
+			int pageSize,
 			EntityStatus entityStatus) throws BusinessException;
 
 	List<ViralLoad> findByStatus(List<String> locationCodes, ViralLoadStatus viralLoadStatus, EntityStatus entityStatus)
