@@ -34,7 +34,8 @@ public class ViralLoadQueryServiceImpl implements ViralLoadQueryService {
 	private ViralLoadDAO viralLoadDAO;
 
 	@Override
-	public List<ViralLoad> findByLocationCodeAndStatus(List<String> locationCodes, String requestingProvinceName) throws BusinessException {
+	public List<ViralLoad> findByLocationCodeAndStatus(List<String> locationCodes, String requestingProvinceName)
+			throws BusinessException {
 
 		if (locationCodes.isEmpty()) {
 
@@ -71,6 +72,14 @@ public class ViralLoadQueryServiceImpl implements ViralLoadQueryService {
 		// Should always start with page 1
 		if (pageNumber == 0) {
 			pageNumber = 1;
+		}
+
+		if (pageSize == 0) {
+			pageSize = DEFAULT_PAGE_SIZE;
+		}
+
+		if (pageSize > MAX_PAGE_SIZE) {
+			pageSize = 100;
 		}
 
 		if (healthFacilityLabCode.isEmpty()) {

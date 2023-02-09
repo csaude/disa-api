@@ -21,6 +21,8 @@ public interface ViralLoadQueryService {
 
 	int DEFAULT_PAGE_SIZE = 10;
 
+	int MAX_PAGE_SIZE = 100;
+
 	List<ViralLoad> findByLocationCodeAndStatus(List<String> locationCodes, String requestingProvinceName) throws BusinessException;
 
 	List<ViralLoad> findByLocationCodeAndStatus(List<String> locationCodes) throws BusinessException;
