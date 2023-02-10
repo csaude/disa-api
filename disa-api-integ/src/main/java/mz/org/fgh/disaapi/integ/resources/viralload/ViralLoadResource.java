@@ -3,6 +3,7 @@
  */
 package mz.org.fgh.disaapi.integ.resources.viralload;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
@@ -85,8 +86,8 @@ public class ViralLoadResource extends AbstractUserContext {
 			@QueryParam("referringRequestID") final String referringRequestID,
 			@QueryParam("viralLoadStatus") final ViralLoadStatus viralLoadStatus,
 			@QueryParam("notProcessingCause") NotProcessingCause notProcessingCause,
-			@QueryParam("startDate") final String strStartDate,
-			@QueryParam("endDate") final String strEndDate,
+			@QueryParam("startDate") final LocalDateTime startDate,
+			@QueryParam("endDate") final LocalDateTime endDate,
 			@QueryParam("pageNumber") int pageNumber,
 			@QueryParam("pageSize") int pageSize,
 			@QueryParam("orderBy") String orderBy,
@@ -94,8 +95,7 @@ public class ViralLoadResource extends AbstractUserContext {
 			throws BusinessException {
 		Page<ViralLoad> vls = this.viralLoadQueryService.findByForm(requestId, nid,
 				healthFacilityLabCode, referringRequestID, viralLoadStatus, notProcessingCause,
-				convertToLocalDateTime(strStartDate),
-				convertToLocalDateTime(strEndDate), pageNumber, pageSize, orderBy, direction);
+				startDate, endDate, pageNumber, pageSize, orderBy, direction);
 		return Response.ok(vls).build();
 
 	}
@@ -110,8 +110,8 @@ public class ViralLoadResource extends AbstractUserContext {
 			@QueryParam("referringRequestID") final String referringRequestID,
 			@QueryParam("viralLoadStatus") final ViralLoadStatus viralLoadStatus,
 			@QueryParam("notProcessingCause") NotProcessingCause notProcessingCause,
-			@QueryParam("startDate") final String strStartDate,
-			@QueryParam("endDate") final String strEndDate,
+			@QueryParam("startDate") final LocalDateTime startDate,
+			@QueryParam("endDate") final LocalDateTime endDate,
 			@QueryParam("pageNumber") int pageNumber,
 			@QueryParam("pageSize") int pageSize,
 			@QueryParam("orderBy") String orderBy,
@@ -119,8 +119,7 @@ public class ViralLoadResource extends AbstractUserContext {
 			throws BusinessException {
 		Page<ViralLoad> vls = this.viralLoadQueryService.findByForm(requestId, nid,
 				healthFacilityLabCode, referringRequestID, viralLoadStatus, notProcessingCause,
-				convertToLocalDateTime(strStartDate),
-				convertToLocalDateTime(strEndDate), pageNumber, pageSize, orderBy, direction);
+				startDate, endDate, pageNumber, pageSize, orderBy, direction);
 		return Response.ok(vls).build();
 	}
 
