@@ -66,6 +66,8 @@ public interface ViralLoadDAO {
 			LocalDateTime endDate,
 			int pageNumber,
 			int pageSize,
+			String orderBy,
+			String direction,
 			EntityStatus entityStatus) throws BusinessException;
 
 	List<ViralLoad> findByStatus(List<String> locationCodes, ViralLoadStatus viralLoadStatus, EntityStatus entityStatus)

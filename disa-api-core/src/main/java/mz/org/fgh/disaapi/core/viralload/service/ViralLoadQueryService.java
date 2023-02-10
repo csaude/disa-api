@@ -23,6 +23,12 @@ public interface ViralLoadQueryService {
 
 	int MAX_PAGE_SIZE = 100;
 
+	String DEFAULT_ORDER_BY = "createdAt";
+
+	String DEFAULT_DIRECTION = "desc";
+
+	String ASCENDING = "asc";
+
 	List<ViralLoad> findByLocationCodeAndStatus(List<String> locationCodes, String requestingProvinceName) throws BusinessException;
 
 	List<ViralLoad> findByLocationCodeAndStatus(List<String> locationCodes) throws BusinessException;
@@ -37,7 +43,9 @@ public interface ViralLoadQueryService {
 			LocalDateTime startDate,
 			LocalDateTime endDate,
 			int pageNumber,
-			int pageSize) throws BusinessException;
+			int pageSize,
+			String orderBy,
+			String direction) throws BusinessException;
 
 	List<ViralLoad> findViralLoadByNid(List<String> nids) throws BusinessException;
 

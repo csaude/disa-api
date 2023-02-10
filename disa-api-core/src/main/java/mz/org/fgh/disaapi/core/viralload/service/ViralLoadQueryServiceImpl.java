@@ -67,7 +67,9 @@ public class ViralLoadQueryServiceImpl implements ViralLoadQueryService {
 			LocalDateTime startDate,
 			LocalDateTime endDate,
 			int pageNumber,
-			int pageSize) throws BusinessException {
+			int pageSize,
+			String orderBy,
+			String direction) throws BusinessException {
 
 		// Should always start with page 1
 		if (pageNumber == 0) {
@@ -79,7 +81,17 @@ public class ViralLoadQueryServiceImpl implements ViralLoadQueryService {
 		}
 
 		if (pageSize > MAX_PAGE_SIZE) {
-			pageSize = 100;
+			pageSize = MAX_PAGE_SIZE;
+		}
+
+		// If no order by order, use DEFAULT_ORDER_BY and DEFAULT_DIRECTION
+		if (StringUtils.isEmpty(orderBy)) {
+			orderBy = DEFAULT_ORDER_BY;
+			direction = DEFAULT_DIRECTION;
+
+		// If order by but no direction, sort ASCENDING
+		} else if (StringUtils.isEmpty(direction)) {
+			direction = ASCENDING;
 		}
 
 		if (healthFacilityLabCode.isEmpty()) {
@@ -88,7 +100,7 @@ public class ViralLoadQueryServiceImpl implements ViralLoadQueryService {
 
 		return this.viralLoadDAO.findByForm(requestId, nid,
 				healthFacilityLabCode, referringRequestID, viralLoadStatus, notProcessingCause, startDate, endDate,
-				pageNumber, pageSize, EntityStatus.ACTIVE);
+				pageNumber, pageSize, orderBy, direction, EntityStatus.ACTIVE);
 	}
 
 	@Override

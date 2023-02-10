@@ -88,11 +88,14 @@ public class ViralLoadResource extends AbstractUserContext {
 			@QueryParam("startDate") final String strStartDate,
 			@QueryParam("endDate") final String strEndDate,
 			@QueryParam("pageNumber") int pageNumber,
-			@QueryParam("pageSize") int pageSize)
+			@QueryParam("pageSize") int pageSize,
+			@QueryParam("orderBy") String orderBy,
+			@QueryParam("direction") String direction)
 			throws BusinessException {
 		Page<ViralLoad> vls = this.viralLoadQueryService.findByForm(requestId, nid,
 				healthFacilityLabCode, referringRequestID, viralLoadStatus, notProcessingCause,
-				convertToLocalDateTime(strStartDate), convertToLocalDateTime(strEndDate), pageNumber, pageSize);
+				convertToLocalDateTime(strStartDate),
+				convertToLocalDateTime(strEndDate), pageNumber, pageSize, orderBy, direction);
 		return Response.ok(vls).build();
 
 	}
@@ -110,11 +113,14 @@ public class ViralLoadResource extends AbstractUserContext {
 			@QueryParam("startDate") final String strStartDate,
 			@QueryParam("endDate") final String strEndDate,
 			@QueryParam("pageNumber") int pageNumber,
-			@QueryParam("pageSize") int pageSize)
+			@QueryParam("pageSize") int pageSize,
+			@QueryParam("orderBy") String orderBy,
+			@QueryParam("direction") String direction)
 			throws BusinessException {
 		Page<ViralLoad> vls = this.viralLoadQueryService.findByForm(requestId, nid,
 				healthFacilityLabCode, referringRequestID, viralLoadStatus, notProcessingCause,
-				convertToLocalDateTime(strStartDate), convertToLocalDateTime(strEndDate), pageNumber, pageSize);
+				convertToLocalDateTime(strStartDate),
+				convertToLocalDateTime(strEndDate), pageNumber, pageSize, orderBy, direction);
 		return Response.ok(vls).build();
 	}
 

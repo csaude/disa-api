@@ -73,6 +73,8 @@ public class ViralLoadDAOImpl implements ViralLoadDAO {
 			LocalDateTime endDate,
 			int pageNumber,
 			int pageSize,
+			String orderBy,
+			String direction,
 			EntityStatus entityStatus) throws BusinessException {
 
 		String alias = "vl";
@@ -127,10 +129,17 @@ public class ViralLoadDAOImpl implements ViralLoadDAO {
 		countQuery.where(restriction);
 		Long count = entityManager.createQuery(countQuery).getSingleResult();
 
-		// Get paginated results
 		criteriaQuery.select(vl);
 		criteriaQuery.where(restriction);
-		// TODO order by?
+
+		// Sorting
+		if (direction.equalsIgnoreCase("asc")) {
+			criteriaQuery.orderBy(cb.asc(vl.get(orderBy)));
+		} else if (direction.equalsIgnoreCase("desc")) {
+			criteriaQuery.orderBy(cb.desc(vl.get(orderBy)));
+		}
+
+		// Get paginated results
 		TypedQuery<ViralLoad> q = entityManager.createQuery(criteriaQuery);
 		q.setFirstResult((pageNumber -1) * pageSize);
 		q.setMaxResults(pageSize);
