@@ -64,6 +64,7 @@ public interface ViralLoadDAO {
 			NotProcessingCause notProcessingCause,
 			LocalDateTime startDate,
 			LocalDateTime endDate,
+			String search,
 			int pageNumber,
 			int pageSize,
 			String orderBy,

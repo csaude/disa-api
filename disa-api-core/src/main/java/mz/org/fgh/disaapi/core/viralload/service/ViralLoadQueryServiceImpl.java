@@ -66,6 +66,7 @@ public class ViralLoadQueryServiceImpl implements ViralLoadQueryService {
 			NotProcessingCause notProcessingCause,
 			LocalDateTime startDate,
 			LocalDateTime endDate,
+			String search,
 			int pageNumber,
 			int pageSize,
 			String orderBy,
@@ -99,7 +100,7 @@ public class ViralLoadQueryServiceImpl implements ViralLoadQueryService {
 		}
 
 		return this.viralLoadDAO.findByForm(requestId, nid,
-				healthFacilityLabCode, referringRequestID, viralLoadStatus, notProcessingCause, startDate, endDate,
+				healthFacilityLabCode, referringRequestID, viralLoadStatus, notProcessingCause, startDate, endDate, search,
 				pageNumber, pageSize, orderBy, direction, EntityStatus.ACTIVE);
 	}
 

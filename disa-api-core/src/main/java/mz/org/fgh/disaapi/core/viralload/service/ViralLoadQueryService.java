@@ -42,6 +42,7 @@ public interface ViralLoadQueryService {
 			NotProcessingCause notProcessingCause,
 			LocalDateTime startDate,
 			LocalDateTime endDate,
+			String search,
 			int pageNumber,
 			int pageSize,
 			String orderBy,

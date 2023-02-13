@@ -71,6 +71,7 @@ public class ViralLoadDAOImpl implements ViralLoadDAO {
 			NotProcessingCause notProcessingCause,
 			LocalDateTime startDate,
 			LocalDateTime endDate,
+			String search,
 			int pageNumber,
 			int pageSize,
 			String orderBy,
@@ -116,6 +117,15 @@ public class ViralLoadDAOImpl implements ViralLoadDAO {
 
 		if (!StringUtils.isEmpty(nid)) {
 			predicates.add(cb.equal(vl.get("nid"), nid));
+		}
+
+		if (!StringUtils.isEmpty(search)) {
+			predicates.add(cb.or(
+				cb.like(vl.get("nid"), search + "%"),
+				cb.like(vl.get("firstName"), search + "%"),
+				cb.like(vl.get("lastName"), search + "%"),
+				cb.like(vl.get("requestId"), search + "%")
+			));
 		}
 
 		Predicate restriction = cb.and(predicates.toArray(new Predicate[0]));

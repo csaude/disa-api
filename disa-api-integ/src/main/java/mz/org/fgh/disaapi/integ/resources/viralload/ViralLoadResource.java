@@ -90,12 +90,13 @@ public class ViralLoadResource extends AbstractUserContext {
 			@QueryParam("endDate") final LocalDateTime endDate,
 			@QueryParam("pageNumber") int pageNumber,
 			@QueryParam("pageSize") int pageSize,
+			@QueryParam("search") String search,
 			@QueryParam("orderBy") String orderBy,
 			@QueryParam("direction") String direction)
 			throws BusinessException {
 		Page<ViralLoad> vls = this.viralLoadQueryService.findByForm(requestId, nid,
 				healthFacilityLabCode, referringRequestID, viralLoadStatus, notProcessingCause,
-				startDate, endDate, pageNumber, pageSize, orderBy, direction);
+				startDate, endDate, search, pageNumber, pageSize, orderBy, direction);
 		return Response.ok(vls).build();
 
 	}
@@ -114,12 +115,13 @@ public class ViralLoadResource extends AbstractUserContext {
 			@QueryParam("endDate") final LocalDateTime endDate,
 			@QueryParam("pageNumber") int pageNumber,
 			@QueryParam("pageSize") int pageSize,
+			@QueryParam("search") String search,
 			@QueryParam("orderBy") String orderBy,
 			@QueryParam("direction") String direction)
 			throws BusinessException {
 		Page<ViralLoad> vls = this.viralLoadQueryService.findByForm(requestId, nid,
 				healthFacilityLabCode, referringRequestID, viralLoadStatus, notProcessingCause,
-				startDate, endDate, pageNumber, pageSize, orderBy, direction);
+				startDate, endDate, search, pageNumber, pageSize, orderBy, direction);
 		return Response.ok(vls).build();
 	}
 
