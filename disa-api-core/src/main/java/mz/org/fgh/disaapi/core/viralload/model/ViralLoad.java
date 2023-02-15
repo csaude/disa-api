@@ -157,26 +157,15 @@ public class ViralLoad extends GenericEntity {
 	@Column(name = "FinalViralLoadResult")
 	private String finalViralLoadResult;
 
-	@Column(name = "IsPoc")
-	private byte isPoc;
-	
 	@Column(name = "SYNCHRONIZED_BY")
 	private String synchronizedBy;
-	
+
 	public String getSynchronizedBy() {
 		return synchronizedBy;
 	}
 
 	public void setSynchronizedBy(String synchronizedBy) {
 		this.synchronizedBy = synchronizedBy;
-	}
-
-	public byte getIsPoc() {
-		return isPoc;
-	}
-
-	public void setIsPoc(byte isPoc) {
-		this.isPoc = isPoc;
 	}
 
 	public String getFinalViralLoadResult() {
@@ -474,7 +463,7 @@ public class ViralLoad extends GenericEntity {
 	public void setCauseDuplicateNid() {
 		notProcessingCause = NotProcessingCause.DUPLICATE_NID;
 	}
-	
+
 	public void setCauseDuplicateReqId() {
 		notProcessingCause = NotProcessingCause.DUPLICATED_REQUEST_ID;
 	}
