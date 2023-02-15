@@ -24,14 +24,6 @@ public interface ViralLoadDAO {
 		public static final String findByLocationCodeAndStatus = "SELECT vl FROM ViralLoad vl WHERE vl.healthFacilityLabCode IN (:locationCodes)and vl.viralLoadStatus = :viralLoadStatus AND vl.entityStatus = :entityStatus "
 																+ "AND vl.requestingProvinceName = :requestingProvinceName";
 		public static final String findByLocationCodeAndStatusSimple = "SELECT vl FROM ViralLoad vl WHERE vl.healthFacilityLabCode IN (:locationCodes) and vl.viralLoadStatus = :viralLoadStatus AND vl.entityStatus = :entityStatus";
-		public static final String findByForm = "SELECT vl FROM ViralLoad vl "
-											  + "WHERE (COALESCE(:requestId, null) is null or vl.requestId = :requestId) "
-				                              + "AND (COALESCE(:nid, null) is null or vl.nid = :nid) "
-				                              + "AND (COALESCE(:healthFacilityLabCode, null) is null or vl.healthFacilityLabCode IN (:healthFacilityLabCode)) "
-				                              + "AND (COALESCE(:referringRequestID, null) is null or vl.referringRequestID = :referringRequestID) "
-				                              + "AND (COALESCE(:viralLoadStatus, null) is null or vl.viralLoadStatus = :viralLoadStatus) "
-											  + "AND vl.createdAt between :startDate and :endDate "
-				                              + "AND vl.entityStatus = :entityStatus";
 		public static final String findByStatusAndDates = "SELECT vl FROM ViralLoad vl WHERE vl.healthFacilityLabCode IN (:locationCodes)and vl.viralLoadStatus = :viralLoadStatus AND vl.entityStatus = :entityStatus and vl.createdAt between :startDate and :endDate";
 		public static final String findViralLoadByNid = "SELECT vl FROM ViralLoad vl WHERE vl.nid IN (:nids) AND vl.entityStatus = :entityStatus";
 		public static final String findViralLoadByRequestId = "SELECT vl FROM ViralLoad vl WHERE vl.requestId IN (:requestIds) AND vl.entityStatus = :entityStatus";
@@ -42,7 +34,6 @@ public interface ViralLoadDAO {
 	class QUERY_NAME {
 		public static final String findByLocationCodeAndStatus = "ViralLoad.findByLocationCodeAndStatus";
 		public static final String findByLocationCodeAndStatusSimple = "ViralLoad.findByLocationCodeAndStatusSimple";
-		public static final String findByForm = "ViralLoad.findByForm";
 		public static final String findByStatusAndDates = "ViralLoad.findByStatusAndDates";
 		public static final String findViralLoadByNid = "ViralLoad.findViralLoadByNid";
 		public static final String findViralLoadByRequestId = "ViralLoad.findViralLoadByRequestId";
@@ -71,6 +62,19 @@ public interface ViralLoadDAO {
 			String direction,
 			EntityStatus entityStatus) throws BusinessException;
 
+	List<ViralLoad> findAllByForm(
+			String requestId, String nid,
+			List<String> healthFacilityLabCode,
+			String referringRequestID,
+			ViralLoadStatus viralLoadStatus,
+			NotProcessingCause notProcessingCause,
+			LocalDateTime startDate,
+			LocalDateTime endDate,
+			String search,
+			String orderBy,
+			String direction,
+			EntityStatus entityStatus) throws BusinessException;
+
 	List<ViralLoad> findByStatus(List<String> locationCodes, ViralLoadStatus viralLoadStatus, EntityStatus entityStatus)
 			throws BusinessException;
 
@@ -79,7 +83,8 @@ public interface ViralLoadDAO {
 
 	List<ViralLoad> findViralLoadByNid(List<String> nids, EntityStatus entityStatus) throws BusinessException;
 
-	List<ViralLoad> findViralLoadByRequestId(List<String> requestIds, EntityStatus entityStatus) throws BusinessException;
+	List<ViralLoad> findViralLoadByRequestId(List<String> requestIds, EntityStatus entityStatus)
+			throws BusinessException;
 
 	List<ViralLoad> findByLocationCodeStatusAndNotProcessingCause(List<String> locationCodes,
 			ViralLoadStatus viralLoadStatus, EntityStatus entityStatus, NotProcessingCause reasonForNotProcessing)

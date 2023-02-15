@@ -100,6 +100,30 @@ public class ViralLoadResource extends AbstractUserContext {
 	}
 
 	@GET
+	@Path("/requestProvince/export")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response exportViralLoads(
+			@QueryParam("requestId") final String requestId,
+			@QueryParam("nid") final String nid,
+			@QueryParam("healthFacilityLabCode") final List<String> healthFacilityLabCode,
+			@QueryParam("referringRequestID") final String referringRequestID,
+			@QueryParam("viralLoadStatus") final ViralLoadStatus viralLoadStatus,
+			@QueryParam("notProcessingCause") NotProcessingCause notProcessingCause,
+			@QueryParam("startDate") final LocalDateTime startDate,
+			@QueryParam("endDate") final LocalDateTime endDate,
+			@QueryParam("pageNumber") int pageNumber,
+			@QueryParam("pageSize") int pageSize,
+			@QueryParam("search") String search,
+			@QueryParam("orderBy") String orderBy,
+			@QueryParam("direction") String direction)
+			throws BusinessException {
+		List<ViralLoad> vls = this.viralLoadQueryService.findAllByForm(requestId, nid,
+				healthFacilityLabCode, referringRequestID, viralLoadStatus, notProcessingCause,
+				startDate, endDate, search, pageNumber, pageSize, orderBy, direction);
+		return Response.ok(vls).build();
+	}
+
+	@GET
 	@Path("/requestProvince/viral-status")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response _findViralLoadsByStatus(@QueryParam("locationCodes") final List<String> locationCodes,

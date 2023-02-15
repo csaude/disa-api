@@ -100,8 +100,44 @@ public class ViralLoadQueryServiceImpl implements ViralLoadQueryService {
 		}
 
 		return this.viralLoadDAO.findByForm(requestId, nid,
-				healthFacilityLabCode, referringRequestID, viralLoadStatus, notProcessingCause, startDate, endDate, search,
+				healthFacilityLabCode, referringRequestID, viralLoadStatus, notProcessingCause, startDate, endDate,
+				search,
 				pageNumber, pageSize, orderBy, direction, EntityStatus.ACTIVE);
+	}
+
+	@Override
+	public List<ViralLoad> findAllByForm(String requestId, String nid, List<String> healthFacilityLabCode,
+			String referringRequestID, ViralLoadStatus viralLoadStatus, NotProcessingCause notProcessingCause,
+			LocalDateTime startDate, LocalDateTime endDate, String search, int pageNumber, int pageSize, String orderBy,
+			String direction) throws BusinessException {
+
+		// If no order by order, use DEFAULT_ORDER_BY and DEFAULT_DIRECTION
+		if (StringUtils.isEmpty(orderBy)) {
+			orderBy = DEFAULT_ORDER_BY;
+			direction = DEFAULT_DIRECTION;
+
+			// If order by but no direction, sort ASCENDING
+		} else if (StringUtils.isEmpty(direction)) {
+			direction = ASCENDING;
+		}
+
+		if (healthFacilityLabCode.isEmpty()) {
+			throw new BusinessException("The HF code should be informed");
+		}
+
+		return this.viralLoadDAO.findAllByForm(
+				requestId,
+				nid,
+				healthFacilityLabCode,
+				referringRequestID,
+				viralLoadStatus,
+				notProcessingCause,
+				startDate,
+				endDate,
+				search,
+				orderBy,
+				direction,
+				EntityStatus.ACTIVE);
 	}
 
 	@Override

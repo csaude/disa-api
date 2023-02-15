@@ -64,6 +64,16 @@ public class ViralLoadResourceTest {
 			+ "nid={nid}&"
 			+ "pageNumber={pageNumber}&";
 
+	private static final String EXPORT_URL = "/viralloads/requestProvince/export?"
+			+ "startDate={startDate}&"
+			+ "endDate={endDate}&"
+			+ "healthFacilityLabCode={healthFacilityLabCode}&"
+			+ "requestId={requestId}&"
+			+ "referringRequestID={referringRequestID}&"
+			+ "viralLoadStatus={viralLoadStatus}&"
+			+ "notProcessingCause={notProcessingCause}&"
+			+ "nid={nid}&";
+
 	@Inject
 	private ViralLoadService viralLoadService;
 
@@ -205,6 +215,35 @@ public class ViralLoadResourceTest {
 		assertThat(page2.getPageSize()).isEqualTo(ViralLoadQueryService.DEFAULT_PAGE_SIZE);
 		assertThat(page2.getTotalResults()).isEqualTo(16);
 		assertThat(page2.getResultList()).hasSize(16 - ViralLoadQueryService.DEFAULT_PAGE_SIZE);
+	}
+
+	@Test
+	public void exportViralLoadsByFormShouldReturnAllResults() {
+		DateTimeFormatter ofPattern = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+		LocalDateTime todayMidnight = LocalDateTime.of(LocalDate.now(), LocalTime.MIDNIGHT);
+		LocalDateTime tomorrowMidnight = todayMidnight.plusDays(1);
+
+		HttpHeaders headers = createHttpContentTypeAndAuthorizationHeaders();
+		HttpEntity<String> httpEntity = new HttpEntity<String>(null, headers);
+		Map<String, String> uriVariables = new HashMap<>();
+		uriVariables.put("startDate", "2022-01-01 00:00:00");
+		uriVariables.put("endDate", tomorrowMidnight.format(ofPattern));
+		uriVariables.put("healthFacilityLabCode", "01041137");
+		uriVariables.put("requestId", null);
+		uriVariables.put("nid", null);
+		uriVariables.put("referringRequestID", null);
+		uriVariables.put("viralLoadStatus", null);
+		uriVariables.put("notProcessingCause", null);
+
+		ParameterizedTypeReference<List<ViralLoad>> responseType = new ParameterizedTypeReference<List<ViralLoad>>() {
+		};
+
+		ResponseEntity<List<ViralLoad>> response = restTemplate
+				.exchange(EXPORT_URL, HttpMethod.GET, httpEntity, responseType, uriVariables);
+		List<ViralLoad> viralLoads = response.getBody();
+		assertThat(response.getStatusCode().is2xxSuccessful()).isTrue();
+		assertThat(response.getHeaders().get("Content-Type").get(0)).isEqualTo("application/json");
+		assertThat(viralLoads).hasSize(16);
 	}
 
 	private HttpHeaders createHttpContentTypeAndAuthorizationHeaders() {

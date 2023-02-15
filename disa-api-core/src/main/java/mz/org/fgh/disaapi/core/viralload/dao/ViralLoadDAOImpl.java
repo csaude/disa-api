@@ -87,48 +87,10 @@ public class ViralLoadDAOImpl implements ViralLoadDAO {
 		vl.alias(alias);
 
 		// Build query predicates
-		List<Predicate> predicates = new ArrayList<>();
-		predicates.add(cb.equal(vl.get("entityStatus"), entityStatus));
-		predicates.add(vl.get("healthFacilityLabCode").in(healthFacilityLabCode));
-
-		if (startDate != null) {
-			predicates.add(cb.greaterThan(vl.get("createdAt"), startDate));
-		}
-
-		if (endDate != null) {
-			predicates.add(cb.lessThan(vl.get("createdAt"), endDate));
-		}
-
-		if (!StringUtils.isEmpty(requestId)) {
-			predicates.add(cb.equal(vl.get("requestId"), requestId));
-		}
-
-		if (!StringUtils.isEmpty(referringRequestID)) {
-			predicates.add(cb.equal(vl.get("referringRequestID"), referringRequestID));
-		}
-
-		if (viralLoadStatus != null) {
-			predicates.add(cb.equal(vl.get("viralLoadStatus"), viralLoadStatus));
-		}
-
-		if (notProcessingCause != null) {
-			predicates.add(cb.equal(vl.get("notProcessingCause"), notProcessingCause));
-		}
-
-		if (!StringUtils.isEmpty(nid)) {
-			predicates.add(cb.equal(vl.get("nid"), nid));
-		}
-
-		if (!StringUtils.isEmpty(search)) {
-			predicates.add(cb.or(
-				cb.like(vl.get("nid"), search + "%"),
-				cb.like(vl.get("firstName"), search + "%"),
-				cb.like(vl.get("lastName"), search + "%"),
-				cb.like(vl.get("requestId"), search + "%")
-			));
-		}
-
-		Predicate restriction = cb.and(predicates.toArray(new Predicate[0]));
+		Predicate restrictions = getSearchQueryRestrictions(
+				requestId, nid, healthFacilityLabCode, referringRequestID,
+				viralLoadStatus, notProcessingCause, startDate, endDate, search,
+				entityStatus, cb, vl);
 
 		// Build count query
 		CriteriaQuery<Long> countQuery = cb.createQuery(Long.class);
@@ -136,25 +98,56 @@ public class ViralLoadDAOImpl implements ViralLoadDAO {
 		// Use same alias so restrictions match
 		vlCount.alias(alias);
 		countQuery.select(cb.count(vlCount));
-		countQuery.where(restriction);
+		countQuery.where(restrictions);
 		Long count = entityManager.createQuery(countQuery).getSingleResult();
 
 		criteriaQuery.select(vl);
-		criteriaQuery.where(restriction);
+		criteriaQuery.where(restrictions);
 
 		// Sorting
-		if (direction.equalsIgnoreCase("asc")) {
-			criteriaQuery.orderBy(cb.asc(vl.get(orderBy)));
-		} else if (direction.equalsIgnoreCase("desc")) {
-			criteriaQuery.orderBy(cb.desc(vl.get(orderBy)));
-		}
+		setSearchQueryOrder(orderBy, direction, cb, criteriaQuery, vl);
 
 		// Get paginated results
 		TypedQuery<ViralLoad> q = entityManager.createQuery(criteriaQuery);
-		q.setFirstResult((pageNumber -1) * pageSize);
+		q.setFirstResult((pageNumber - 1) * pageSize);
 		q.setMaxResults(pageSize);
 
 		return new Page<>(pageNumber, pageSize, count.longValue(), q.getResultList());
+	}
+
+	@Override
+	public List<ViralLoad> findAllByForm(
+			String requestId,
+			String nid,
+			List<String> healthFacilityLabCode,
+			String referringRequestID,
+			ViralLoadStatus viralLoadStatus,
+			NotProcessingCause notProcessingCause,
+			LocalDateTime startDate,
+			LocalDateTime endDate,
+			String search,
+			String orderBy,
+			String direction,
+			EntityStatus entityStatus) throws BusinessException {
+
+		CriteriaBuilder cb = entityManager.getCriteriaBuilder();
+		CriteriaQuery<ViralLoad> criteriaQuery = cb.createQuery(ViralLoad.class);
+		Root<ViralLoad> vl = criteriaQuery.from(ViralLoad.class);
+
+		// Build query predicates
+		Predicate restrictions = getSearchQueryRestrictions(
+				requestId, nid, healthFacilityLabCode, referringRequestID,
+				viralLoadStatus, notProcessingCause, startDate, endDate, search,
+				entityStatus, cb, vl);
+
+		criteriaQuery.select(vl);
+		criteriaQuery.where(restrictions);
+
+		setSearchQueryOrder(orderBy, direction, cb, criteriaQuery, vl);
+
+		TypedQuery<ViralLoad> q = entityManager.createQuery(criteriaQuery);
+
+		return q.getResultList();
 	}
 
 	@Override
@@ -233,5 +226,72 @@ public class ViralLoadDAOImpl implements ViralLoadDAO {
 		this.entityManager.merge(entity);
 
 		return entity;
+	}
+
+	private Predicate getSearchQueryRestrictions(
+			String requestId,
+			String nid,
+			List<String> healthFacilityLabCode,
+			String referringRequestID,
+			ViralLoadStatus viralLoadStatus,
+			NotProcessingCause notProcessingCause,
+			LocalDateTime startDate,
+			LocalDateTime endDate,
+			String search,
+			EntityStatus entityStatus,
+			CriteriaBuilder cb,
+			Root<ViralLoad> vl) {
+
+		List<Predicate> predicates = new ArrayList<>();
+		predicates.add(cb.equal(vl.get("entityStatus"), entityStatus));
+		predicates.add(vl.get("healthFacilityLabCode").in(healthFacilityLabCode));
+
+		if (startDate != null) {
+			predicates.add(cb.greaterThan(vl.get("createdAt"), startDate));
+		}
+
+		if (endDate != null) {
+			predicates.add(cb.lessThan(vl.get("createdAt"), endDate));
+		}
+
+		if (!StringUtils.isEmpty(requestId)) {
+			predicates.add(cb.equal(vl.get("requestId"), requestId));
+		}
+
+		if (!StringUtils.isEmpty(referringRequestID)) {
+			predicates.add(cb.equal(vl.get("referringRequestID"), referringRequestID));
+		}
+
+		if (viralLoadStatus != null) {
+			predicates.add(cb.equal(vl.get("viralLoadStatus"), viralLoadStatus));
+		}
+
+		if (notProcessingCause != null) {
+			predicates.add(cb.equal(vl.get("notProcessingCause"), notProcessingCause));
+		}
+
+		if (!StringUtils.isEmpty(nid)) {
+			predicates.add(cb.equal(vl.get("nid"), nid));
+		}
+
+		if (!StringUtils.isEmpty(search)) {
+			predicates.add(cb.or(
+					cb.like(vl.get("nid"), search + "%"),
+					cb.like(vl.get("firstName"), search + "%"),
+					cb.like(vl.get("lastName"), search + "%"),
+					cb.like(vl.get("requestId"), search + "%")));
+		}
+
+		return cb.and(predicates.toArray(new Predicate[0]));
+	}
+
+	private void setSearchQueryOrder(String orderBy, String direction, CriteriaBuilder cb,
+			CriteriaQuery<ViralLoad> criteriaQuery,
+			Root<ViralLoad> vl) {
+		if (direction.equalsIgnoreCase("asc")) {
+			criteriaQuery.orderBy(cb.asc(vl.get(orderBy)));
+		} else if (direction.equalsIgnoreCase("desc")) {
+			criteriaQuery.orderBy(cb.desc(vl.get(orderBy)));
+		}
 	}
 }

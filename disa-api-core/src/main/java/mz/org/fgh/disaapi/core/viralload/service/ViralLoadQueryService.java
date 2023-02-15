@@ -29,7 +29,8 @@ public interface ViralLoadQueryService {
 
 	String ASCENDING = "asc";
 
-	List<ViralLoad> findByLocationCodeAndStatus(List<String> locationCodes, String requestingProvinceName) throws BusinessException;
+	List<ViralLoad> findByLocationCodeAndStatus(List<String> locationCodes, String requestingProvinceName)
+			throws BusinessException;
 
 	List<ViralLoad> findByLocationCodeAndStatus(List<String> locationCodes) throws BusinessException;
 
@@ -38,6 +39,21 @@ public interface ViralLoadQueryService {
 			String nid,
 			List<String> healthFacilityLabCode,
 			String ReferringRequestID,
+			ViralLoadStatus viralLoadStatus,
+			NotProcessingCause notProcessingCause,
+			LocalDateTime startDate,
+			LocalDateTime endDate,
+			String search,
+			int pageNumber,
+			int pageSize,
+			String orderBy,
+			String direction) throws BusinessException;
+
+	List<ViralLoad> findAllByForm(
+			String requestId,
+			String nid,
+			List<String> healthFacilityLabCode,
+			String referringRequestID,
 			ViralLoadStatus viralLoadStatus,
 			NotProcessingCause notProcessingCause,
 			LocalDateTime startDate,
