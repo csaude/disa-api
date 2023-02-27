@@ -13,7 +13,7 @@ import org.springframework.stereotype.Service;
 
 import mz.org.fgh.disaapi.core.orgunit.service.OrgUnitQueryService;
 
-@Path("orgunits")
+@Path("/v2/orgunits")
 @Service
 public class OrgUnitResource {
 

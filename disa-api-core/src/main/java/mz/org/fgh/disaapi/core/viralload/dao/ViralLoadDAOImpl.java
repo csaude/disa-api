@@ -125,7 +125,6 @@ public class ViralLoadDAOImpl implements ViralLoadDAO {
 			NotProcessingCause notProcessingCause,
 			LocalDateTime startDate,
 			LocalDateTime endDate,
-			String search,
 			String orderBy,
 			String direction,
 			EntityStatus entityStatus) throws BusinessException {
@@ -137,7 +136,7 @@ public class ViralLoadDAOImpl implements ViralLoadDAO {
 		// Build query predicates
 		Predicate restrictions = getSearchQueryRestrictions(
 				requestId, nid, healthFacilityLabCode, referringRequestID,
-				viralLoadStatus, notProcessingCause, startDate, endDate, search,
+				viralLoadStatus, notProcessingCause, startDate, endDate, null,
 				entityStatus, cb, vl);
 
 		criteriaQuery.select(vl);

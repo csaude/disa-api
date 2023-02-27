@@ -51,9 +51,9 @@ import mz.org.fgh.disaapi.integ.test.fixturefactory.ViralLoadTemplate;
 @DirtiesContext(classMode = ClassMode.BEFORE_EACH_TEST_METHOD)
 public class ViralLoadResourceTest {
 
-	private static final String RESULT_URL = "/viralloads/{requestId}";
+	private static final String RESULT_URL = "/v2/viralloads/{requestId}";
 
-	private static final String SEARCH_URL = "/viralloads/requestProvince/search-form?"
+	private static final String SEARCH_URL = "/v2/viralloads/search-form?"
 			+ "startDate={startDate}&"
 			+ "endDate={endDate}&"
 			+ "healthFacilityLabCode={healthFacilityLabCode}&"
@@ -64,7 +64,7 @@ public class ViralLoadResourceTest {
 			+ "nid={nid}&"
 			+ "pageNumber={pageNumber}&";
 
-	private static final String EXPORT_URL = "/viralloads/requestProvince/export?"
+	private static final String EXPORT_URL = "/v2/viralloads/export?"
 			+ "startDate={startDate}&"
 			+ "endDate={endDate}&"
 			+ "healthFacilityLabCode={healthFacilityLabCode}&"

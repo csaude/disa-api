@@ -70,7 +70,6 @@ public interface ViralLoadDAO {
 			NotProcessingCause notProcessingCause,
 			LocalDateTime startDate,
 			LocalDateTime endDate,
-			String search,
 			String orderBy,
 			String direction,
 			EntityStatus entityStatus) throws BusinessException;

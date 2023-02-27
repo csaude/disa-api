@@ -57,12 +57,7 @@ public interface ViralLoadQueryService {
 			ViralLoadStatus viralLoadStatus,
 			NotProcessingCause notProcessingCause,
 			LocalDateTime startDate,
-			LocalDateTime endDate,
-			String search,
-			int pageNumber,
-			int pageSize,
-			String orderBy,
-			String direction) throws BusinessException;
+			LocalDateTime endDate) throws BusinessException;
 
 	List<ViralLoad> findViralLoadByNid(List<String> nids) throws BusinessException;
 

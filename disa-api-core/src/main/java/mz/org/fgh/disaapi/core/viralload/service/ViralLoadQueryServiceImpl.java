@@ -108,18 +108,7 @@ public class ViralLoadQueryServiceImpl implements ViralLoadQueryService {
 	@Override
 	public List<ViralLoad> findAllByForm(String requestId, String nid, List<String> healthFacilityLabCode,
 			String referringRequestID, ViralLoadStatus viralLoadStatus, NotProcessingCause notProcessingCause,
-			LocalDateTime startDate, LocalDateTime endDate, String search, int pageNumber, int pageSize, String orderBy,
-			String direction) throws BusinessException {
-
-		// If no order by order, use DEFAULT_ORDER_BY and DEFAULT_DIRECTION
-		if (StringUtils.isEmpty(orderBy)) {
-			orderBy = DEFAULT_ORDER_BY;
-			direction = DEFAULT_DIRECTION;
-
-			// If order by but no direction, sort ASCENDING
-		} else if (StringUtils.isEmpty(direction)) {
-			direction = ASCENDING;
-		}
+			LocalDateTime startDate, LocalDateTime endDate) throws BusinessException {
 
 		if (healthFacilityLabCode.isEmpty()) {
 			throw new BusinessException("The HF code should be informed");
@@ -134,9 +123,8 @@ public class ViralLoadQueryServiceImpl implements ViralLoadQueryService {
 				notProcessingCause,
 				startDate,
 				endDate,
-				search,
-				orderBy,
-				direction,
+				DEFAULT_ORDER_BY,
+				DEFAULT_DIRECTION,
 				EntityStatus.ACTIVE);
 	}
 
