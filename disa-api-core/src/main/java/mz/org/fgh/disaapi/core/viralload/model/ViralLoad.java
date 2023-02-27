@@ -173,14 +173,6 @@ public class ViralLoad extends GenericEntity {
 		this.synchronizedBy = synchronizedBy;
 	}
 
-	public byte getIsPoc() {
-		return isPoc;
-	}
-
-	public void setIsPoc(byte isPoc) {
-		this.isPoc = isPoc;
-	}
-
 	public String getFinalViralLoadResult() {
 		return finalViralLoadResult;
 	}
