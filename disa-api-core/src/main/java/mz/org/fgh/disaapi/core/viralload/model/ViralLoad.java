@@ -26,7 +26,6 @@ import mz.org.fgh.disaapi.core.viralload.dao.ViralLoadDAO;
 @NamedQueries({
 		@NamedQuery(name = ViralLoadDAO.QUERY_NAME.findByLocationCodeAndStatus, query = ViralLoadDAO.QUERY.findByLocationCodeAndStatus),
 		@NamedQuery(name = ViralLoadDAO.QUERY_NAME.findByLocationCodeAndStatusSimple, query = ViralLoadDAO.QUERY.findByLocationCodeAndStatusSimple),
-		@NamedQuery(name = ViralLoadDAO.QUERY_NAME.findByForm, query = ViralLoadDAO.QUERY.findByForm),
 		@NamedQuery(name = ViralLoadDAO.QUERY_NAME.findViralLoadByNid, query = ViralLoadDAO.QUERY.findViralLoadByNid),
 		@NamedQuery(name = ViralLoadDAO.QUERY_NAME.findViralLoadByRequestId, query = ViralLoadDAO.QUERY.findViralLoadByRequestId),
 		@NamedQuery(name = ViralLoadDAO.QUERY_NAME.findByStatusAndDates, query = ViralLoadDAO.QUERY.findByStatusAndDates),
@@ -159,10 +158,10 @@ public class ViralLoad extends GenericEntity {
 
 	@Column(name = "IsPoc")
 	private byte isPoc;
-	
+
 	@Column(name = "SYNCHRONIZED_BY")
 	private String synchronizedBy;
-	
+
 	public String getSynchronizedBy() {
 		return synchronizedBy;
 	}
@@ -474,7 +473,7 @@ public class ViralLoad extends GenericEntity {
 	public void setCauseDuplicateNid() {
 		notProcessingCause = NotProcessingCause.DUPLICATE_NID;
 	}
-	
+
 	public void setCauseDuplicateReqId() {
 		notProcessingCause = NotProcessingCause.DUPLICATED_REQUEST_ID;
 	}

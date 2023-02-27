@@ -10,11 +10,13 @@ import java.util.List;
 import javax.inject.Inject;
 
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import mz.co.msaude.boot.frameworks.exception.BusinessException;
 import mz.co.msaude.boot.frameworks.model.EntityStatus;
 import mz.org.fgh.disaapi.core.viralload.dao.ViralLoadDAO;
 import mz.org.fgh.disaapi.core.viralload.model.NotProcessingCause;
+import mz.org.fgh.disaapi.core.viralload.model.Page;
 import mz.org.fgh.disaapi.core.viralload.model.ViralLoad;
 import mz.org.fgh.disaapi.core.viralload.model.ViralLoadStatus;
 
@@ -32,7 +34,8 @@ public class ViralLoadQueryServiceImpl implements ViralLoadQueryService {
 	private ViralLoadDAO viralLoadDAO;
 
 	@Override
-	public List<ViralLoad> findByLocationCodeAndStatus(List<String> locationCodes, String requestingProvinceName) throws BusinessException {
+	public List<ViralLoad> findByLocationCodeAndStatus(List<String> locationCodes, String requestingProvinceName)
+			throws BusinessException {
 
 		if (locationCodes.isEmpty()) {
 
@@ -54,14 +57,75 @@ public class ViralLoadQueryServiceImpl implements ViralLoadQueryService {
 	}
 
 	@Override
-	public List<ViralLoad> findByForm(String requestId, String nid,
-			final List<String> healthFacilityLabCode,
+	public Page<ViralLoad> findByForm(
+			String requestId,
+			String nid,
+			List<String> healthFacilityLabCode,
 			String referringRequestID,
-			ViralLoadStatus viralLoadStatus, NotProcessingCause notProcessingCause,
-			LocalDateTime startDate, LocalDateTime endDate) throws BusinessException {
+			ViralLoadStatus viralLoadStatus,
+			NotProcessingCause notProcessingCause,
+			LocalDateTime startDate,
+			LocalDateTime endDate,
+			String search,
+			int pageNumber,
+			int pageSize,
+			String orderBy,
+			String direction) throws BusinessException {
+
+		// Should always start with page 1
+		if (pageNumber == 0) {
+			pageNumber = 1;
+		}
+
+		if (pageSize == 0) {
+			pageSize = DEFAULT_PAGE_SIZE;
+		}
+
+		if (pageSize > MAX_PAGE_SIZE) {
+			pageSize = MAX_PAGE_SIZE;
+		}
+
+		// If no order by order, use DEFAULT_ORDER_BY and DEFAULT_DIRECTION
+		if (StringUtils.isEmpty(orderBy)) {
+			orderBy = DEFAULT_ORDER_BY;
+			direction = DEFAULT_DIRECTION;
+
+		// If order by but no direction, sort ASCENDING
+		} else if (StringUtils.isEmpty(direction)) {
+			direction = ASCENDING;
+		}
+
+		if (healthFacilityLabCode.isEmpty()) {
+			throw new BusinessException("The HF code should be informed");
+		}
 
 		return this.viralLoadDAO.findByForm(requestId, nid,
-				healthFacilityLabCode, referringRequestID, viralLoadStatus, notProcessingCause, startDate, endDate, EntityStatus.ACTIVE);
+				healthFacilityLabCode, referringRequestID, viralLoadStatus, notProcessingCause, startDate, endDate,
+				search,
+				pageNumber, pageSize, orderBy, direction, EntityStatus.ACTIVE);
+	}
+
+	@Override
+	public List<ViralLoad> findAllByForm(String requestId, String nid, List<String> healthFacilityLabCode,
+			String referringRequestID, ViralLoadStatus viralLoadStatus, NotProcessingCause notProcessingCause,
+			LocalDateTime startDate, LocalDateTime endDate) throws BusinessException {
+
+		if (healthFacilityLabCode.isEmpty()) {
+			throw new BusinessException("The HF code should be informed");
+		}
+
+		return this.viralLoadDAO.findAllByForm(
+				requestId,
+				nid,
+				healthFacilityLabCode,
+				referringRequestID,
+				viralLoadStatus,
+				notProcessingCause,
+				startDate,
+				endDate,
+				DEFAULT_ORDER_BY,
+				DEFAULT_DIRECTION,
+				EntityStatus.ACTIVE);
 	}
 
 	@Override
