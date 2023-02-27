@@ -162,6 +162,9 @@ public class ViralLoad extends GenericEntity {
 	@Column(name = "SYNCHRONIZED_BY")
 	private String synchronizedBy;
 
+	@Column
+	private Integer ageInYears;
+
 	public String getSynchronizedBy() {
 		return synchronizedBy;
 	}
@@ -524,5 +527,13 @@ public class ViralLoad extends GenericEntity {
 
 	public void setRequestingDistrictName(String requestingDistrictName) {
 		this.requestingDistrictName = requestingDistrictName;
+	}
+
+	public Integer getAgeInYears() {
+		return ageInYears;
+	}
+
+	public void setAgeInYears(Integer ageInYears) {
+		this.ageInYears = ageInYears;
 	}
 }
