@@ -29,6 +29,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import mz.co.msaude.boot.frameworks.exception.BusinessException;
 import mz.org.fgh.disaapi.core.exception.NotFoundBusinessException;
 import mz.org.fgh.disaapi.core.viralload.config.AbstractUserContext;
+import mz.org.fgh.disaapi.core.viralload.model.NotProcessingCause;
 import mz.org.fgh.disaapi.core.viralload.model.ViralLoad;
 import mz.org.fgh.disaapi.core.viralload.model.ViralLoadStatus;
 import mz.org.fgh.disaapi.core.viralload.service.ViralLoadQueryService;
@@ -82,11 +83,12 @@ public class ViralLoadResource extends AbstractUserContext {
 			@QueryParam("healthFacilityLabCode") final List<String> healthFacilityLabCode,
 			@QueryParam("referringRequestID") final String referringRequestID,
 			@QueryParam("viralLoadStatus") final ViralLoadStatus viralLoadStatus,
+			@QueryParam("notProcessingCause") NotProcessingCause notProcessingCause,
 			@QueryParam("startDate") final String strStartDate,
 			@QueryParam("endDate") final String strEndDate)
 			throws BusinessException {
 		viralLoads = this.viralLoadQueryService.findByForm(requestId, nid,
-				healthFacilityLabCode, referringRequestID, viralLoadStatus,
+				healthFacilityLabCode, referringRequestID, viralLoadStatus, notProcessingCause,
 				convertToLocalDateTime(strStartDate), convertToLocalDateTime(strEndDate));
 		return Response.ok(viralLoads).build();
 
@@ -101,11 +103,12 @@ public class ViralLoadResource extends AbstractUserContext {
 			@QueryParam("healthFacilityLabCode") final List<String> healthFacilityLabCode,
 			@QueryParam("referringRequestID") final String referringRequestID,
 			@QueryParam("viralLoadStatus") final ViralLoadStatus viralLoadStatus,
+			@QueryParam("notProcessingCause") NotProcessingCause notProcessingCause,
 			@QueryParam("startDate") final String strStartDate,
 			@QueryParam("endDate") final String strEndDate)
 			throws BusinessException {
 		viralLoads = this.viralLoadQueryService.findByForm(requestId, nid,
-				healthFacilityLabCode, referringRequestID, viralLoadStatus,
+				healthFacilityLabCode, referringRequestID, viralLoadStatus, notProcessingCause,
 				convertToLocalDateTime(strStartDate), convertToLocalDateTime(strEndDate));
 		return Response.ok(viralLoads).build();
 
@@ -242,7 +245,7 @@ public class ViralLoadResource extends AbstractUserContext {
 
 		viralLoads.forEach(viralLoad -> {
 			viralLoad.setProcessed();
-			viralLoad.setSynchronizedBy(defaultLocationUuid);   
+			viralLoad.setSynchronizedBy(defaultLocationUuid);
 			updateViralLoad(viralLoad);
 		});
 

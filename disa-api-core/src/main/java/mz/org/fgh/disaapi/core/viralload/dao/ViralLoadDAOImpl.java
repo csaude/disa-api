@@ -34,7 +34,7 @@ public class ViralLoadDAOImpl extends GenericDAOImpl<ViralLoad, Long> implements
 				new ParamBuilder().add("viralLoadStatus", viralLoadStatus).add("entityStatus", entityStatus)
 						.add("locationCodes", locationCodes).add("requestingProvinceName", requestingProvinceName).process());
 	}
-	
+
 	@Override
 	public List<ViralLoad> findByLocationCodeAndStatus(List<String> locationCodes, ViralLoadStatus viralLoadStatus,
 			EntityStatus entityStatus) throws BusinessException {
@@ -43,11 +43,13 @@ public class ViralLoadDAOImpl extends GenericDAOImpl<ViralLoad, Long> implements
 				new ParamBuilder().add("viralLoadStatus", viralLoadStatus).add("entityStatus", entityStatus)
 						.add("locationCodes", locationCodes).process());
 	}
-	
+
 	@Override
-	public List<ViralLoad> findByForm(String requestId, String nid, 
-			final List<String> healthFacilityLabCode, String referringRequestID, 
-			ViralLoadStatus viralLoadStatus, LocalDateTime startDate, LocalDateTime endDate, EntityStatus entityStatus) throws BusinessException {
+	public List<ViralLoad> findByForm(String requestId, String nid,
+			final List<String> healthFacilityLabCode, String referringRequestID,
+			ViralLoadStatus viralLoadStatus, NotProcessingCause notProcessingCause,
+			LocalDateTime startDate, LocalDateTime endDate,
+			EntityStatus entityStatus) throws BusinessException {
 
 		return this.findByNamedQuery(ViralLoadDAO.QUERY_NAME.findByForm,
 				new ParamBuilder()
@@ -59,6 +61,7 @@ public class ViralLoadDAOImpl extends GenericDAOImpl<ViralLoad, Long> implements
 								  .add("viralLoadStatus", viralLoadStatus)
 								  .add("startDate", startDate)
 								  .add("endDate", endDate)
+								  .add("notProcessingCause", notProcessingCause)
 								  .process());
 	}
 
@@ -67,7 +70,7 @@ public class ViralLoadDAOImpl extends GenericDAOImpl<ViralLoad, Long> implements
 		return this.findByNamedQuery(ViralLoadDAO.QUERY_NAME.findViralLoadByNid,
 				new ParamBuilder().add("nids", nids).add("entityStatus", entityStatus).process());
 	}
-	
+
 	@Override
 	public List<ViralLoad> findViralLoadByRequestId(List<String> requestIds, EntityStatus entityStatus) throws BusinessException {
 		return this.findByNamedQuery(ViralLoadDAO.QUERY_NAME.findViralLoadByRequestId,

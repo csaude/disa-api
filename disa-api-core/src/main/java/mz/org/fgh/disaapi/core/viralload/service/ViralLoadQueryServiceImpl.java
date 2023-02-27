@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import mz.co.msaude.boot.frameworks.exception.BusinessException;
 import mz.co.msaude.boot.frameworks.model.EntityStatus;
 import mz.org.fgh.disaapi.core.viralload.dao.ViralLoadDAO;
+import mz.org.fgh.disaapi.core.viralload.model.NotProcessingCause;
 import mz.org.fgh.disaapi.core.viralload.model.ViralLoad;
 import mz.org.fgh.disaapi.core.viralload.model.ViralLoadStatus;
 
@@ -40,7 +41,7 @@ public class ViralLoadQueryServiceImpl implements ViralLoadQueryService {
 		return this.viralLoadDAO.findByLocationCodeAndStatus(locationCodes, ViralLoadStatus.PENDING,
 				EntityStatus.ACTIVE, requestingProvinceName);
 	}
-	
+
 	@Override
 	public List<ViralLoad> findByLocationCodeAndStatus(List<String> locationCodes) throws BusinessException {
 
@@ -51,14 +52,16 @@ public class ViralLoadQueryServiceImpl implements ViralLoadQueryService {
 		return this.viralLoadDAO.findByLocationCodeAndStatus(locationCodes, ViralLoadStatus.PENDING,
 				EntityStatus.ACTIVE);
 	}
-	
-	@Override
-	public List<ViralLoad> findByForm(String requestId, String nid, 
-			final List<String> healthFacilityLabCode, 
-			String referringRequestID, ViralLoadStatus viralLoadStatus, LocalDateTime startDate, LocalDateTime endDate) throws BusinessException {
 
-		return this.viralLoadDAO.findByForm(requestId, nid, 
-				healthFacilityLabCode, referringRequestID, viralLoadStatus, startDate, endDate, EntityStatus.ACTIVE);
+	@Override
+	public List<ViralLoad> findByForm(String requestId, String nid,
+			final List<String> healthFacilityLabCode,
+			String referringRequestID,
+			ViralLoadStatus viralLoadStatus, NotProcessingCause notProcessingCause,
+			LocalDateTime startDate, LocalDateTime endDate) throws BusinessException {
+
+		return this.viralLoadDAO.findByForm(requestId, nid,
+				healthFacilityLabCode, referringRequestID, viralLoadStatus, notProcessingCause, startDate, endDate, EntityStatus.ACTIVE);
 	}
 
 	@Override
@@ -70,7 +73,7 @@ public class ViralLoadQueryServiceImpl implements ViralLoadQueryService {
 		}
 		return viralLoadDAO.findViralLoadByNid(nids, EntityStatus.ACTIVE);
 	}
-	
+
 	@Override
 	public List<ViralLoad> findViralLoadByRequestId(List<String> requestIds) throws BusinessException {
 		if (requestIds.isEmpty()) {
