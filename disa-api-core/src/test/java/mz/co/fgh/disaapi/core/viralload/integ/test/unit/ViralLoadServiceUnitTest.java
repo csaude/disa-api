@@ -13,6 +13,7 @@ import javax.inject.Inject;
 import org.junit.Test;
 import org.mockito.Mockito;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.security.test.context.support.WithMockUser;
 
 import mz.co.fgh.disaapi.core.config.AbstractUnitServiceTest;
 import mz.co.fgh.disaapi.core.fixturefactory.ViralLoadTemplate;
@@ -34,6 +35,7 @@ public class ViralLoadServiceUnitTest extends AbstractUnitServiceTest {
     private ViralLoadDAO viralLoadDAO;
 
     @Test
+    @WithMockUser
     public void updateViralLoadShouldUpdateViralLoadPropertyValues() throws BusinessException {
 
         ViralLoad viralLoad = EntityFactory.gimme(ViralLoad.class, ViralLoadTemplate.NOT_PROCESSED);
@@ -56,6 +58,7 @@ public class ViralLoadServiceUnitTest extends AbstractUnitServiceTest {
     }
 
     @Test
+    @WithMockUser
     public void updateViralLoadShouldUpdateAllowedViralLoadPropertyValues() throws BusinessException {
 
         ViralLoad viralLoad = EntityFactory.gimme(ViralLoad.class, ViralLoadTemplate.NOT_PROCESSED);

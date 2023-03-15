@@ -14,6 +14,7 @@ import javax.inject.Inject;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.springframework.security.test.context.support.WithMockUser;
 
 import mz.co.fgh.disaapi.core.config.AbstractIntegServiceTest;
 import mz.co.fgh.disaapi.core.fixturefactory.ViralLoadTemplate;
@@ -66,6 +67,7 @@ public class ViralLoadQueryServiceTest extends AbstractIntegServiceTest {
 	}
 
 	@Test
+	@WithMockUser
 	public void shouldFindByLocationCodeAndStatus() throws BusinessException {
 
 		locationCodes.addAll(Arrays.asList("01041137", "01041137"));
@@ -76,6 +78,7 @@ public class ViralLoadQueryServiceTest extends AbstractIntegServiceTest {
 	}
 
 	@Test
+	@WithMockUser
 	public void shouldFindViralLoadByNid() throws BusinessException {
 
 		nids.addAll(Arrays.asList("0091A", "01041137"));

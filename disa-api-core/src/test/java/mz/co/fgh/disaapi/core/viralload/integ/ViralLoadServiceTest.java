@@ -9,6 +9,7 @@ import java.util.List;
 import javax.inject.Inject;
 
 import org.junit.Test;
+import org.springframework.security.test.context.support.WithMockUser;
 
 import mz.co.fgh.disaapi.core.config.AbstractIntegServiceTest;
 import mz.co.fgh.disaapi.core.fixturefactory.ViralLoadTemplate;
@@ -37,6 +38,7 @@ public class ViralLoadServiceTest extends AbstractIntegServiceTest {
 	}
 
 	@Test
+	@WithMockUser
 	public void shouldCreateViralLoad() throws BusinessException {
 
 		this.viralLoadService.createViralLoad(viralLoad);
@@ -46,6 +48,7 @@ public class ViralLoadServiceTest extends AbstractIntegServiceTest {
 	}
 
 	@Test
+	@WithMockUser
 	public void shouldUpdateViralLoad() throws BusinessException {
 
 		viralLoadService.createViralLoad(viralLoad);
