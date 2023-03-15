@@ -8,7 +8,6 @@ import java.util.List;
 
 import mz.co.msaude.boot.frameworks.exception.BusinessException;
 import mz.co.msaude.boot.frameworks.model.EntityStatus;
-import mz.co.msaude.boot.frameworks.model.UserContext;
 import mz.org.fgh.disaapi.core.viralload.model.NotProcessingCause;
 import mz.org.fgh.disaapi.core.viralload.model.Page;
 import mz.org.fgh.disaapi.core.viralload.model.ViralLoad;
@@ -89,7 +88,7 @@ public interface ViralLoadDAO {
 			ViralLoadStatus viralLoadStatus, EntityStatus entityStatus, NotProcessingCause reasonForNotProcessing)
 			throws BusinessException;
 
-	ViralLoad create(final UserContext context, final ViralLoad entity) throws BusinessException;
+	ViralLoad create(final ViralLoad entity, String username) throws BusinessException;
 
-	ViralLoad update(final UserContext context, final ViralLoad entity) throws BusinessException;
+	ViralLoad update(final ViralLoad entity, String username) throws BusinessException;
 }

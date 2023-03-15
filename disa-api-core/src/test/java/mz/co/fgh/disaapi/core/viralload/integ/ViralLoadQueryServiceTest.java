@@ -58,7 +58,7 @@ public class ViralLoadQueryServiceTest extends AbstractIntegServiceTest {
 
 	private ViralLoad createViralLoad(final ViralLoad viralLoad) {
 		try {
-			this.viralLoadService.createViralLoad(this.getUserContext(), viralLoad);
+			this.viralLoadService.createViralLoad(viralLoad);
 		} catch (final BusinessException e) {
 			e.printStackTrace();
 		}
@@ -82,7 +82,7 @@ public class ViralLoadQueryServiceTest extends AbstractIntegServiceTest {
 
 		viralLoad.setNid("0091A");
 
-		viralLoadService.createViralLoad(getUserContext(), viralLoad);
+		viralLoadService.createViralLoad(viralLoad);
 
 		assertTrue(!this.viralLoadQueryService.findViralLoadByNid(nids).isEmpty());
 	}

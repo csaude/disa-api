@@ -47,7 +47,6 @@ public class ViralLoadServiceUnitTest extends AbstractUnitServiceTest {
         propertyValues.put("healthFacilityLabCode", "1040107");
         propertyValues.put("requestingFacilityName", "CS 24 de Julho");
         this.viralLoadService.updateViralLoad(
-                getUserContext(),
                 viralLoad,
                 propertyValues);
 
@@ -68,7 +67,6 @@ public class ViralLoadServiceUnitTest extends AbstractUnitServiceTest {
         Map<String, Object> propertyValues = new HashMap<>();
         propertyValues.put("reasonForTest", "Suspected treatment failure");
         this.viralLoadService.updateViralLoad(
-                getUserContext(),
                 viralLoad,
                 propertyValues);
 
@@ -90,7 +88,6 @@ public class ViralLoadServiceUnitTest extends AbstractUnitServiceTest {
         propertyValues.put("healthFacilityLabCode", "1040107");
         propertyValues.put("requestingFacilityName", "CS 24 de Julho");
         this.viralLoadService.updateViralLoad(
-                getUserContext(),
                 viralLoad,
                 propertyValues);
 
@@ -108,7 +105,6 @@ public class ViralLoadServiceUnitTest extends AbstractUnitServiceTest {
         Map<String, Object> propertyValues = new HashMap<>();
         propertyValues.put("viralLoadStatus", "");
         this.viralLoadService.updateViralLoad(
-                getUserContext(),
                 viralLoad,
                 propertyValues);
     }
@@ -127,7 +123,6 @@ public class ViralLoadServiceUnitTest extends AbstractUnitServiceTest {
         propertyValues.put("healthFacilityLabCode", "1040107");
         propertyValues.put("requestingFacilityName", "CS 24 de Julho");
         this.viralLoadService.updateViralLoad(
-                getUserContext(),
                 viralLoad,
                 propertyValues);
 

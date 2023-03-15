@@ -21,7 +21,6 @@ import org.springframework.util.StringUtils;
 
 import mz.co.msaude.boot.frameworks.exception.BusinessException;
 import mz.co.msaude.boot.frameworks.model.EntityStatus;
-import mz.co.msaude.boot.frameworks.model.UserContext;
 import mz.co.msaude.boot.frameworks.util.ParamBuilder;
 import mz.co.msaude.boot.frameworks.util.UuidFactory;
 import mz.org.fgh.disaapi.core.viralload.model.NotProcessingCause;
@@ -203,8 +202,8 @@ public class ViralLoadDAOImpl implements ViralLoadDAO {
 	}
 
 	@Override
-	public ViralLoad create(final UserContext context, final ViralLoad entity) throws BusinessException {
-		entity.setCreatedBy(context.getUuid());
+	public ViralLoad create(final ViralLoad entity, String username) throws BusinessException {
+		entity.setCreatedBy(username);
 		entity.setCreatedAt(LocalDateTime.now());
 		entity.active();
 
@@ -218,8 +217,8 @@ public class ViralLoadDAOImpl implements ViralLoadDAO {
 	}
 
 	@Override
-	public ViralLoad update(final UserContext context, final ViralLoad entity) throws BusinessException {
-		entity.setUpdatedBy(context.getUuid());
+	public ViralLoad update(final ViralLoad entity, String username) throws BusinessException {
+		entity.setUpdatedBy(username);
 		entity.setUpdatedAt(LocalDateTime.now());
 
 		this.entityManager.merge(entity);

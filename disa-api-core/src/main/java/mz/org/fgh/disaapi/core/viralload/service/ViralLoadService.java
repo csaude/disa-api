@@ -7,7 +7,6 @@ import java.util.List;
 import java.util.Map;
 
 import mz.co.msaude.boot.frameworks.exception.BusinessException;
-import mz.co.msaude.boot.frameworks.model.UserContext;
 import mz.org.fgh.disaapi.core.viralload.model.ViralLoad;
 
 /**
@@ -16,9 +15,9 @@ import mz.org.fgh.disaapi.core.viralload.model.ViralLoad;
  */
 public interface ViralLoadService {
 
-	ViralLoad createViralLoad(UserContext context, ViralLoad viralLoad) throws BusinessException;
+	ViralLoad createViralLoad(ViralLoad viralLoad) throws BusinessException;
 
-	ViralLoad updateViralLoad(UserContext context, ViralLoad viralLoad) throws BusinessException;
+	ViralLoad updateViralLoad(ViralLoad viralLoad) throws BusinessException;
 
 	/**
 	 * Updates viral load given property values. For security only properties
@@ -30,7 +29,7 @@ public interface ViralLoadService {
 	 * @return Updated viral load
 	 * @throws BusinessException
 	 */
-	ViralLoad updateViralLoad(UserContext context, ViralLoad viralLoad, Map<String, Object> propertyValues)
+	ViralLoad updateViralLoad(ViralLoad viralLoad, Map<String, Object> propertyValues)
 			throws BusinessException;
 
 	/**

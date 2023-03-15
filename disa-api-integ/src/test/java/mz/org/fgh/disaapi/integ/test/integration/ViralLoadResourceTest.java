@@ -30,6 +30,7 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.annotation.DirtiesContext.ClassMode;
 import org.springframework.test.context.junit4.SpringRunner;
@@ -38,7 +39,6 @@ import br.com.six2six.fixturefactory.loader.FixtureFactoryLoader;
 import mz.co.msaude.boot.frameworks.exception.BusinessException;
 import mz.co.msaude.boot.frameworks.fixturefactory.EntityFactory;
 import mz.co.msaude.boot.frameworks.model.UserContext;
-import mz.co.msaude.boot.frameworks.util.UuidFactory;
 import mz.org.fgh.disaapi.core.viralload.model.Page;
 import mz.org.fgh.disaapi.core.viralload.model.ViralLoad;
 import mz.org.fgh.disaapi.core.viralload.model.ViralLoadStatus;
@@ -96,28 +96,25 @@ public class ViralLoadResourceTest {
 	@Before
 	public void before() throws BusinessException {
 
-		userContext = new UserContext();
-		userContext.setUuid(UuidFactory.generate());
-		userContext.setUsername("hisfgh");
-
 		vls = EntityFactory.gimme(ViralLoad.class, 15, ViralLoadTemplate.VALID);
 		notProcessedVl = EntityFactory.gimme(ViralLoad.class, ViralLoadTemplate.NOT_PROCESSED);
 		inactiveVl = EntityFactory.gimme(ViralLoad.class, ViralLoadTemplate.INACTIVE);
 
 		for (ViralLoad vl : vls) {
-			viralLoadService.createViralLoad(userContext, vl);
+			viralLoadService.createViralLoad(vl);
 		}
 
-		viralLoadService.createViralLoad(userContext, notProcessedVl);
+		viralLoadService.createViralLoad(notProcessedVl);
 
 		// GenericDAO wont let us create entities with INACTIVE status.
 		// So we need create and update the status.
-		viralLoadService.createViralLoad(userContext, inactiveVl);
+		viralLoadService.createViralLoad(inactiveVl);
 		inactiveVl.inactive();
-		viralLoadService.updateViralLoad(userContext, inactiveVl);
+		viralLoadService.updateViralLoad(inactiveVl);
 	}
 
 	@Test
+	@WithMockUser
 	public void deleteShouldReturnOk() {
 		HttpHeaders headers = createHttpContentTypeAndAuthorizationHeaders();
 		HttpEntity<String> httpEntity = new HttpEntity<>("", headers);
@@ -129,6 +126,7 @@ public class ViralLoadResourceTest {
 	}
 
 	@Test
+	@WithMockUser
 	public void deleteShouldReturnNotFound() {
 		HttpHeaders headers = createHttpContentTypeAndAuthorizationHeaders();
 		HttpEntity<String> httpEntity = new HttpEntity<>("", headers);
@@ -140,6 +138,7 @@ public class ViralLoadResourceTest {
 	}
 
 	@Test
+	@WithMockUser
 	public void updateShouldUpdateTheViralLoad() throws JSONException {
 
 		HttpHeaders headers = createHttpContentTypeAndAuthorizationHeaders();
@@ -157,6 +156,7 @@ public class ViralLoadResourceTest {
 	}
 
 	@Test
+	@WithMockUser
 	public void updateShouldReturnNotFound() throws JSONException {
 
 		HttpHeaders headers = createHttpContentTypeAndAuthorizationHeaders();
@@ -173,6 +173,7 @@ public class ViralLoadResourceTest {
 	}
 
 	@Test
+	@WithMockUser
 	public void findViralLoadsByFormShouldReturnPaginatedResults() {
 		DateTimeFormatter ofPattern = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 		LocalDateTime todayMidnight = LocalDateTime.of(LocalDate.now(), LocalTime.MIDNIGHT);
@@ -218,6 +219,7 @@ public class ViralLoadResourceTest {
 	}
 
 	@Test
+	@WithMockUser
 	public void exportViralLoadsByFormShouldReturnAllResults() {
 		DateTimeFormatter ofPattern = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 		LocalDateTime todayMidnight = LocalDateTime.of(LocalDate.now(), LocalTime.MIDNIGHT);

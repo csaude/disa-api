@@ -139,7 +139,7 @@ public class ViralLoadResourceV2 extends AbstractUserContext {
 		try {
 			ViralLoad viralLoad = new ViralLoad();
 			viralLoad.setRequestId(requestId);
-			ViralLoad updatedVl = this.viralLoadService.updateViralLoad(getUserContext(), viralLoad, propertyValues);
+			ViralLoad updatedVl = this.viralLoadService.updateViralLoad(viralLoad, propertyValues);
 			return Response.ok(updatedVl).build();
 		} catch (NotFoundBusinessException e) {
 			throw new NotFoundException("Viral load not found");
@@ -149,7 +149,7 @@ public class ViralLoadResourceV2 extends AbstractUserContext {
 
 	private void updateViralLoad(ViralLoad viralLoad) {
 		try {
-			viralLoadService.updateViralLoad(getUserContext(), viralLoad);
+			viralLoadService.updateViralLoad(viralLoad);
 		} catch (BusinessException e) {
 			e.printStackTrace();
 		}

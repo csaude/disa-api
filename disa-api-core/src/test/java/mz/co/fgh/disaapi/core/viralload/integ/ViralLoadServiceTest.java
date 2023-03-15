@@ -39,7 +39,7 @@ public class ViralLoadServiceTest extends AbstractIntegServiceTest {
 	@Test
 	public void shouldCreateViralLoad() throws BusinessException {
 
-		this.viralLoadService.createViralLoad(this.getUserContext(), viralLoad);
+		this.viralLoadService.createViralLoad(viralLoad);
 
 		assertFalse(viralLoad.getId() == null);
 
@@ -48,7 +48,7 @@ public class ViralLoadServiceTest extends AbstractIntegServiceTest {
 	@Test
 	public void shouldUpdateViralLoad() throws BusinessException {
 
-		viralLoadService.createViralLoad(getUserContext(), viralLoad);
+		viralLoadService.createViralLoad(viralLoad);
 
 		nids.addAll(Arrays.asList("01041137", "01041137"));
 
@@ -56,7 +56,7 @@ public class ViralLoadServiceTest extends AbstractIntegServiceTest {
 
 		viralLoad.setViralLoadStatus(ViralLoadStatus.NOT_PROCESSED);
 
-		viralLoadService.updateViralLoad(getUserContext(), viralLoad);
+		viralLoadService.updateViralLoad(viralLoad);
 
 		assertFalse(viralLoad.getViralLoadStatus() == ViralLoadStatus.PENDING);
 

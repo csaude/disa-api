@@ -12,12 +12,13 @@ import javax.inject.Inject;
 
 import org.springframework.beans.BeanWrapper;
 import org.springframework.beans.PropertyAccessorFactory;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
 
 import mz.co.msaude.boot.frameworks.exception.BusinessException;
 import mz.co.msaude.boot.frameworks.model.EntityStatus;
-import mz.co.msaude.boot.frameworks.model.UserContext;
 import mz.co.msaude.boot.frameworks.service.AbstractService;
 import mz.org.fgh.disaapi.core.exception.NotFoundBusinessException;
 import mz.org.fgh.disaapi.core.viralload.dao.ViralLoadDAO;
@@ -37,19 +38,19 @@ public class ViralLoadServiceImpl extends AbstractService implements ViralLoadSe
 	private ViralLoadDAO viralLoadDAO;
 
 	@Override
-	public ViralLoad createViralLoad(final UserContext context, final ViralLoad viralLoad) throws BusinessException {
-		this.viralLoadDAO.create(context, viralLoad);
+	public ViralLoad createViralLoad(ViralLoad viralLoad) throws BusinessException {
+		this.viralLoadDAO.create(viralLoad, getCurrentUsername());
 		return viralLoad;
 	}
 
 	@Override
-	public ViralLoad updateViralLoad(UserContext context, ViralLoad viralLoad) throws BusinessException {
-		this.viralLoadDAO.update(context, viralLoad);
+	public ViralLoad updateViralLoad(ViralLoad viralLoad) throws BusinessException {
+		this.viralLoadDAO.update(viralLoad, getCurrentUsername());
 		return viralLoad;
 	}
 
 	@Override
-	public ViralLoad updateViralLoad(UserContext context, ViralLoad viralLoad, Map<String, Object> propertyValues)
+	public ViralLoad updateViralLoad(ViralLoad viralLoad, Map<String, Object> propertyValues)
 			throws BusinessException {
 
 		List<String> requestIds = Arrays.asList(viralLoad.getRequestId());
@@ -76,7 +77,7 @@ public class ViralLoadServiceImpl extends AbstractService implements ViralLoadSe
 			}
 		}
 
-		return this.updateViralLoad(context, (ViralLoad) bw.getWrappedInstance());
+		return this.updateViralLoad((ViralLoad) bw.getWrappedInstance());
 	}
 
 	@Override
@@ -93,6 +94,16 @@ public class ViralLoadServiceImpl extends AbstractService implements ViralLoadSe
 		if (ViralLoadStatus.PROCESSED == dbVl.getViralLoadStatus()) {
 			throw new BusinessException(
 					"Cannot reschedule viral load " + viralLoad.getRequestId() + ". It has already been processed.");
+		}
+	}
+
+	private String getCurrentUsername() {
+		Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+		if (principal instanceof UserDetails) {
+			return ((UserDetails) principal).getUsername();
+		} else {
+			return principal.toString();
 		}
 	}
 }

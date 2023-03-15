@@ -140,7 +140,7 @@ public class ViralLoadResource extends AbstractUserContext {
 
 	private void updateViralLoad(ViralLoad viralLoad) {
 		try {
-			viralLoadService.updateViralLoad(getUserContext(), viralLoad);
+			viralLoadService.updateViralLoad(viralLoad);
 		} catch (BusinessException e) {
 			e.printStackTrace();
 		}
