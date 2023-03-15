@@ -26,7 +26,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 import mz.co.msaude.boot.frameworks.exception.BusinessException;
 import mz.org.fgh.disaapi.core.exception.NotFoundBusinessException;
-import mz.org.fgh.disaapi.core.viralload.config.AbstractUserContext;
 import mz.org.fgh.disaapi.core.viralload.model.NotProcessingCause;
 import mz.org.fgh.disaapi.core.viralload.model.Page;
 import mz.org.fgh.disaapi.core.viralload.model.ViralLoad;
@@ -36,7 +35,7 @@ import mz.org.fgh.disaapi.core.viralload.service.ViralLoadService;
 
 @Path("/v2/viralloads")
 @Service(ViralLoadResourceV2.NAME)
-public class ViralLoadResourceV2 extends AbstractUserContext {
+public class ViralLoadResourceV2 {
 
 	public static final String NAME = "mz.org.fgh.disaapi.integ.viralload.ViralLoadResourceV2";
 

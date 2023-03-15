@@ -19,7 +19,6 @@ import javax.ws.rs.core.Response;
 import org.springframework.stereotype.Service;
 
 import mz.co.msaude.boot.frameworks.exception.BusinessException;
-import mz.org.fgh.disaapi.core.viralload.config.AbstractUserContext;
 import mz.org.fgh.disaapi.core.viralload.model.NotProcessingCause;
 import mz.org.fgh.disaapi.core.viralload.model.ViralLoad;
 import mz.org.fgh.disaapi.core.viralload.model.ViralLoadStatus;
@@ -33,7 +32,7 @@ import mz.org.fgh.disaapi.core.viralload.service.ViralLoadService;
  */
 @Path("viralloads")
 @Service(ViralLoadResource.NAME)
-public class ViralLoadResource extends AbstractUserContext {
+public class ViralLoadResource {
 
 	public static final String NAME = "mz.org.fgh.disaapi.integ.viralload.ViralLoadResource";
 
