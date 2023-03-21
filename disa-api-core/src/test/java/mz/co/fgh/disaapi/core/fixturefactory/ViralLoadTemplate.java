@@ -24,12 +24,15 @@ public class ViralLoadTemplate implements TemplateLoader {
 
 	public static final String PROCESSED = "PROCESSED";
 
+	public static final String MAPUTO = "Maputo";
+
 	@Override
 	public void load() {
 
 		Fixture.of(ViralLoad.class).addTemplate(VALID, new Rule() {
 			{
-				this.add("nid", "ART.331/15");
+				this.add("nid", regex("0001041137/\\d{4}/\\d{5}"));
+                this.add("requestId", regex("MZDISAPQM\\d{7}"));
 				this.add("dateOfBirth", LocalDate.now());
 				this.add("healthFacilityLabCode", "01041137");
 				this.add("nameOfTechnicianRequestingTest", "ITALIDA");
@@ -65,6 +68,14 @@ public class ViralLoadTemplate implements TemplateLoader {
 		Fixture.of(ViralLoad.class).addTemplate(PROCESSED).inherits(VALID, new Rule() {
 			{
 				this.add("viralLoadStatus", ViralLoadStatus.PROCESSED);
+			}
+		});
+
+		Fixture.of(ViralLoad.class).addTemplate(MAPUTO).inherits(VALID, new Rule() {
+			{
+				this.add("nid", "000${healthFacilityLabCode}/0000/00000");
+				this.add("healthFacilityLabCode", "1100100");
+				this.add("requestingProvinceName", "Maputo");
 			}
 		});
 	}

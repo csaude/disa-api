@@ -13,6 +13,8 @@ import mz.org.fgh.disaapi.core.viralload.model.NotProcessingCause;
 import mz.org.fgh.disaapi.core.viralload.model.Page;
 import mz.org.fgh.disaapi.core.viralload.model.ViralLoad;
 import mz.org.fgh.disaapi.core.viralload.model.ViralLoadStatus;
+import mz.org.fgh.disaapi.core.viralload.repository.ViralLoadRepository;
+import mz.org.fgh.disaapi.core.viralload.service.ViralLoadQueryService;
 
 /**
  * @author Stélio Moiane
@@ -41,12 +43,28 @@ public interface ViralLoadDAO {
 
 	}
 
+	/**
+	 * @deprecated see
+	 *             {@link ViralLoadRepository#findByLocationCodeAndStatus(List, ViralLoadStatus, EntityStatus, String)}
+	 */
+	@Deprecated
 	List<ViralLoad> findByLocationCodeAndStatus(List<String> locationCodes, ViralLoadStatus viralLoadStatus,
 			EntityStatus entityStatus, String requestingProvinceName) throws BusinessException;
 
+	/**
+	 *
+	 * @deprecated see
+	 *             {@link ViralLoadRepository#findByHealthFacilityLabCodeInAndViralLoadStatusAndEntityStatus(List, ViralLoadStatus, EntityStatus)}
+	 */
+	@Deprecated
 	List<ViralLoad> findByLocationCodeAndStatus(List<String> locationCodes, ViralLoadStatus viralLoadStatus,
 			EntityStatus entityStatus) throws BusinessException;
 
+	/**
+	 * @deprecated see
+	 *             {@link ViralLoadQueryService#findByForm(ViralLoad, List, LocalDateTime, LocalDateTime, org.springframework.data.domain.Pageable)}
+	 */
+	@Deprecated
 	Page<ViralLoad> findByForm(
 			String requestId, String nid,
 			List<String> healthFacilityLabCode,
@@ -62,6 +80,10 @@ public interface ViralLoadDAO {
 			String direction,
 			EntityStatus entityStatus) throws BusinessException;
 
+	/**
+	 * @deprecated see {@link ViralLoadQueryService#findAllByForm(ViralLoad, List, LocalDateTime, LocalDateTime)}
+	 */
+	@Deprecated
 	List<ViralLoad> findAllByForm(
 			String requestId, String nid,
 			List<String> healthFacilityLabCode,
@@ -74,17 +96,42 @@ public interface ViralLoadDAO {
 			String direction,
 			EntityStatus entityStatus) throws BusinessException;
 
+	/**
+	 * @deprecated see
+	 *             {@link ViralLoadRepository#findByHealthFacilityLabCodeAndViralLoadStatusAndEntityStatus(List, ViralLoadStatus, EntityStatus)}
+	 */
+	@Deprecated
 	List<ViralLoad> findByStatus(List<String> locationCodes, ViralLoadStatus viralLoadStatus, EntityStatus entityStatus)
 			throws BusinessException;
 
+	/**
+	 * @deprecated see
+	 *             {@link ViralLoadRepository#findByStatusAndDates(List, ViralLoadStatus, EntityStatus, LocalDateTime, LocalDateTime)}
+	 */
+	@Deprecated
 	List<ViralLoad> findByStatusAndDates(List<String> locationCodes, ViralLoadStatus viralLoadStatus,
 			EntityStatus entityStatus, LocalDateTime startDate, LocalDateTime endDate) throws BusinessException;
 
+	/**
+	 * @deprecated see
+	 *             {@link ViralLoadRepository#findByNidAndEntityStatus(List, EntityStatus)}
+	 */
+	@Deprecated
 	List<ViralLoad> findViralLoadByNid(List<String> nids, EntityStatus entityStatus) throws BusinessException;
 
+	/**
+	 * @deprecated see
+	 *             {@link ViralLoadRepository#findByRequestIdAndEntityStatus(List, EntityStatus)}
+	 */
+	@Deprecated
 	List<ViralLoad> findViralLoadByRequestId(List<String> requestIds, EntityStatus entityStatus)
 			throws BusinessException;
 
+	/**
+	 * @deprecated see
+	 *             {@link ViralLoadRepository#findByLocationCodeStatusAndNotProcessingCause(List, ViralLoadStatus, EntityStatus, NotProcessingCause)}
+	 */
+	@Deprecated
 	List<ViralLoad> findByLocationCodeStatusAndNotProcessingCause(List<String> locationCodes,
 			ViralLoadStatus viralLoadStatus, EntityStatus entityStatus, NotProcessingCause reasonForNotProcessing)
 			throws BusinessException;
