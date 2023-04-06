@@ -2,62 +2,73 @@ package mz.co.fgh.disaapi.core.viralload.integ;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
 import javax.inject.Inject;
+import javax.persistence.EntityManagerFactory;
 
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
+import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
+import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.test.context.ContextConfiguration;
 
+import br.com.six2six.fixturefactory.Fixture;
+import br.com.six2six.fixturefactory.loader.FixtureFactoryLoader;
+import br.com.six2six.fixturefactory.processor.HibernateProcessor;
 import mz.co.fgh.disaapi.core.config.AbstractIntegServiceTest;
 import mz.co.fgh.disaapi.core.fixturefactory.ViralLoadTemplate;
 import mz.co.msaude.boot.frameworks.exception.BusinessException;
-import mz.co.msaude.boot.frameworks.fixturefactory.EntityFactory;
 import mz.org.fgh.disaapi.core.viralload.model.ViralLoad;
 import mz.org.fgh.disaapi.core.viralload.model.ViralLoadStatus;
-import mz.org.fgh.disaapi.core.viralload.service.ViralLoadQueryService;
 import mz.org.fgh.disaapi.core.viralload.service.ViralLoadService;
 
+@ContextConfiguration
 public class ViralLoadServiceTest extends AbstractIntegServiceTest {
 
 	@Inject
-	protected ViralLoadQueryService viralLoadQueryService;
+	private EntityManagerFactory emFactory;
 
 	@Inject
 	protected ViralLoadService viralLoadService;
 
 	private ViralLoad viralLoad;
-	private List<String> nids;
 
-	public ViralLoadServiceTest() {
-		this.viralLoad = EntityFactory.gimme(ViralLoad.class, ViralLoadTemplate.VALID);
-		nids = new ArrayList<String>();
+
+    @BeforeClass
+    public static void setUp() {
+            FixtureFactoryLoader.loadTemplates("mz.co.fgh.disaapi.core.fixturefactory");
+    }
+
+	@Before
+	public void before() {
+		SessionFactory sessionFactory = emFactory.unwrap(SessionFactory.class);
+		try (Session session = sessionFactory.openSession()) {
+
+			Transaction tx = session.beginTransaction();
+
+			HibernateProcessor hibernateProcessor = new HibernateProcessor(session);
+
+			viralLoad = Fixture.from(ViralLoad.class)
+					.uses(hibernateProcessor)
+					.gimme(ViralLoadTemplate.VALID);
+
+			tx.commit();
+		}
 	}
 
 	@Test
-	public void shouldCreateViralLoad() throws BusinessException {
-
-		this.viralLoadService.createViralLoad(this.getUserContext(), viralLoad);
-
-		assertThat(viralLoad.getId()).isNotNull();
-
-	}
-
-	@Test
+	@WithMockUser
 	public void shouldUpdateViralLoad() throws BusinessException {
 
-		viralLoadService.createViralLoad(getUserContext(), viralLoad);
-
-		nids.addAll(Arrays.asList("01041137", "01041137"));
-
-		this.viralLoadQueryService.findViralLoadByNid(nids);
+		assertThat(viralLoad.getViralLoadStatus()).isEqualTo(ViralLoadStatus.PENDING);
 
 		viralLoad.setViralLoadStatus(ViralLoadStatus.NOT_PROCESSED);
 
-		viralLoadService.updateViralLoad(getUserContext(), viralLoad);
+		viralLoadService.updateViralLoad(viralLoad);
 
-		assertThat(viralLoad.getViralLoadStatus()).isNotEqualTo(ViralLoadStatus.PENDING);
+		assertThat(viralLoad.getViralLoadStatus()).isEqualTo(ViralLoadStatus.NOT_PROCESSED);
 
 	}
 }

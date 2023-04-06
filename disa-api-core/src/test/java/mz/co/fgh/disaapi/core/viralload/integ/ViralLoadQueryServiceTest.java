@@ -13,20 +13,27 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import javax.inject.Inject;
+import javax.persistence.EntityManagerFactory;
 
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.annotation.DirtiesContext.ClassMode;
 
+import br.com.six2six.fixturefactory.Fixture;
+import br.com.six2six.fixturefactory.loader.FixtureFactoryLoader;
+import br.com.six2six.fixturefactory.processor.HibernateProcessor;
 import mz.co.fgh.disaapi.core.config.AbstractIntegServiceTest;
+import mz.co.fgh.disaapi.core.fixturefactory.OrgUnitTemplate;
 import mz.co.fgh.disaapi.core.fixturefactory.ViralLoadTemplate;
 import mz.co.msaude.boot.frameworks.exception.BusinessException;
-import mz.co.msaude.boot.frameworks.fixturefactory.EntityFactory;
 import mz.org.fgh.disaapi.core.viralload.model.ViralLoad;
 import mz.org.fgh.disaapi.core.viralload.model.ViralLoadStatus;
 import mz.org.fgh.disaapi.core.viralload.service.ViralLoadQueryService;
-import mz.org.fgh.disaapi.core.viralload.service.ViralLoadService;
 
 /**
  * @author Stélio Moiane
@@ -39,44 +46,52 @@ public class ViralLoadQueryServiceTest extends AbstractIntegServiceTest {
 	protected ViralLoadQueryService viralLoadQueryService;
 
 	@Inject
-	protected ViralLoadService viralLoadService;
+	private EntityManagerFactory emFactory;
 
 	private List<ViralLoad> viralLoads;
 
-	@Before
-	public void before() throws BusinessException {
-
-		viralLoads = EntityFactory.gimme(ViralLoad.class, 10, ViralLoadTemplate.VALID);
-
-		List<ViralLoad> fromMaputo = EntityFactory.gimme(ViralLoad.class, 5, ViralLoadTemplate.MAPUTO);
-		viralLoads.addAll(fromMaputo);
-
-		List<ViralLoad> notProcessed = EntityFactory.gimme(ViralLoad.class, 2, ViralLoadTemplate.NOT_PROCESSED);
-		viralLoads.addAll(notProcessed);
-
-		ViralLoad processed = EntityFactory.gimme(ViralLoad.class, ViralLoadTemplate.PROCESSED);
-		viralLoads.add(processed);
-
-		viralLoads.forEach(viralLoad -> {
-			createViralLoad(viralLoad);
-		});
-
+	@BeforeClass
+	public static void setUp() {
+		FixtureFactoryLoader.loadTemplates("mz.co.fgh.disaapi.core.fixturefactory");
 	}
 
-	private ViralLoad createViralLoad(final ViralLoad viralLoad) {
-		try {
-			this.viralLoadService.createViralLoad(this.getUserContext(), viralLoad);
-		} catch (final BusinessException e) {
-			e.printStackTrace();
+	@Before
+	public void before() {
+
+		SessionFactory sessionFactory = emFactory.unwrap(SessionFactory.class);
+		try (Session session = sessionFactory.openSession()) {
+
+			Transaction tx = session.beginTransaction();
+
+			HibernateProcessor hibernateProcessor = new HibernateProcessor(session);
+
+			viralLoads = Fixture.from(ViralLoad.class)
+					.uses(hibernateProcessor)
+					.gimme(10, ViralLoadTemplate.VALID);
+
+			Fixture.from(ViralLoad.class)
+					.uses(hibernateProcessor)
+					.gimme(5, ViralLoadTemplate.MAPUTO);
+
+			Fixture.from(ViralLoad.class)
+					.uses(hibernateProcessor)
+					.gimme(2, ViralLoadTemplate.NOT_PROCESSED);
+
+			Fixture.from(ViralLoad.class)
+					.uses(hibernateProcessor)
+					.gimme(ViralLoadTemplate.PROCESSED);
+
+			tx.commit();
 		}
-		return viralLoad;
+
 	}
 
 	@Test
 	public void findByLocationCodeAndStatusShouldReturnFromSpecificProvince() throws BusinessException {
 
 		final List<ViralLoad> viralLoads = this.viralLoadQueryService
-				.findPendingByLocationCodeAndProvince(Arrays.asList("01041137", "01041137"), "Zambezia");
+				.findPendingByLocationCodeAndProvince(Arrays.asList(OrgUnitTemplate.ZAMBEZIA_SISMA_CODES),
+						"Zambezia");
 
 		assertThat(viralLoads).hasSize(10);
 	}
@@ -84,8 +99,12 @@ public class ViralLoadQueryServiceTest extends AbstractIntegServiceTest {
 	@Test
 	public void findByLocationCodeAndStatusShouldReturnPendingResultsFromGivenLabCodes() throws BusinessException {
 
+		String[] allCodes = Arrays.copyOf(OrgUnitTemplate.ZAMBEZIA_SISMA_CODES,
+				OrgUnitTemplate.ZAMBEZIA_SISMA_CODES.length + 1);
+		allCodes[allCodes.length - 1] = "1100100";
+
 		final List<ViralLoad> viralLoads = this.viralLoadQueryService
-				.findPendingByLocationCode(Arrays.asList("01041137", "1100100"));
+				.findPendingByLocationCode(Arrays.asList(allCodes));
 
 		assertThat(viralLoads).hasSize(15);
 	}
@@ -99,7 +118,7 @@ public class ViralLoadQueryServiceTest extends AbstractIntegServiceTest {
 		ViralLoad example = new ViralLoad();
 		example.active();
 		List<ViralLoad> findAllByForm = this.viralLoadQueryService.findAllByForm(example,
-				Arrays.asList("01041137"), startDate, endDate);
+				Arrays.asList(OrgUnitTemplate.ZAMBEZIA_SISMA_CODES), startDate, endDate);
 		assertThat(findAllByForm).hasSize(13);
 	}
 
@@ -127,7 +146,8 @@ public class ViralLoadQueryServiceTest extends AbstractIntegServiceTest {
 
 	@Test
 	public void findByStatusShouldReturnResultsFromGivenHealthFacilitiesAndStatus() throws BusinessException {
-		List<ViralLoad> findByStatus = viralLoadQueryService.findByLocaationCodeAndStatus(Arrays.asList("01041137"),
+		List<ViralLoad> findByStatus = viralLoadQueryService.findByLocaationCodeAndStatus(
+				Arrays.asList(OrgUnitTemplate.ZAMBEZIA_SISMA_CODES),
 				ViralLoadStatus.NOT_PROCESSED);
 		assertThat(findByStatus).hasSize(2);
 	}
@@ -138,7 +158,8 @@ public class ViralLoadQueryServiceTest extends AbstractIntegServiceTest {
 		LocalDate today = LocalDate.now();
 		LocalDateTime startDate = today.atStartOfDay();
 		LocalDateTime endDate = today.atTime(LocalTime.MAX);
-		List<ViralLoad> findByStatusAndDates = viralLoadQueryService.findByLocationCodeAndStatusBetweenDates(Arrays.asList("01041137"),
+		List<ViralLoad> findByStatusAndDates = viralLoadQueryService.findByLocationCodeAndStatusBetweenDates(
+				Arrays.asList(OrgUnitTemplate.ZAMBEZIA_SISMA_CODES),
 				ViralLoadStatus.PROCESSED, startDate,
 				endDate);
 		assertThat(findByStatusAndDates).hasSize(1);

@@ -17,6 +17,6 @@ import mz.co.fgh.disaapi.core.DisaApiCoreUnitTestApplication;
 @ActiveProfiles("unitTest")
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = { DisaApiCoreUnitTestApplication.class })
-public abstract class AbstractUnitServiceTest extends AbstractServiceTest {
+public abstract class AbstractUnitServiceTest {
 
 }

@@ -30,6 +30,8 @@ public class OrgUnit {
     @Column
     private String facility;
 
+    private Integer implementingPartnerId;
+
     public String getCode() {
         return code;
     }
@@ -61,4 +63,13 @@ public class OrgUnit {
     public void setFacility(String facility) {
         this.facility = facility;
     }
+
+    public Integer getImplementingPartnerId() {
+        return implementingPartnerId;
+    }
+
+    public void setImplementingPartnerId(Integer implementingPartnerId) {
+        this.implementingPartnerId = implementingPartnerId;
+    }
+
 }

@@ -17,5 +17,5 @@ import mz.org.fgh.disaapi.core.DisaApiCoreApplication;
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = { DisaApiCoreApplication.class })
 @ActiveProfiles("test")
-public abstract class AbstractIntegServiceTest extends AbstractServiceTest {
+public abstract class AbstractIntegServiceTest {
 }
