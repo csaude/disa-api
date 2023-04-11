@@ -35,10 +35,8 @@ import mz.org.fgh.disaapi.core.viralload.service.ViralLoadQueryService;
 import mz.org.fgh.disaapi.core.viralload.service.ViralLoadService;
 
 @Path("/v2/viralloads")
-@Service(ViralLoadResourceV2.NAME)
+@Service
 public class ViralLoadResourceV2 extends AbstractUserContext {
-
-	public static final String NAME = "mz.org.fgh.disaapi.integ.viralload.ViralLoadResourceV2";
 
 	@Inject
 	private ViralLoadQueryService viralLoadQueryService;

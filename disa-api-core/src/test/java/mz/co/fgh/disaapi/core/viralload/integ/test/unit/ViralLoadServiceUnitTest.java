@@ -20,9 +20,9 @@ import mz.co.msaude.boot.frameworks.exception.BusinessException;
 import mz.co.msaude.boot.frameworks.fixturefactory.EntityFactory;
 import mz.co.msaude.boot.frameworks.model.EntityStatus;
 import mz.org.fgh.disaapi.core.exception.NotFoundBusinessException;
-import mz.org.fgh.disaapi.core.viralload.dao.ViralLoadDAO;
 import mz.org.fgh.disaapi.core.viralload.model.ViralLoad;
 import mz.org.fgh.disaapi.core.viralload.model.ViralLoadStatus;
+import mz.org.fgh.disaapi.core.viralload.repository.ViralLoadRepository;
 import mz.org.fgh.disaapi.core.viralload.service.ViralLoadService;
 
 public class ViralLoadServiceUnitTest extends AbstractUnitServiceTest {
@@ -31,7 +31,7 @@ public class ViralLoadServiceUnitTest extends AbstractUnitServiceTest {
     private ViralLoadService viralLoadService;
 
     @MockBean
-    private ViralLoadDAO viralLoadDAO;
+    private ViralLoadRepository viralLoadRepository;
 
     @Test
     public void updateViralLoadShouldUpdateViralLoadPropertyValues() throws BusinessException {
@@ -39,7 +39,7 @@ public class ViralLoadServiceUnitTest extends AbstractUnitServiceTest {
         ViralLoad viralLoad = EntityFactory.gimme(ViralLoad.class, ViralLoadTemplate.NOT_PROCESSED);
 
         List<String> requestIds = Arrays.asList(viralLoad.getRequestId());
-        Mockito.when(viralLoadDAO.findViralLoadByRequestId(requestIds, EntityStatus.ACTIVE))
+        Mockito.when(viralLoadRepository.findByRequestIdInAndEntityStatus(requestIds, EntityStatus.ACTIVE))
                 .thenReturn(Arrays.asList(viralLoad));
 
         Map<String, Object> propertyValues = new HashMap<>();
@@ -62,7 +62,7 @@ public class ViralLoadServiceUnitTest extends AbstractUnitServiceTest {
         ViralLoad viralLoad = EntityFactory.gimme(ViralLoad.class, ViralLoadTemplate.NOT_PROCESSED);
 
         List<String> requestIds = Arrays.asList(viralLoad.getRequestId());
-        Mockito.when(viralLoadDAO.findViralLoadByRequestId(requestIds, EntityStatus.ACTIVE))
+        Mockito.when(viralLoadRepository.findByRequestIdInAndEntityStatus(requestIds, EntityStatus.ACTIVE))
                 .thenReturn(Arrays.asList(viralLoad));
 
         Map<String, Object> propertyValues = new HashMap<>();
@@ -82,7 +82,7 @@ public class ViralLoadServiceUnitTest extends AbstractUnitServiceTest {
         ViralLoad viralLoad = EntityFactory.gimme(ViralLoad.class, ViralLoadTemplate.PROCESSED);
 
         List<String> requestIds = Arrays.asList(viralLoad.getRequestId());
-        Mockito.when(viralLoadDAO.findViralLoadByRequestId(requestIds, EntityStatus.ACTIVE))
+        Mockito.when(viralLoadRepository.findByRequestIdInAndEntityStatus(requestIds, EntityStatus.ACTIVE))
                 .thenReturn(Arrays.asList(viralLoad));
 
         Map<String, Object> propertyValues = new HashMap<>();
@@ -102,7 +102,7 @@ public class ViralLoadServiceUnitTest extends AbstractUnitServiceTest {
         ViralLoad viralLoad = EntityFactory.gimme(ViralLoad.class, ViralLoadTemplate.NOT_PROCESSED);
 
         List<String> requestIds = Arrays.asList(viralLoad.getRequestId());
-        Mockito.when(viralLoadDAO.findViralLoadByRequestId(requestIds, EntityStatus.ACTIVE))
+        Mockito.when(viralLoadRepository.findByRequestIdInAndEntityStatus(requestIds, EntityStatus.ACTIVE))
                 .thenReturn(Arrays.asList(viralLoad));
 
         Map<String, Object> propertyValues = new HashMap<>();
@@ -119,7 +119,7 @@ public class ViralLoadServiceUnitTest extends AbstractUnitServiceTest {
         ViralLoad viralLoad = EntityFactory.gimme(ViralLoad.class, ViralLoadTemplate.PROCESSED);
 
         List<String> requestIds = Arrays.asList(viralLoad.getRequestId());
-        Mockito.when(viralLoadDAO.findViralLoadByRequestId(requestIds, EntityStatus.ACTIVE))
+        Mockito.when(viralLoadRepository.findByRequestIdInAndEntityStatus(requestIds, EntityStatus.ACTIVE))
                 .thenReturn(Collections.emptyList());
 
         Map<String, Object> propertyValues = new HashMap<>();

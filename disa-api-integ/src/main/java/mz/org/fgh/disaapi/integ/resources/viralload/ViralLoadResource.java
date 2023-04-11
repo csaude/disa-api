@@ -35,11 +35,9 @@ import mz.org.fgh.disaapi.core.viralload.service.ViralLoadService;
  * @deprecated see {@link ViralLoadResourceV2}.
  */
 @Path("viralloads")
-@Service(ViralLoadResource.NAME)
 @Deprecated
+@Service
 public class ViralLoadResource extends AbstractUserContext {
-
-	public static final String NAME = "mz.org.fgh.disaapi.integ.viralload.ViralLoadResource";
 
 	@Inject
 	private ViralLoadQueryService viralLoadQueryService;
@@ -55,7 +53,7 @@ public class ViralLoadResource extends AbstractUserContext {
 	public Response findViralLoads(@QueryParam("locationCodes") final List<String> locationCodes,
 			@QueryParam("requestingProvinceName") String requestingProvinceName)
 			throws BusinessException {
-		viralLoads = this.viralLoadQueryService.findByLocationCodeAndStatus(locationCodes, requestingProvinceName);
+		viralLoads = this.viralLoadQueryService.findPendingByLocationCodeAndProvince(locationCodes, requestingProvinceName);
 		return Response.ok(viralLoads).build();
 
 	}
@@ -64,7 +62,7 @@ public class ViralLoadResource extends AbstractUserContext {
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response findViralLoads(@QueryParam("locationCodes") final List<String> locationCodes)
 			throws BusinessException {
-		viralLoads = this.viralLoadQueryService.findByLocationCodeAndStatus(locationCodes);
+		viralLoads = this.viralLoadQueryService.findPendingByLocationCode(locationCodes);
 		return Response.ok(viralLoads).build();
 
 	}
@@ -96,7 +94,7 @@ public class ViralLoadResource extends AbstractUserContext {
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response _findViralLoadsByStatus(@QueryParam("locationCodes") final List<String> locationCodes,
 			@QueryParam("viralLoadStatus") final ViralLoadStatus viralLoadStatus) throws BusinessException {
-		viralLoads = this.viralLoadQueryService.findByStatus(locationCodes, viralLoadStatus);
+		viralLoads = this.viralLoadQueryService.findByLocaationCodeAndStatus(locationCodes, viralLoadStatus);
 		return Response.ok(viralLoads).build();
 	}
 
@@ -107,7 +105,7 @@ public class ViralLoadResource extends AbstractUserContext {
 			@QueryParam("viralLoadStatus") final ViralLoadStatus viralLoadStatus,
 			@QueryParam("startDate") final String strStartDate, @QueryParam("endDate") final String strEndDate)
 			throws BusinessException {
-		viralLoads = this.viralLoadQueryService.findByStatusAndDates(locationCodes, viralLoadStatus,
+		viralLoads = this.viralLoadQueryService.findByLocationCodeAndStatusBetweenDates(locationCodes, viralLoadStatus,
 				convertToLocalDateTime(strStartDate), convertToLocalDateTime(strEndDate));
 		return Response.ok(viralLoads).build();
 	}

@@ -5,8 +5,8 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
 import org.springframework.context.annotation.Profile;
 
-import mz.org.fgh.disaapi.core.viralload.service.ViralLoadService;
 import mz.org.fgh.disaapi.core.viralload.service.ViralLoadServiceImpl;
+import mz.org.fgh.disaapi.core.viralload.service.ViralLoadService;
 
 @Configuration
 @Profile("unitTest")
