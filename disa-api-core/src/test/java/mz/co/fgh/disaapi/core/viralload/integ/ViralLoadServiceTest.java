@@ -1,6 +1,6 @@
 package mz.co.fgh.disaapi.core.viralload.integ;
 
-import static org.junit.Assert.assertFalse;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -22,18 +22,17 @@ import mz.org.fgh.disaapi.core.viralload.service.ViralLoadService;
 public class ViralLoadServiceTest extends AbstractIntegServiceTest {
 
 	@Inject
-	private ViralLoadQueryService viralLoadQueryService;
+	protected ViralLoadQueryService viralLoadQueryService;
 
 	@Inject
-	private ViralLoadService viralLoadService;
+	protected ViralLoadService viralLoadService;
 
 	private ViralLoad viralLoad;
 	private List<String> nids;
 
-	public ViralLoadServiceTest() throws BusinessException {
+	public ViralLoadServiceTest() {
 		this.viralLoad = EntityFactory.gimme(ViralLoad.class, ViralLoadTemplate.VALID);
 		nids = new ArrayList<String>();
-
 	}
 
 	@Test
@@ -41,7 +40,7 @@ public class ViralLoadServiceTest extends AbstractIntegServiceTest {
 
 		this.viralLoadService.createViralLoad(this.getUserContext(), viralLoad);
 
-		assertFalse(viralLoad.getId() == null);
+		assertThat(viralLoad.getId()).isNotNull();
 
 	}
 
@@ -58,7 +57,7 @@ public class ViralLoadServiceTest extends AbstractIntegServiceTest {
 
 		viralLoadService.updateViralLoad(getUserContext(), viralLoad);
 
-		assertFalse(viralLoad.getViralLoadStatus() == ViralLoadStatus.PENDING);
+		assertThat(viralLoad.getViralLoadStatus()).isNotEqualTo(ViralLoadStatus.PENDING);
 
 	}
 }

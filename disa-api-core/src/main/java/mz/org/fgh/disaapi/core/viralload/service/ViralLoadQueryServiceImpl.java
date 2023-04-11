@@ -3,12 +3,16 @@
  */
 package mz.org.fgh.disaapi.core.viralload.service;
 
+import static mz.org.fgh.disaapi.core.viralload.repository.ViralLoadSpecifications.createdInLocationBetweenDates;
+
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
@@ -16,48 +20,61 @@ import mz.co.msaude.boot.frameworks.exception.BusinessException;
 import mz.co.msaude.boot.frameworks.model.EntityStatus;
 import mz.org.fgh.disaapi.core.viralload.dao.ViralLoadDAO;
 import mz.org.fgh.disaapi.core.viralload.model.NotProcessingCause;
-import mz.org.fgh.disaapi.core.viralload.model.Page;
 import mz.org.fgh.disaapi.core.viralload.model.ViralLoad;
 import mz.org.fgh.disaapi.core.viralload.model.ViralLoadStatus;
+import mz.org.fgh.disaapi.core.viralload.repository.ViralLoadRepository;
 
 /**
  * @author Stélio Moiane
  * @author Hélio Machabane
  *
  */
-@Service(ViralLoadQueryServiceImpl.NAME)
+@Service
 public class ViralLoadQueryServiceImpl implements ViralLoadQueryService {
-
-	public static final String NAME = "mz.org.fgh.disaapi.core.viralload.service.ViralLoadQueryServiceImpl";
 
 	@Inject
 	private ViralLoadDAO viralLoadDAO;
 
+	@Inject
+	private ViralLoadRepository viralLoadRepository;
+
 	@Override
-	public List<ViralLoad> findByLocationCodeAndStatus(List<String> locationCodes, String requestingProvinceName)
+	public List<ViralLoad> findPendingByLocationCodeAndProvince(List<String> locationCodes, String requestingProvinceName)
 			throws BusinessException {
 
 		if (locationCodes.isEmpty()) {
 
 			return new ArrayList<ViralLoad>();
 		}
-		return this.viralLoadDAO.findByLocationCodeAndStatus(locationCodes, ViralLoadStatus.PENDING,
+		return viralLoadRepository.findByLocationCodeAndStatus(locationCodes, ViralLoadStatus.PENDING,
 				EntityStatus.ACTIVE, requestingProvinceName);
 	}
 
 	@Override
-	public List<ViralLoad> findByLocationCodeAndStatus(List<String> locationCodes) throws BusinessException {
+	public List<ViralLoad> findPendingByLocationCode(List<String> locationCodes) throws BusinessException {
 
 		if (locationCodes.isEmpty()) {
 
 			return new ArrayList<ViralLoad>();
 		}
-		return this.viralLoadDAO.findByLocationCodeAndStatus(locationCodes, ViralLoadStatus.PENDING,
+		return viralLoadRepository.findByHealthFacilityLabCodeInAndViralLoadStatusAndEntityStatus(locationCodes, ViralLoadStatus.PENDING,
 				EntityStatus.ACTIVE);
 	}
 
 	@Override
-	public Page<ViralLoad> findByForm(
+	public Page<ViralLoad> findByForm(ViralLoad example, List<String> locationCodes, LocalDateTime startDate,
+			LocalDateTime endDate, Pageable pageable) throws BusinessException {
+
+		if (locationCodes.isEmpty()) {
+			throw new BusinessException("The HF code should be informed");
+		}
+
+		return viralLoadRepository.findAll(createdInLocationBetweenDates(example, locationCodes, startDate, endDate),
+				pageable);
+	}
+
+	@Override
+	public mz.org.fgh.disaapi.core.viralload.model.Page<ViralLoad> findByForm(
 			String requestId,
 			String nid,
 			List<String> healthFacilityLabCode,
@@ -90,7 +107,7 @@ public class ViralLoadQueryServiceImpl implements ViralLoadQueryService {
 			orderBy = DEFAULT_ORDER_BY;
 			direction = DEFAULT_DIRECTION;
 
-		// If order by but no direction, sort ASCENDING
+			// If order by but no direction, sort ASCENDING
 		} else if (StringUtils.isEmpty(direction)) {
 			direction = ASCENDING;
 		}
@@ -103,6 +120,17 @@ public class ViralLoadQueryServiceImpl implements ViralLoadQueryService {
 				healthFacilityLabCode, referringRequestID, viralLoadStatus, notProcessingCause, startDate, endDate,
 				search,
 				pageNumber, pageSize, orderBy, direction, EntityStatus.ACTIVE);
+	}
+
+	@Override
+	public List<ViralLoad> findAllByForm(ViralLoad example, List<String> locationCodes,
+			LocalDateTime startDate, LocalDateTime endDate) throws BusinessException {
+
+		if (locationCodes.isEmpty()) {
+			throw new BusinessException("The HF code should be informed");
+		}
+
+		return viralLoadRepository.findAll(createdInLocationBetweenDates(example, locationCodes, startDate, endDate));
 	}
 
 	@Override
@@ -135,7 +163,7 @@ public class ViralLoadQueryServiceImpl implements ViralLoadQueryService {
 
 			return new ArrayList<ViralLoad>();
 		}
-		return viralLoadDAO.findViralLoadByNid(nids, EntityStatus.ACTIVE);
+		return viralLoadRepository.findByNidInAndEntityStatus(nids, EntityStatus.ACTIVE);
 	}
 
 	@Override
@@ -144,27 +172,27 @@ public class ViralLoadQueryServiceImpl implements ViralLoadQueryService {
 
 			return new ArrayList<ViralLoad>();
 		}
-		return viralLoadDAO.findViralLoadByRequestId(requestIds, EntityStatus.ACTIVE);
+		return viralLoadRepository.findByRequestIdInAndEntityStatus(requestIds, EntityStatus.ACTIVE);
 	}
 
 	@Override
-	public List<ViralLoad> findByStatus(List<String> locationCodes, ViralLoadStatus viralLoadStatus)
+	public List<ViralLoad> findByLocaationCodeAndStatus(List<String> locationCodes, ViralLoadStatus viralLoadStatus)
 			throws BusinessException {
 
 		if (locationCodes.isEmpty()) {
 			return new ArrayList<ViralLoad>();
 		}
-		return viralLoadDAO.findByStatus(locationCodes, viralLoadStatus, EntityStatus.ACTIVE);
+		return viralLoadRepository.findByHealthFacilityLabCodeInAndViralLoadStatusAndEntityStatus(locationCodes, viralLoadStatus, EntityStatus.ACTIVE);
 	}
 
 	@Override
-	public List<ViralLoad> findByStatusAndDates(List<String> locationCodes, ViralLoadStatus viralLoadStatus,
+	public List<ViralLoad> findByLocationCodeAndStatusBetweenDates(List<String> locationCodes, ViralLoadStatus viralLoadStatus,
 			LocalDateTime startDate, LocalDateTime endDate) throws BusinessException {
 
 		if (locationCodes.isEmpty()) {
 			return new ArrayList<ViralLoad>();
 		}
-		return viralLoadDAO.findByStatusAndDates(locationCodes, viralLoadStatus, EntityStatus.ACTIVE, startDate,
+		return viralLoadRepository.findByStatusAndDates(locationCodes, viralLoadStatus, EntityStatus.ACTIVE, startDate,
 				endDate);
 	}
 }
