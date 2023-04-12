@@ -6,22 +6,22 @@ import javax.inject.Inject;
 
 import org.springframework.stereotype.Service;
 
-import mz.org.fgh.disaapi.core.orgunit.dao.OrgUnitDAO;
+import mz.org.fgh.disaapi.core.orgunit.OrgUnitRepository;
 import mz.org.fgh.disaapi.core.orgunit.model.OrgUnit;
 
 @Service
-public class OrgUnitQueryServiceImpl implements OrgUnitQueryService {
+public class OrgUnitServiceImpl implements OrgUnitService {
 
     @Inject
-    private OrgUnitDAO orgUnitDAO;
+    private OrgUnitRepository orgUnitRepository;
 
     @Override
     public List<OrgUnit> search(String term) {
-        return orgUnitDAO.search(term);
+        return orgUnitRepository.search(term);
     }
 
     @Override
     public OrgUnit findByCode(String code) {
-        return orgUnitDAO.findByCode(code);
+        return orgUnitRepository.findByCode(code);
     }
 }

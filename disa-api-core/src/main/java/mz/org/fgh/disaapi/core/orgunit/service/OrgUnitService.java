@@ -4,7 +4,7 @@ import java.util.List;
 
 import mz.org.fgh.disaapi.core.orgunit.model.OrgUnit;
 
-public interface OrgUnitQueryService {
+public interface OrgUnitService {
 
     List<OrgUnit> search(String term);
 
