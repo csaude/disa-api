@@ -30,8 +30,12 @@ import mz.org.fgh.disaapi.core.viralload.service.ViralLoadService;
  * @author Stélio Moiane
  * @author Hélio Machabane
  *
+ *
+ *
+ * @deprecated see {@link ViralLoadResourceV2}.
  */
 @Path("viralloads")
+@Deprecated
 @Service
 public class ViralLoadResource extends AbstractUserContext {
 
