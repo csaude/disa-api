@@ -5,10 +5,12 @@ package mz.co.fgh.disaapi.core.fixturefactory;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 import br.com.six2six.fixturefactory.Fixture;
 import br.com.six2six.fixturefactory.Rule;
 import br.com.six2six.fixturefactory.loader.TemplateLoader;
+import mz.co.msaude.boot.frameworks.model.EntityStatus;
 import mz.org.fgh.disaapi.core.viralload.model.ViralLoad;
 import mz.org.fgh.disaapi.core.viralload.model.ViralLoadStatus;
 
@@ -17,6 +19,8 @@ import mz.org.fgh.disaapi.core.viralload.model.ViralLoadStatus;
  *
  */
 public class ViralLoadTemplate implements TemplateLoader {
+
+	public static final String INACTIVE = "INACTIVE";
 
 	public static final String VALID = "VALID";
 
@@ -32,11 +36,11 @@ public class ViralLoadTemplate implements TemplateLoader {
 		Fixture.of(ViralLoad.class).addTemplate(VALID, new Rule() {
 			{
 				this.add("nid", regex("0001041137/\\d{4}/\\d{5}"));
-                this.add("requestId", regex("MZDISAPQM\\d{7}"));
+				this.add("requestId", regex("MZDISAPQM\\d{7}"));
 				this.add("dateOfBirth", LocalDate.now());
-				this.add("healthFacilityLabCode", "01041137");
+				this.add("healthFacilityLabCode", uniqueRandom("1040106", "1040107", "1040111", "1040114"));
 				this.add("nameOfTechnicianRequestingTest", "ITALIDA");
-				this.add("requestingFacilityName", "CS 16 de Junho");
+				this.add("requestingFacilityName", uniqueRandom("17 de Setembro CSURB", "Namuinho CS III", "Chabeco CSURB", "24 de Julho CSURB"));
 				this.add("requestingProvinceName", "Zambezia");
 				this.add("encounter", "SMI");
 				this.add("pregnant", "Unreported");
@@ -55,6 +59,10 @@ public class ViralLoadTemplate implements TemplateLoader {
 				this.add("aprovedBy", "ITALIDA");
 				this.add("labComments", "N/A");
 				this.add("viralLoadStatus", ViralLoadStatus.PENDING);
+				this.add("createdAt", LocalDateTime.now());
+				this.add("createdBy", "fgh");
+				this.add("entityStatus", EntityStatus.ACTIVE);
+				this.add("uuid", UUID.randomUUID().toString());
 
 			}
 		});
@@ -68,6 +76,12 @@ public class ViralLoadTemplate implements TemplateLoader {
 		Fixture.of(ViralLoad.class).addTemplate(PROCESSED).inherits(VALID, new Rule() {
 			{
 				this.add("viralLoadStatus", ViralLoadStatus.PROCESSED);
+			}
+		});
+
+		Fixture.of(ViralLoad.class).addTemplate(INACTIVE).inherits(VALID, new Rule() {
+			{
+				this.add("entityStatus", EntityStatus.INACTIVE);
 			}
 		});
 

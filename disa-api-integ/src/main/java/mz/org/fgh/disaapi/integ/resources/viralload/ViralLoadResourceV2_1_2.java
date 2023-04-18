@@ -27,7 +27,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 import mz.co.msaude.boot.frameworks.exception.BusinessException;
 import mz.org.fgh.disaapi.core.exception.NotFoundBusinessException;
-import mz.org.fgh.disaapi.core.viralload.config.AbstractUserContext;
 import mz.org.fgh.disaapi.core.viralload.model.NotProcessingCause;
 import mz.org.fgh.disaapi.core.viralload.model.ViralLoad;
 import mz.org.fgh.disaapi.core.viralload.model.ViralLoadStatus;
@@ -36,7 +35,7 @@ import mz.org.fgh.disaapi.core.viralload.service.ViralLoadService;
 
 @Path("/v2.1.2/viralloads")
 @Component
-public class ViralLoadResourceV2_2 extends AbstractUserContext {
+public class ViralLoadResourceV2_1_2 {
 
     @Inject
     private ViralLoadQueryService viralLoadQueryService;
@@ -149,7 +148,7 @@ public class ViralLoadResourceV2_2 extends AbstractUserContext {
         try {
             ViralLoad viralLoad = new ViralLoad();
             viralLoad.setRequestId(requestId);
-            ViralLoad updatedVl = this.viralLoadService.updateViralLoad(getUserContext(), viralLoad, propertyValues);
+            ViralLoad updatedVl = this.viralLoadService.updateViralLoad(viralLoad, propertyValues);
             return Response.ok(updatedVl).build();
         } catch (NotFoundBusinessException e) {
             throw new NotFoundException("Viral load not found");
@@ -159,7 +158,7 @@ public class ViralLoadResourceV2_2 extends AbstractUserContext {
 
     private void updateViralLoad(ViralLoad viralLoad) {
         try {
-            viralLoadService.updateViralLoad(getUserContext(), viralLoad);
+            viralLoadService.updateViralLoad(viralLoad);
         } catch (BusinessException e) {
             e.printStackTrace();
         }

@@ -3,6 +3,8 @@
  */
 package mz.org.fgh.disaapi.integ.resources.config;
 
+import java.util.Collections;
+
 import org.glassfish.jersey.server.ResourceConfig;
 import org.springframework.stereotype.Service;
 
@@ -10,7 +12,7 @@ import mz.org.fgh.disaapi.integ.resources.converter.LocalDateTimeParamConverterP
 import mz.org.fgh.disaapi.integ.resources.orgunit.OrgUnitResource;
 import mz.org.fgh.disaapi.integ.resources.viralload.ViralLoadResource;
 import mz.org.fgh.disaapi.integ.resources.viralload.ViralLoadResourceV2;
-import mz.org.fgh.disaapi.integ.resources.viralload.ViralLoadResourceV2_2;
+import mz.org.fgh.disaapi.integ.resources.viralload.ViralLoadResourceV2_1_2;
 
 /**
  * @author Stélio Moiane
@@ -22,8 +24,11 @@ public class JerseyConfig extends ResourceConfig {
 	public JerseyConfig() {
 		this.register(ViralLoadResource.class);
 		this.register(ViralLoadResourceV2.class);
-		this.register(ViralLoadResourceV2_2.class);
+		this.register(ViralLoadResourceV2_1_2.class);
 		this.register(OrgUnitResource.class);
 		this.register(LocalDateTimeParamConverterProvider.class);
+		// Configure Jersey to use setStatus(int) rather sendError(int).
+		// https://docs.spring.io/spring-boot/docs/2.0.3.RELEASE/reference/html/howto-jersey.html#howto-jersey-spring-security
+		setProperties(Collections.singletonMap("jersey.config.server.response.setStatusOverSendError", true));
 	}
 }

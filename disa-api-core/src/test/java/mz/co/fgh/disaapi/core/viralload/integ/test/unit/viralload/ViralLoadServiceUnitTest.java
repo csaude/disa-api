@@ -1,4 +1,4 @@
-package mz.co.fgh.disaapi.core.viralload.integ.test.unit;
+package mz.co.fgh.disaapi.core.viralload.integ.test.unit.viralload;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -10,10 +10,14 @@ import java.util.Map;
 
 import javax.inject.Inject;
 
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.mockito.Mockito;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.test.context.ContextConfiguration;
 
+import br.com.six2six.fixturefactory.loader.FixtureFactoryLoader;
 import mz.co.fgh.disaapi.core.config.AbstractUnitServiceTest;
 import mz.co.fgh.disaapi.core.fixturefactory.ViralLoadTemplate;
 import mz.co.msaude.boot.frameworks.exception.BusinessException;
@@ -25,6 +29,7 @@ import mz.org.fgh.disaapi.core.viralload.model.ViralLoadStatus;
 import mz.org.fgh.disaapi.core.viralload.repository.ViralLoadRepository;
 import mz.org.fgh.disaapi.core.viralload.service.ViralLoadService;
 
+@ContextConfiguration
 public class ViralLoadServiceUnitTest extends AbstractUnitServiceTest {
 
     @Inject
@@ -33,7 +38,13 @@ public class ViralLoadServiceUnitTest extends AbstractUnitServiceTest {
     @MockBean
     private ViralLoadRepository viralLoadRepository;
 
+    @BeforeClass
+    public static void setUp() {
+            FixtureFactoryLoader.loadTemplates("mz.co.fgh.disaapi.core.fixturefactory");
+    }
+
     @Test
+    @WithMockUser
     public void updateViralLoadShouldUpdateViralLoadPropertyValues() throws BusinessException {
 
         ViralLoad viralLoad = EntityFactory.gimme(ViralLoad.class, ViralLoadTemplate.NOT_PROCESSED);
@@ -47,7 +58,6 @@ public class ViralLoadServiceUnitTest extends AbstractUnitServiceTest {
         propertyValues.put("healthFacilityLabCode", "1040107");
         propertyValues.put("requestingFacilityName", "CS 24 de Julho");
         this.viralLoadService.updateViralLoad(
-                getUserContext(),
                 viralLoad,
                 propertyValues);
 
@@ -57,6 +67,7 @@ public class ViralLoadServiceUnitTest extends AbstractUnitServiceTest {
     }
 
     @Test
+    @WithMockUser
     public void updateViralLoadShouldUpdateAllowedViralLoadPropertyValues() throws BusinessException {
 
         ViralLoad viralLoad = EntityFactory.gimme(ViralLoad.class, ViralLoadTemplate.NOT_PROCESSED);
@@ -68,7 +79,6 @@ public class ViralLoadServiceUnitTest extends AbstractUnitServiceTest {
         Map<String, Object> propertyValues = new HashMap<>();
         propertyValues.put("reasonForTest", "Suspected treatment failure");
         this.viralLoadService.updateViralLoad(
-                getUserContext(),
                 viralLoad,
                 propertyValues);
 
@@ -90,7 +100,6 @@ public class ViralLoadServiceUnitTest extends AbstractUnitServiceTest {
         propertyValues.put("healthFacilityLabCode", "1040107");
         propertyValues.put("requestingFacilityName", "CS 24 de Julho");
         this.viralLoadService.updateViralLoad(
-                getUserContext(),
                 viralLoad,
                 propertyValues);
 
@@ -108,7 +117,6 @@ public class ViralLoadServiceUnitTest extends AbstractUnitServiceTest {
         Map<String, Object> propertyValues = new HashMap<>();
         propertyValues.put("viralLoadStatus", "");
         this.viralLoadService.updateViralLoad(
-                getUserContext(),
                 viralLoad,
                 propertyValues);
     }
@@ -127,7 +135,6 @@ public class ViralLoadServiceUnitTest extends AbstractUnitServiceTest {
         propertyValues.put("healthFacilityLabCode", "1040107");
         propertyValues.put("requestingFacilityName", "CS 24 de Julho");
         this.viralLoadService.updateViralLoad(
-                getUserContext(),
                 viralLoad,
                 propertyValues);
 

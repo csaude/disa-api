@@ -13,11 +13,13 @@ import javax.inject.Inject;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 import mz.co.msaude.boot.frameworks.exception.BusinessException;
 import mz.co.msaude.boot.frameworks.model.EntityStatus;
+import mz.org.fgh.disaapi.core.ip.ImplementingPartner;
 import mz.org.fgh.disaapi.core.viralload.dao.ViralLoadDAO;
 import mz.org.fgh.disaapi.core.viralload.model.NotProcessingCause;
 import mz.org.fgh.disaapi.core.viralload.model.ViralLoad;
@@ -39,37 +41,37 @@ public class ViralLoadQueryServiceImpl implements ViralLoadQueryService {
 	private ViralLoadRepository viralLoadRepository;
 
 	@Override
-	public List<ViralLoad> findPendingByLocationCodeAndProvince(List<String> locationCodes, String requestingProvinceName)
+	public List<ViralLoad> findPendingByLocationCodeAndProvince(List<String> orgUnitCodes, String requestingProvinceName)
 			throws BusinessException {
 
-		if (locationCodes.isEmpty()) {
+		if (orgUnitCodes.isEmpty()) {
 
 			return new ArrayList<ViralLoad>();
 		}
-		return viralLoadRepository.findByLocationCodeAndStatus(locationCodes, ViralLoadStatus.PENDING,
+		return viralLoadRepository.findByLocationCodeAndStatus(orgUnitCodes, ViralLoadStatus.PENDING,
 				EntityStatus.ACTIVE, requestingProvinceName);
 	}
 
 	@Override
-	public List<ViralLoad> findPendingByLocationCode(List<String> locationCodes) throws BusinessException {
+	public List<ViralLoad> findPendingByLocationCode(List<String> orgUnitCodes) throws BusinessException {
 
-		if (locationCodes.isEmpty()) {
+		if (orgUnitCodes.isEmpty()) {
 
 			return new ArrayList<ViralLoad>();
 		}
-		return viralLoadRepository.findByHealthFacilityLabCodeInAndViralLoadStatusAndEntityStatus(locationCodes, ViralLoadStatus.PENDING,
+		return viralLoadRepository.findByHealthFacilityLabCodeInAndViralLoadStatusAndEntityStatus(orgUnitCodes, ViralLoadStatus.PENDING,
 				EntityStatus.ACTIVE);
 	}
 
 	@Override
-	public Page<ViralLoad> findByForm(ViralLoad example, List<String> locationCodes, LocalDateTime startDate,
+	public Page<ViralLoad> findByForm(ViralLoad example, List<String> orgUnitCodes, LocalDateTime startDate,
 			LocalDateTime endDate, Pageable pageable) throws BusinessException {
 
-		if (locationCodes.isEmpty()) {
+		if (orgUnitCodes.isEmpty()) {
 			throw new BusinessException("The HF code should be informed");
 		}
 
-		return viralLoadRepository.findAll(createdInLocationBetweenDates(example, locationCodes, startDate, endDate),
+		return viralLoadRepository.findAll(createdInLocationBetweenDates(example, orgUnitCodes, startDate, endDate),
 				pageable);
 	}
 
@@ -77,7 +79,7 @@ public class ViralLoadQueryServiceImpl implements ViralLoadQueryService {
 	public mz.org.fgh.disaapi.core.viralload.model.Page<ViralLoad> findByForm(
 			String requestId,
 			String nid,
-			List<String> healthFacilityLabCode,
+			List<String> orgUnitCodes,
 			String referringRequestID,
 			ViralLoadStatus viralLoadStatus,
 			NotProcessingCause notProcessingCause,
@@ -112,40 +114,40 @@ public class ViralLoadQueryServiceImpl implements ViralLoadQueryService {
 			direction = ASCENDING;
 		}
 
-		if (healthFacilityLabCode.isEmpty()) {
+		if (orgUnitCodes.isEmpty()) {
 			throw new BusinessException("The HF code should be informed");
 		}
 
 		return this.viralLoadDAO.findByForm(requestId, nid,
-				healthFacilityLabCode, referringRequestID, viralLoadStatus, notProcessingCause, startDate, endDate,
+				orgUnitCodes, referringRequestID, viralLoadStatus, notProcessingCause, startDate, endDate,
 				search,
 				pageNumber, pageSize, orderBy, direction, EntityStatus.ACTIVE);
 	}
 
 	@Override
-	public List<ViralLoad> findAllByForm(ViralLoad example, List<String> locationCodes,
+	public List<ViralLoad> findAllByForm(ViralLoad example, List<String> orgUnitCodes,
 			LocalDateTime startDate, LocalDateTime endDate) throws BusinessException {
 
-		if (locationCodes.isEmpty()) {
+		if (orgUnitCodes.isEmpty()) {
 			throw new BusinessException("The HF code should be informed");
 		}
 
-		return viralLoadRepository.findAll(createdInLocationBetweenDates(example, locationCodes, startDate, endDate));
+		return viralLoadRepository.findAll(createdInLocationBetweenDates(example, orgUnitCodes, startDate, endDate));
 	}
 
 	@Override
-	public List<ViralLoad> findAllByForm(String requestId, String nid, List<String> healthFacilityLabCode,
+	public List<ViralLoad> findAllByForm(String requestId, String nid, List<String> orgUnitCodes,
 			String referringRequestID, ViralLoadStatus viralLoadStatus, NotProcessingCause notProcessingCause,
 			LocalDateTime startDate, LocalDateTime endDate) throws BusinessException {
 
-		if (healthFacilityLabCode.isEmpty()) {
+		if (orgUnitCodes.isEmpty()) {
 			throw new BusinessException("The HF code should be informed");
 		}
 
 		return this.viralLoadDAO.findAllByForm(
 				requestId,
 				nid,
-				healthFacilityLabCode,
+				orgUnitCodes,
 				referringRequestID,
 				viralLoadStatus,
 				notProcessingCause,
@@ -176,23 +178,23 @@ public class ViralLoadQueryServiceImpl implements ViralLoadQueryService {
 	}
 
 	@Override
-	public List<ViralLoad> findByLocaationCodeAndStatus(List<String> locationCodes, ViralLoadStatus viralLoadStatus)
+	public List<ViralLoad> findByLocaationCodeAndStatus(List<String> orgUnitCodes, ViralLoadStatus viralLoadStatus)
 			throws BusinessException {
 
-		if (locationCodes.isEmpty()) {
+		if (orgUnitCodes.isEmpty()) {
 			return new ArrayList<ViralLoad>();
 		}
-		return viralLoadRepository.findByHealthFacilityLabCodeInAndViralLoadStatusAndEntityStatus(locationCodes, viralLoadStatus, EntityStatus.ACTIVE);
+		return viralLoadRepository.findByHealthFacilityLabCodeInAndViralLoadStatusAndEntityStatus(orgUnitCodes, viralLoadStatus, EntityStatus.ACTIVE);
 	}
 
 	@Override
-	public List<ViralLoad> findByLocationCodeAndStatusBetweenDates(List<String> locationCodes, ViralLoadStatus viralLoadStatus,
+	public List<ViralLoad> findByLocationCodeAndStatusBetweenDates(List<String> orgUnitCodes, ViralLoadStatus viralLoadStatus,
 			LocalDateTime startDate, LocalDateTime endDate) throws BusinessException {
 
-		if (locationCodes.isEmpty()) {
+		if (orgUnitCodes.isEmpty()) {
 			return new ArrayList<ViralLoad>();
 		}
-		return viralLoadRepository.findByStatusAndDates(locationCodes, viralLoadStatus, EntityStatus.ACTIVE, startDate,
+		return viralLoadRepository.findByStatusAndDates(orgUnitCodes, viralLoadStatus, EntityStatus.ACTIVE, startDate,
 				endDate);
 	}
 }

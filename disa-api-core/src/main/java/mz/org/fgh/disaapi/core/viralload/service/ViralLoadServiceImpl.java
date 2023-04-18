@@ -10,13 +10,13 @@ import javax.inject.Inject;
 
 import org.springframework.beans.BeanWrapper;
 import org.springframework.beans.PropertyAccessorFactory;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
 
 import mz.co.msaude.boot.frameworks.exception.BusinessException;
 import mz.co.msaude.boot.frameworks.model.EntityStatus;
-import mz.co.msaude.boot.frameworks.model.UserContext;
-import mz.co.msaude.boot.frameworks.util.UuidFactory;
 import mz.org.fgh.disaapi.core.exception.NotFoundBusinessException;
 import mz.org.fgh.disaapi.core.viralload.model.ViralLoad;
 import mz.org.fgh.disaapi.core.viralload.model.ViralLoadStatus;
@@ -29,28 +29,16 @@ public class ViralLoadServiceImpl implements ViralLoadService {
     ViralLoadRepository viralLoadRepository;
 
     @Override
-    public ViralLoad createViralLoad(UserContext context, ViralLoad viralLoad) throws BusinessException {
-        viralLoad.setCreatedBy(context.getUuid());
-        viralLoad.setCreatedAt(LocalDateTime.now());
-        viralLoad.active();
-
-        if (viralLoad.getUuid() == null) {
-            viralLoad.setUuid(UuidFactory.generate());
-        }
-
-        return viralLoadRepository.save(viralLoad);
-    }
-
-    @Override
-    public ViralLoad updateViralLoad(UserContext context, ViralLoad viralLoad) throws BusinessException {
-        viralLoad.setUpdatedBy(context.getUuid());
+    public ViralLoad updateViralLoad(ViralLoad viralLoad) throws BusinessException {
+        UserDetails user = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        viralLoad.setUpdatedBy(user.getUsername());
         viralLoad.setUpdatedAt(LocalDateTime.now());
 
         return viralLoadRepository.save(viralLoad);
     }
 
     @Override
-    public ViralLoad updateViralLoad(UserContext context, ViralLoad viralLoad, Map<String, Object> propertyValues)
+    public ViralLoad updateViralLoad(ViralLoad viralLoad, Map<String, Object> propertyValues)
             throws BusinessException {
         List<String> requestIds = Arrays.asList(viralLoad.getRequestId());
         List<ViralLoad> vls = viralLoadRepository.findByRequestIdInAndEntityStatus(requestIds, EntityStatus.ACTIVE);
@@ -76,7 +64,7 @@ public class ViralLoadServiceImpl implements ViralLoadService {
             }
         }
 
-        return this.updateViralLoad(context, (ViralLoad) bw.getWrappedInstance());
+        return this.updateViralLoad((ViralLoad) bw.getWrappedInstance());
     }
 
     @Override
@@ -90,9 +78,9 @@ public class ViralLoadServiceImpl implements ViralLoadService {
     }
 
     private void validateStatus(ViralLoad viralLoad, ViralLoad dbVl) throws BusinessException {
-		if (ViralLoadStatus.PROCESSED == dbVl.getViralLoadStatus()) {
-			throw new BusinessException(
-					"Cannot reschedule viral load " + viralLoad.getRequestId() + ". It has already been processed.");
-		}
-	}
+        if (ViralLoadStatus.PROCESSED == dbVl.getViralLoadStatus()) {
+            throw new BusinessException(
+                    "Cannot reschedule viral load " + viralLoad.getRequestId() + ". It has already been processed.");
+        }
+    }
 }

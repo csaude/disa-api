@@ -3,17 +3,7 @@ package mz.org.fgh.disaapi.core.orgunit.model;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
-import javax.persistence.NamedNativeQueries;
-import javax.persistence.NamedNativeQuery;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
 
-import mz.org.fgh.disaapi.core.orgunit.dao.OrgUnitDAO;
-
-@NamedNativeQueries({
-        @NamedNativeQuery(name = OrgUnitDAO.QUERY_NAME.search, query = OrgUnitDAO.QUERY.search, resultClass = OrgUnit.class) })
-@NamedQueries({
-        @NamedQuery(name = OrgUnitDAO.QUERY_NAME.findByCode, query = OrgUnitDAO.QUERY.findByCode) })
 @Entity
 public class OrgUnit {
 
@@ -29,6 +19,8 @@ public class OrgUnit {
 
     @Column
     private String facility;
+
+    private Integer implementingPartnerId;
 
     public String getCode() {
         return code;
@@ -61,4 +53,13 @@ public class OrgUnit {
     public void setFacility(String facility) {
         this.facility = facility;
     }
+
+    public Integer getImplementingPartnerId() {
+        return implementingPartnerId;
+    }
+
+    public void setImplementingPartnerId(Integer implementingPartnerId) {
+        this.implementingPartnerId = implementingPartnerId;
+    }
+
 }
