@@ -25,6 +25,8 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.annotation.DirtiesContext.ClassMode;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
 
@@ -41,6 +43,7 @@ import mz.org.fgh.disaapi.core.viralload.model.ViralLoad;
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
 @ContextConfiguration
+@DirtiesContext(classMode = ClassMode.BEFORE_EACH_TEST_METHOD)
 public class ViralLoadResourceTest {
 
     private static final String NOT_PROCESSED_URL = "/viralloads/requestProvince/not-processed?notProcessedNids={notProcessedNids}&reasonForNotProcessing={reasonForNotProcessing}&defaultLocationUuid={defaultLocationUuid}";
