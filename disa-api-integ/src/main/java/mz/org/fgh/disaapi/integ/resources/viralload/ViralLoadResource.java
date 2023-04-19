@@ -132,6 +132,7 @@ public class ViralLoadResource {
 				viralLoad.setCauseDuplicateNid();
 			} else if (reasonForNotProcessing.equals("duplicatedReqId")) {
 				viralLoad.setCauseDuplicateReqId();
+				viralLoad.inactive();
 			}
 			updateViralLoad(viralLoad);
 		});
