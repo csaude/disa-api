@@ -30,6 +30,7 @@ import mz.org.fgh.disaapi.core.result.model.LabResult;
 import mz.org.fgh.disaapi.core.result.model.LabResultStatus;
 import mz.org.fgh.disaapi.core.result.model.NotProcessingCause;
 import mz.org.fgh.disaapi.core.result.model.Page;
+import mz.org.fgh.disaapi.core.result.model.TypeOfResult;
 import mz.org.fgh.disaapi.core.result.service.LabResultQueryService;
 import mz.org.fgh.disaapi.core.result.service.LabResultService;
 
@@ -53,6 +54,7 @@ public class ViralLoadResourceV2 {
 			@QueryParam("referringRequestID") final String referringRequestID,
 			@QueryParam("labResultStatus") final LabResultStatus labResultStatus,
 			@QueryParam("notProcessingCause") NotProcessingCause notProcessingCause,
+			@QueryParam("typeOfResult") TypeOfResult typeOfResult,
 			@QueryParam("startDate") final LocalDateTime startDate,
 			@QueryParam("endDate") final LocalDateTime endDate,
 			@QueryParam("pageNumber") int pageNumber,
@@ -63,7 +65,7 @@ public class ViralLoadResourceV2 {
 			throws BusinessException {
 
 		Page<LabResult> vls = this.viralLoadQueryService.findByForm(requestId, nid,
-				healthFacilityLabCode, referringRequestID, labResultStatus, notProcessingCause,
+				healthFacilityLabCode, referringRequestID, labResultStatus, notProcessingCause, typeOfResult,
 				startDate, endDate, search, pageNumber, pageSize, orderBy, direction);
 
 		return Response.ok(vls).build();
@@ -79,6 +81,7 @@ public class ViralLoadResourceV2 {
 			@QueryParam("referringRequestID") final String referringRequestID,
 			@QueryParam("labResultStatus") final LabResultStatus labResultStatus,
 			@QueryParam("notProcessingCause") NotProcessingCause notProcessingCause,
+			@QueryParam("typeOfResult") TypeOfResult typeOfResult,
 			@QueryParam("startDate") final LocalDateTime startDate,
 			@QueryParam("endDate") final LocalDateTime endDate,
 			@QueryParam("orderBy") String orderBy,
@@ -86,7 +89,7 @@ public class ViralLoadResourceV2 {
 			throws BusinessException {
 
 		List<LabResult> vls = this.viralLoadQueryService.findAllByForm(requestId, nid,
-				healthFacilityLabCode, referringRequestID, labResultStatus, notProcessingCause,
+				healthFacilityLabCode, referringRequestID, labResultStatus, notProcessingCause, typeOfResult,
 				startDate, endDate);
 
 		return Response.ok(vls).build();

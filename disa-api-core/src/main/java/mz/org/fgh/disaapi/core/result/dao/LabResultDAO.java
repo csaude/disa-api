@@ -13,6 +13,7 @@ import mz.org.fgh.disaapi.core.result.model.LabResult;
 import mz.org.fgh.disaapi.core.result.model.LabResultStatus;
 import mz.org.fgh.disaapi.core.result.model.NotProcessingCause;
 import mz.org.fgh.disaapi.core.result.model.Page;
+import mz.org.fgh.disaapi.core.result.model.TypeOfResult;
 import mz.org.fgh.disaapi.core.result.repository.LabResultRepository;
 import mz.org.fgh.disaapi.core.result.service.LabResultQueryService;
 
@@ -71,6 +72,7 @@ public interface LabResultDAO {
 			String referringRequestID,
 			LabResultStatus labResultStatus,
 			NotProcessingCause notProcessingCause,
+			TypeOfResult typeOfResult,
 			LocalDateTime startDate,
 			LocalDateTime endDate,
 			String search,
@@ -90,6 +92,7 @@ public interface LabResultDAO {
 			String referringRequestID,
 			LabResultStatus labResultStatus,
 			NotProcessingCause notProcessingCause,
+			TypeOfResult typeOfResult,
 			LocalDateTime startDate,
 			LocalDateTime endDate,
 			String orderBy,

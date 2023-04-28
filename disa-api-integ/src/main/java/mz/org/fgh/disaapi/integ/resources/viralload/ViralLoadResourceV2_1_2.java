@@ -31,6 +31,7 @@ import mz.org.fgh.disaapi.core.result.model.HIVVLLabResult;
 import mz.org.fgh.disaapi.core.result.model.LabResult;
 import mz.org.fgh.disaapi.core.result.model.LabResultStatus;
 import mz.org.fgh.disaapi.core.result.model.NotProcessingCause;
+import mz.org.fgh.disaapi.core.result.model.TypeOfResult;
 import mz.org.fgh.disaapi.core.result.service.LabResultQueryService;
 import mz.org.fgh.disaapi.core.result.service.LabResultService;
 
@@ -54,6 +55,7 @@ public class ViralLoadResourceV2_1_2 {
             @QueryParam("referringRequestID") final String referringRequestID,
             @QueryParam("labResultStatus") final LabResultStatus labResultStatus,
             @QueryParam("notProcessingCause") NotProcessingCause notProcessingCause,
+            @QueryParam("notProcessingCause") TypeOfResult typeOfResult,
             @QueryParam("startDate") final LocalDateTime startDate,
             @QueryParam("endDate") final LocalDateTime endDate,
             @QueryParam("pageNumber") int pageNumber,
@@ -63,7 +65,10 @@ public class ViralLoadResourceV2_1_2 {
             @QueryParam("direction") String direction)
             throws BusinessException {
 
+        // TODO use one of typeOfResult or the class
         LabResult result = new HIVVLLabResult();
+        result.setTypeOfResult(typeOfResult);
+
         result.setRequestId(requestId);
         result.setNid(nid);
         result.setReferringRequestID(referringRequestID);

@@ -15,6 +15,7 @@ import mz.co.msaude.boot.frameworks.exception.BusinessException;
 import mz.org.fgh.disaapi.core.result.model.LabResult;
 import mz.org.fgh.disaapi.core.result.model.LabResultStatus;
 import mz.org.fgh.disaapi.core.result.model.NotProcessingCause;
+import mz.org.fgh.disaapi.core.result.model.TypeOfResult;
 
 /**
  * @author Stélio Moiane
@@ -57,6 +58,7 @@ public interface LabResultQueryService {
 			String ReferringRequestID,
 			LabResultStatus labResultStatus,
 			NotProcessingCause notProcessingCause,
+			TypeOfResult typeOfResult,
 			LocalDateTime startDate,
 			LocalDateTime endDate,
 			String search,
@@ -82,6 +84,7 @@ public interface LabResultQueryService {
 			String referringRequestID,
 			LabResultStatus labResultStatus,
 			NotProcessingCause notProcessingCause,
+			TypeOfResult typeOfResult,
 			LocalDateTime startDate,
 			LocalDateTime endDate) throws BusinessException;
 
