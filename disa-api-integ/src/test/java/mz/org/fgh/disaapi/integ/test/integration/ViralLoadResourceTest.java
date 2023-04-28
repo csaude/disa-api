@@ -38,7 +38,8 @@ import mz.co.fgh.disaapi.core.fixturefactory.ViralLoadTemplate;
 import mz.co.msaude.boot.frameworks.exception.BusinessException;
 import mz.org.fgh.disaapi.core.ip.ImplementingPartner;
 import mz.org.fgh.disaapi.core.orgunit.model.OrgUnit;
-import mz.org.fgh.disaapi.core.viralload.model.ViralLoad;
+import mz.org.fgh.disaapi.core.result.model.HIVVLLabResult;
+import mz.org.fgh.disaapi.core.result.model.LabResult;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
@@ -54,7 +55,7 @@ public class ViralLoadResourceTest {
     @Inject
     private EntityManagerFactory emFactory;
 
-    private ViralLoad vl;
+    private LabResult vl;
 
     protected ImplementingPartner fgh;
 
@@ -73,7 +74,7 @@ public class ViralLoadResourceTest {
 
             HibernateProcessor hibernateProcessor = new HibernateProcessor(session);
 
-            vl = Fixture.from(ViralLoad.class)
+            vl = Fixture.from(HIVVLLabResult.class)
                     .uses(hibernateProcessor)
                     .gimme(ViralLoadTemplate.VALID);
 

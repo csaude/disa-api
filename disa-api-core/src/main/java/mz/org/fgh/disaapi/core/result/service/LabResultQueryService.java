@@ -1,7 +1,7 @@
 /**
  *
  */
-package mz.org.fgh.disaapi.core.viralload.service;
+package mz.org.fgh.disaapi.core.result.service;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -12,16 +12,16 @@ import org.springframework.security.access.prepost.PostFilter;
 import org.springframework.security.access.prepost.PreAuthorize;
 
 import mz.co.msaude.boot.frameworks.exception.BusinessException;
-import mz.org.fgh.disaapi.core.viralload.model.NotProcessingCause;
-import mz.org.fgh.disaapi.core.viralload.model.ViralLoad;
-import mz.org.fgh.disaapi.core.viralload.model.ViralLoadStatus;
+import mz.org.fgh.disaapi.core.result.model.LabResult;
+import mz.org.fgh.disaapi.core.result.model.LabResultStatus;
+import mz.org.fgh.disaapi.core.result.model.NotProcessingCause;
 
 /**
  * @author Stélio Moiane
  * @author Hélio Machabane
  *
  */
-public interface ViralLoadQueryService {
+public interface LabResultQueryService {
 
 	int DEFAULT_PAGE_SIZE = 10;
 
@@ -34,28 +34,28 @@ public interface ViralLoadQueryService {
 	String ASCENDING = "asc";
 
 	@PreAuthorize("principal.orgUnitCodes.containsAll(#orgUnitCodes)")
-	List<ViralLoad> findPendingByLocationCodeAndProvince(List<String> orgUnitCodes, String requestingProvinceName)
+	List<LabResult> findPendingByLocationCodeAndProvince(List<String> orgUnitCodes, String requestingProvinceName)
 			throws BusinessException;
 
 	@PreAuthorize("principal.orgUnitCodes.containsAll(#orgUnitCodes)")
-	List<ViralLoad> findPendingByLocationCode(List<String> orgUnitCodes) throws BusinessException;
+	List<LabResult> findPendingByLocationCode(List<String> orgUnitCodes) throws BusinessException;
 
 	@PreAuthorize("principal.orgUnitCodes.containsAll(#orgUnitCodes)")
-	Page<ViralLoad> findByForm(ViralLoad example, List<String> orgUnitCodes, LocalDateTime startDate,
+	Page<LabResult> findByForm(LabResult example, List<String> orgUnitCodes, LocalDateTime startDate,
 			LocalDateTime endDate, Pageable pageable) throws BusinessException;
 
 	/**
 	 * @deprecated see
-	 *             {@link #findByForm(ViralLoad, List, LocalDateTime, LocalDateTime, Pageable)}
+	 *             {@link #findByForm(LabResult, List, LocalDateTime, LocalDateTime, Pageable)}
 	 */
 	@Deprecated
 	@PreAuthorize("principal.orgUnitCodes.containsAll(#orgUnitCodes)")
-	mz.org.fgh.disaapi.core.viralload.model.Page<ViralLoad> findByForm(
+	mz.org.fgh.disaapi.core.result.model.Page<LabResult> findByForm(
 			String requestId,
 			String nid,
 			List<String> orgUnitCodes,
 			String ReferringRequestID,
-			ViralLoadStatus viralLoadStatus,
+			LabResultStatus labResultStatus,
 			NotProcessingCause notProcessingCause,
 			LocalDateTime startDate,
 			LocalDateTime endDate,
@@ -66,36 +66,36 @@ public interface ViralLoadQueryService {
 			String direction) throws BusinessException;
 
 	@PreAuthorize("principal.orgUnitCodes.containsAll(#orgUnitCodes)")
-	List<ViralLoad> findAllByForm(ViralLoad example, List<String> orgUnitCodes, LocalDateTime startDate,
+	List<LabResult> findAllByForm(LabResult example, List<String> orgUnitCodes, LocalDateTime startDate,
 			LocalDateTime endDate) throws BusinessException;
 
 	/**
 	 * @deprecated see
-	 *             {@link #findAllByForm(ViralLoad, List, LocalDateTime, LocalDateTime)}
+	 *             {@link #findAllByForm(LabResult, List, LocalDateTime, LocalDateTime)}
 	 */
 	@Deprecated
 	@PreAuthorize("principal.orgUnitCodes.containsAll(#orgUnitCodes)")
-	List<ViralLoad> findAllByForm(
+	List<LabResult> findAllByForm(
 			String requestId,
 			String nid,
 			List<String> orgUnitCodes,
 			String referringRequestID,
-			ViralLoadStatus viralLoadStatus,
+			LabResultStatus labResultStatus,
 			NotProcessingCause notProcessingCause,
 			LocalDateTime startDate,
 			LocalDateTime endDate) throws BusinessException;
 
 	@PostFilter("principal.orgUnitCodes.contains(filterObject.healthFacilityLabCode)")
-	List<ViralLoad> findViralLoadByNid(List<String> nids) throws BusinessException;
+	List<LabResult> findViralLoadByNid(List<String> nids) throws BusinessException;
 
 	@PostFilter("principal.orgUnitCodes.contains(filterObject.healthFacilityLabCode)")
-	List<ViralLoad> findViralLoadByRequestId(List<String> requestIds) throws BusinessException;
+	List<LabResult> findViralLoadByRequestId(List<String> requestIds) throws BusinessException;
 
 	@PreAuthorize("principal.orgUnitCodes.containsAll(#orgUnitCodes)")
-	List<ViralLoad> findByLocaationCodeAndStatus(List<String> orgUnitCodes, ViralLoadStatus viralLoadStatus)
+	List<LabResult> findByLocaationCodeAndStatus(List<String> orgUnitCodes, LabResultStatus labResultStatus)
 			throws BusinessException;
 
 	@PreAuthorize("principal.orgUnitCodes.containsAll(#orgUnitCodes)")
-	List<ViralLoad> findByLocationCodeAndStatusBetweenDates(List<String> orgUnitCodes, ViralLoadStatus viralLoadStatus,
+	List<LabResult> findByLocationCodeAndStatusBetweenDates(List<String> orgUnitCodes, LabResultStatus labResultStatus,
 			LocalDateTime startDate, LocalDateTime endDate) throws BusinessException;
 }

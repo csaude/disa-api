@@ -1,7 +1,7 @@
 /**
  *
  */
-package mz.org.fgh.disaapi.core.viralload.config;
+package mz.org.fgh.disaapi.core.result.config;
 
 import mz.co.msaude.boot.frameworks.model.UserContext;
 import mz.co.msaude.boot.frameworks.util.UuidFactory;

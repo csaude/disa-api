@@ -1,7 +1,7 @@
 /**
  *
  */
-package mz.org.fgh.disaapi.core.viralload.dao;
+package mz.org.fgh.disaapi.core.result.dao;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -24,18 +24,18 @@ import mz.co.msaude.boot.frameworks.model.EntityStatus;
 import mz.co.msaude.boot.frameworks.model.UserContext;
 import mz.co.msaude.boot.frameworks.util.ParamBuilder;
 import mz.co.msaude.boot.frameworks.util.UuidFactory;
-import mz.org.fgh.disaapi.core.viralload.model.NotProcessingCause;
-import mz.org.fgh.disaapi.core.viralload.model.Page;
-import mz.org.fgh.disaapi.core.viralload.model.ViralLoad;
-import mz.org.fgh.disaapi.core.viralload.model.ViralLoadStatus;
+import mz.org.fgh.disaapi.core.result.model.LabResult;
+import mz.org.fgh.disaapi.core.result.model.LabResultStatus;
+import mz.org.fgh.disaapi.core.result.model.NotProcessingCause;
+import mz.org.fgh.disaapi.core.result.model.Page;
 
 /**
  * @author Stélio Moiane
  * @author Hélio Machabane
  *
  */
-@Repository(ViralLoadDAOImpl.NAME)
-public class ViralLoadDAOImpl implements ViralLoadDAO {
+@Repository(LabResultDAOImpl.NAME)
+public class LabResultDAOImpl implements LabResultDAO {
 
 	public static final String NAME = "mz.org.fgh.disaapi.core.viralload.dao.ViralLoadDAOImpl";
 
@@ -43,31 +43,31 @@ public class ViralLoadDAOImpl implements ViralLoadDAO {
 	private EntityManager entityManager;
 
 	@Override
-	public List<ViralLoad> findByLocationCodeAndStatus(List<String> locationCodes, ViralLoadStatus viralLoadStatus,
+	public List<LabResult> findByLocationCodeAndStatus(List<String> locationCodes, LabResultStatus labResultStatus,
 			EntityStatus entityStatus, String requestingProvinceName) throws BusinessException {
 
-		return this.findByNamedQuery(ViralLoadDAO.QUERY_NAME.findByLocationCodeAndStatus,
-				new ParamBuilder().add("viralLoadStatus", viralLoadStatus).add("entityStatus", entityStatus)
+		return this.findByNamedQuery(LabResultDAO.QUERY_NAME.findByLocationCodeAndStatus,
+				new ParamBuilder().add("labResultStatus", labResultStatus).add("entityStatus", entityStatus)
 						.add("locationCodes", locationCodes).add("requestingProvinceName", requestingProvinceName)
 						.process());
 	}
 
 	@Override
-	public List<ViralLoad> findByLocationCodeAndStatus(List<String> locationCodes, ViralLoadStatus viralLoadStatus,
+	public List<LabResult> findByLocationCodeAndStatus(List<String> locationCodes, LabResultStatus labResultStatus,
 			EntityStatus entityStatus) throws BusinessException {
 
-		return this.findByNamedQuery(ViralLoadDAO.QUERY_NAME.findByLocationCodeAndStatusSimple,
-				new ParamBuilder().add("viralLoadStatus", viralLoadStatus).add("entityStatus", entityStatus)
+		return this.findByNamedQuery(LabResultDAO.QUERY_NAME.findByLocationCodeAndStatusSimple,
+				new ParamBuilder().add("labResultStatus", labResultStatus).add("entityStatus", entityStatus)
 						.add("locationCodes", locationCodes).process());
 	}
 
 	@Override
-	public Page<ViralLoad> findByForm(
+	public Page<LabResult> findByForm(
 			String requestId,
 			String nid,
 			List<String> healthFacilityLabCode,
 			String referringRequestID,
-			ViralLoadStatus viralLoadStatus,
+			LabResultStatus labResultStatus,
 			NotProcessingCause notProcessingCause,
 			LocalDateTime startDate,
 			LocalDateTime endDate,
@@ -81,20 +81,20 @@ public class ViralLoadDAOImpl implements ViralLoadDAO {
 		String alias = "vl";
 
 		CriteriaBuilder cb = entityManager.getCriteriaBuilder();
-		CriteriaQuery<ViralLoad> criteriaQuery = cb.createQuery(ViralLoad.class);
-		Root<ViralLoad> vl = criteriaQuery.from(ViralLoad.class);
+		CriteriaQuery<LabResult> criteriaQuery = cb.createQuery(LabResult.class);
+		Root<LabResult> vl = criteriaQuery.from(LabResult.class);
 
 		vl.alias(alias);
 
 		// Build query predicates
 		Predicate restrictions = getSearchQueryRestrictions(
 				requestId, nid, healthFacilityLabCode, referringRequestID,
-				viralLoadStatus, notProcessingCause, startDate, endDate, search,
+				labResultStatus, notProcessingCause, startDate, endDate, search,
 				entityStatus, cb, vl);
 
 		// Build count query
 		CriteriaQuery<Long> countQuery = cb.createQuery(Long.class);
-		Root<ViralLoad> vlCount = countQuery.from(ViralLoad.class);
+		Root<LabResult> vlCount = countQuery.from(LabResult.class);
 		// Use same alias so restrictions match
 		vlCount.alias(alias);
 		countQuery.select(cb.count(vlCount));
@@ -108,7 +108,7 @@ public class ViralLoadDAOImpl implements ViralLoadDAO {
 		setSearchQueryOrder(orderBy, direction, cb, criteriaQuery, vl);
 
 		// Get paginated results
-		TypedQuery<ViralLoad> q = entityManager.createQuery(criteriaQuery);
+		TypedQuery<LabResult> q = entityManager.createQuery(criteriaQuery);
 		q.setFirstResult((pageNumber - 1) * pageSize);
 		q.setMaxResults(pageSize);
 
@@ -116,12 +116,12 @@ public class ViralLoadDAOImpl implements ViralLoadDAO {
 	}
 
 	@Override
-	public List<ViralLoad> findAllByForm(
+	public List<LabResult> findAllByForm(
 			String requestId,
 			String nid,
 			List<String> healthFacilityLabCode,
 			String referringRequestID,
-			ViralLoadStatus viralLoadStatus,
+			LabResultStatus labResultStatus,
 			NotProcessingCause notProcessingCause,
 			LocalDateTime startDate,
 			LocalDateTime endDate,
@@ -130,13 +130,13 @@ public class ViralLoadDAOImpl implements ViralLoadDAO {
 			EntityStatus entityStatus) throws BusinessException {
 
 		CriteriaBuilder cb = entityManager.getCriteriaBuilder();
-		CriteriaQuery<ViralLoad> criteriaQuery = cb.createQuery(ViralLoad.class);
-		Root<ViralLoad> vl = criteriaQuery.from(ViralLoad.class);
+		CriteriaQuery<LabResult> criteriaQuery = cb.createQuery(LabResult.class);
+		Root<LabResult> vl = criteriaQuery.from(LabResult.class);
 
 		// Build query predicates
 		Predicate restrictions = getSearchQueryRestrictions(
 				requestId, nid, healthFacilityLabCode, referringRequestID,
-				viralLoadStatus, notProcessingCause, startDate, endDate, null,
+				labResultStatus, notProcessingCause, startDate, endDate, null,
 				entityStatus, cb, vl);
 
 		criteriaQuery.select(vl);
@@ -144,56 +144,56 @@ public class ViralLoadDAOImpl implements ViralLoadDAO {
 
 		setSearchQueryOrder(orderBy, direction, cb, criteriaQuery, vl);
 
-		TypedQuery<ViralLoad> q = entityManager.createQuery(criteriaQuery);
+		TypedQuery<LabResult> q = entityManager.createQuery(criteriaQuery);
 
 		return q.getResultList();
 	}
 
 	@Override
-	public List<ViralLoad> findViralLoadByNid(List<String> nids, EntityStatus entityStatus) throws BusinessException {
-		return this.findByNamedQuery(ViralLoadDAO.QUERY_NAME.findViralLoadByNid,
+	public List<LabResult> findViralLoadByNid(List<String> nids, EntityStatus entityStatus) throws BusinessException {
+		return this.findByNamedQuery(LabResultDAO.QUERY_NAME.findByNid,
 				new ParamBuilder().add("nids", nids).add("entityStatus", entityStatus).process());
 	}
 
 	@Override
-	public List<ViralLoad> findViralLoadByRequestId(List<String> requestIds, EntityStatus entityStatus)
+	public List<LabResult> findViralLoadByRequestId(List<String> requestIds, EntityStatus entityStatus)
 			throws BusinessException {
-		return this.findByNamedQuery(ViralLoadDAO.QUERY_NAME.findViralLoadByRequestId,
+		return this.findByNamedQuery(LabResultDAO.QUERY_NAME.findByRequestId,
 				new ParamBuilder().add("requestIds", requestIds).add("entityStatus", entityStatus).process());
 	}
 
 	@Override
-	public List<ViralLoad> findByStatus(List<String> locationCodes, ViralLoadStatus viralLoadStatus,
+	public List<LabResult> findByStatus(List<String> locationCodes, LabResultStatus labResultStatus,
 			EntityStatus entityStatus) throws BusinessException {
-		return this.findByNamedQuery(ViralLoadDAO.QUERY_NAME.findByLocationCodeAndStatus,
-				new ParamBuilder().add("viralLoadStatus", viralLoadStatus).add("entityStatus", entityStatus)
+		return this.findByNamedQuery(LabResultDAO.QUERY_NAME.findByLocationCodeAndStatus,
+				new ParamBuilder().add("labResultStatus", labResultStatus).add("entityStatus", entityStatus)
 						.add("locationCodes", locationCodes).process());
 	}
 
 	@Override
-	public List<ViralLoad> findByStatusAndDates(List<String> locationCodes, ViralLoadStatus viralLoadStatus,
+	public List<LabResult> findByStatusAndDates(List<String> locationCodes, LabResultStatus labResultStatus,
 			EntityStatus entityStatus, LocalDateTime startDate, LocalDateTime endDate) throws BusinessException {
-		return this.findByNamedQuery(ViralLoadDAO.QUERY_NAME.findByStatusAndDates,
-				new ParamBuilder().add("viralLoadStatus", viralLoadStatus).add("entityStatus", entityStatus)
+		return this.findByNamedQuery(LabResultDAO.QUERY_NAME.findByStatusAndDates,
+				new ParamBuilder().add("labResultStatus", labResultStatus).add("entityStatus", entityStatus)
 						.add("locationCodes", locationCodes).add("startDate", startDate).add("endDate", endDate)
 						.process());
 	}
 
 	@Override
-	public List<ViralLoad> findByLocationCodeStatusAndNotProcessingCause(List<String> locationCodes,
-			ViralLoadStatus viralLoadStatus, EntityStatus entityStatus, NotProcessingCause notProcessingCause)
+	public List<LabResult> findByLocationCodeStatusAndNotProcessingCause(List<String> locationCodes,
+			LabResultStatus labResultStatus, EntityStatus entityStatus, NotProcessingCause notProcessingCause)
 			throws BusinessException {
 
-		return this.findByNamedQuery(ViralLoadDAO.QUERY_NAME.findByLocationCodeStatusAndNotProcessingCause,
-				new ParamBuilder().add("viralLoadStatus", viralLoadStatus).add("entityStatus", entityStatus)
+		return this.findByNamedQuery(LabResultDAO.QUERY_NAME.findByLocationCodeStatusAndNotProcessingCause,
+				new ParamBuilder().add("labResultStatus", labResultStatus).add("entityStatus", entityStatus)
 						.add("locationCodes", locationCodes).add("notProcessingCause", notProcessingCause)
 						.process());
 	}
 
-	private List<ViralLoad> findByNamedQuery(final String queryName, final Map<String, ? extends Object> params)
+	private List<LabResult> findByNamedQuery(final String queryName, final Map<String, ? extends Object> params)
 			throws BusinessException {
 
-		final TypedQuery<ViralLoad> query = this.entityManager.createNamedQuery(queryName, ViralLoad.class);
+		final TypedQuery<LabResult> query = this.entityManager.createNamedQuery(queryName, LabResult.class);
 
 		for (final Map.Entry<String, ? extends Object> param : params.entrySet()) {
 			query.setParameter(param.getKey(), param.getValue());
@@ -203,7 +203,7 @@ public class ViralLoadDAOImpl implements ViralLoadDAO {
 	}
 
 	@Override
-	public ViralLoad create(final UserContext context, final ViralLoad entity) throws BusinessException {
+	public LabResult create(final UserContext context, final LabResult entity) throws BusinessException {
 		entity.setCreatedBy(context.getUuid());
 		entity.setCreatedAt(LocalDateTime.now());
 		entity.active();
@@ -218,7 +218,7 @@ public class ViralLoadDAOImpl implements ViralLoadDAO {
 	}
 
 	@Override
-	public ViralLoad update(final UserContext context, final ViralLoad entity) throws BusinessException {
+	public LabResult update(final UserContext context, final LabResult entity) throws BusinessException {
 		entity.setUpdatedBy(context.getUuid());
 		entity.setUpdatedAt(LocalDateTime.now());
 
@@ -232,14 +232,14 @@ public class ViralLoadDAOImpl implements ViralLoadDAO {
 			String nid,
 			List<String> healthFacilityLabCode,
 			String referringRequestID,
-			ViralLoadStatus viralLoadStatus,
+			LabResultStatus labResultStatus,
 			NotProcessingCause notProcessingCause,
 			LocalDateTime startDate,
 			LocalDateTime endDate,
 			String search,
 			EntityStatus entityStatus,
 			CriteriaBuilder cb,
-			Root<ViralLoad> vl) {
+			Root<LabResult> vl) {
 
 		List<Predicate> predicates = new ArrayList<>();
 		predicates.add(cb.equal(vl.get("entityStatus"), entityStatus));
@@ -261,8 +261,8 @@ public class ViralLoadDAOImpl implements ViralLoadDAO {
 			predicates.add(cb.equal(vl.get("referringRequestID"), referringRequestID));
 		}
 
-		if (viralLoadStatus != null) {
-			predicates.add(cb.equal(vl.get("viralLoadStatus"), viralLoadStatus));
+		if (labResultStatus != null) {
+			predicates.add(cb.equal(vl.get("labResultStatus"), labResultStatus));
 		}
 
 		if (notProcessingCause != null) {
@@ -285,8 +285,8 @@ public class ViralLoadDAOImpl implements ViralLoadDAO {
 	}
 
 	private void setSearchQueryOrder(String orderBy, String direction, CriteriaBuilder cb,
-			CriteriaQuery<ViralLoad> criteriaQuery,
-			Root<ViralLoad> vl) {
+			CriteriaQuery<LabResult> criteriaQuery,
+			Root<LabResult> vl) {
 		if (direction.equalsIgnoreCase("asc")) {
 			criteriaQuery.orderBy(cb.asc(vl.get(orderBy)));
 		} else if (direction.equalsIgnoreCase("desc")) {

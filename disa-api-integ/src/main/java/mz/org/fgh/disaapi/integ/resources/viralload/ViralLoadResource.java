@@ -19,11 +19,11 @@ import javax.ws.rs.core.Response;
 import org.springframework.stereotype.Service;
 
 import mz.co.msaude.boot.frameworks.exception.BusinessException;
-import mz.org.fgh.disaapi.core.viralload.model.NotProcessingCause;
-import mz.org.fgh.disaapi.core.viralload.model.ViralLoad;
-import mz.org.fgh.disaapi.core.viralload.model.ViralLoadStatus;
-import mz.org.fgh.disaapi.core.viralload.service.ViralLoadQueryService;
-import mz.org.fgh.disaapi.core.viralload.service.ViralLoadService;
+import mz.org.fgh.disaapi.core.result.model.LabResult;
+import mz.org.fgh.disaapi.core.result.model.LabResultStatus;
+import mz.org.fgh.disaapi.core.result.model.NotProcessingCause;
+import mz.org.fgh.disaapi.core.result.service.LabResultQueryService;
+import mz.org.fgh.disaapi.core.result.service.LabResultService;
 
 /**
  * @author Stélio Moiane
@@ -39,12 +39,12 @@ import mz.org.fgh.disaapi.core.viralload.service.ViralLoadService;
 public class ViralLoadResource {
 
 	@Inject
-	private ViralLoadQueryService viralLoadQueryService;
+	private LabResultQueryService labResultQueryService;
 
 	@Inject
-	private ViralLoadService viralLoadService;
+	private LabResultService labResultService;
 
-	private List<ViralLoad> viralLoads;
+	private List<LabResult> viralLoads;
 
 	@GET
 	@Path("/requestProvince")
@@ -52,7 +52,7 @@ public class ViralLoadResource {
 	public Response findViralLoads(@QueryParam("locationCodes") final List<String> locationCodes,
 			@QueryParam("requestingProvinceName") String requestingProvinceName)
 			throws BusinessException {
-		viralLoads = this.viralLoadQueryService.findPendingByLocationCodeAndProvince(locationCodes, requestingProvinceName);
+		viralLoads = this.labResultQueryService.findPendingByLocationCodeAndProvince(locationCodes, requestingProvinceName);
 		return Response.ok(viralLoads).build();
 
 	}
@@ -61,7 +61,7 @@ public class ViralLoadResource {
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response findViralLoads(@QueryParam("locationCodes") final List<String> locationCodes)
 			throws BusinessException {
-		viralLoads = this.viralLoadQueryService.findPendingByLocationCode(locationCodes);
+		viralLoads = this.labResultQueryService.findPendingByLocationCode(locationCodes);
 		return Response.ok(viralLoads).build();
 
 	}
@@ -75,14 +75,14 @@ public class ViralLoadResource {
 			@QueryParam("nid") final String nid,
 			@QueryParam("healthFacilityLabCode") final List<String> healthFacilityLabCode,
 			@QueryParam("referringRequestID") final String referringRequestID,
-			@QueryParam("viralLoadStatus") final ViralLoadStatus viralLoadStatus,
+			@QueryParam("viralLoadStatus") final LabResultStatus labResultStatus,
 			@QueryParam("notProcessingCause") final NotProcessingCause notProcessingCause,
 			@QueryParam("startDate") final LocalDateTime startDate,
 			@QueryParam("endDate") final LocalDateTime endDate)
 			throws BusinessException {
 
-		List<ViralLoad> vls = this.viralLoadQueryService.findAllByForm(requestId, nid,
-				healthFacilityLabCode, referringRequestID, viralLoadStatus, notProcessingCause,
+		List<LabResult> vls = this.labResultQueryService.findAllByForm(requestId, nid,
+				healthFacilityLabCode, referringRequestID, labResultStatus, notProcessingCause,
 				startDate, endDate);
 
 		return Response.ok(vls).build();
@@ -92,8 +92,8 @@ public class ViralLoadResource {
 	@Path("/requestProvince/viral-status")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response _findViralLoadsByStatus(@QueryParam("locationCodes") final List<String> locationCodes,
-			@QueryParam("viralLoadStatus") final ViralLoadStatus viralLoadStatus) throws BusinessException {
-		viralLoads = this.viralLoadQueryService.findByLocaationCodeAndStatus(locationCodes, viralLoadStatus);
+			@QueryParam("viralLoadStatus") final LabResultStatus labResultStatus) throws BusinessException {
+		viralLoads = this.labResultQueryService.findByLocaationCodeAndStatus(locationCodes, labResultStatus);
 		return Response.ok(viralLoads).build();
 	}
 
@@ -101,10 +101,10 @@ public class ViralLoadResource {
 	@Path("/requestProvince/viral-status-dates")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response _findViralLoadsByStatusAndDates(@QueryParam("locationCodes") final List<String> locationCodes,
-			@QueryParam("viralLoadStatus") final ViralLoadStatus viralLoadStatus,
+			@QueryParam("viralLoadStatus") final LabResultStatus labResultStatus,
 			@QueryParam("startDate") final String strStartDate, @QueryParam("endDate") final String strEndDate)
 			throws BusinessException {
-		viralLoads = this.viralLoadQueryService.findByLocationCodeAndStatusBetweenDates(locationCodes, viralLoadStatus,
+		viralLoads = this.labResultQueryService.findByLocationCodeAndStatusBetweenDates(locationCodes, labResultStatus,
 				convertToLocalDateTime(strStartDate), convertToLocalDateTime(strEndDate));
 		return Response.ok(viralLoads).build();
 	}
@@ -117,7 +117,7 @@ public class ViralLoadResource {
 			@QueryParam("reasonForNotProcessing") final String reasonForNotProcessing,
 			@QueryParam("defaultLocationUuid") final String defaultLocationUuid) throws BusinessException {
 
-		viralLoads = viralLoadQueryService.findViralLoadByRequestId(notProcessedNids);
+		viralLoads = labResultQueryService.findViralLoadByRequestId(notProcessedNids);
 
 		viralLoads.forEach(viralLoad -> {
 			viralLoad.setNotProcessed();
@@ -140,9 +140,9 @@ public class ViralLoadResource {
 		return Response.ok(viralLoads).build();
 	}
 
-	private void updateViralLoad(ViralLoad viralLoad) {
+	private void updateViralLoad(LabResult viralLoad) {
 		try {
-			viralLoadService.updateViralLoad(viralLoad);
+			labResultService.updateLabResult(viralLoad);
 		} catch (BusinessException e) {
 			e.printStackTrace();
 		}
@@ -155,7 +155,7 @@ public class ViralLoadResource {
 			@QueryParam("defaultLocationUuid") final String defaultLocationUuid)
 			throws BusinessException {
 
-		viralLoads = viralLoadQueryService.findViralLoadByRequestId(processedNids);
+		viralLoads = labResultQueryService.findViralLoadByRequestId(processedNids);
 
 		viralLoads.forEach(viralLoad -> {
 			viralLoad.setProcessed();
@@ -172,7 +172,7 @@ public class ViralLoadResource {
 	public Response _updateViralLoadPendingViralLoad(@QueryParam("pendingNids") final List<String> pendingNids)
 			throws BusinessException {
 
-		viralLoads = viralLoadQueryService.findViralLoadByRequestId(pendingNids);
+		viralLoads = labResultQueryService.findViralLoadByRequestId(pendingNids);
 
 		viralLoads.forEach(viralLoad -> {
 			viralLoad.setPending();

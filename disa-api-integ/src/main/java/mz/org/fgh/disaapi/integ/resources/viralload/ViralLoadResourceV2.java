@@ -26,22 +26,22 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 import mz.co.msaude.boot.frameworks.exception.BusinessException;
 import mz.org.fgh.disaapi.core.exception.NotFoundBusinessException;
-import mz.org.fgh.disaapi.core.viralload.model.NotProcessingCause;
-import mz.org.fgh.disaapi.core.viralload.model.Page;
-import mz.org.fgh.disaapi.core.viralload.model.ViralLoad;
-import mz.org.fgh.disaapi.core.viralload.model.ViralLoadStatus;
-import mz.org.fgh.disaapi.core.viralload.service.ViralLoadQueryService;
-import mz.org.fgh.disaapi.core.viralload.service.ViralLoadService;
+import mz.org.fgh.disaapi.core.result.model.LabResult;
+import mz.org.fgh.disaapi.core.result.model.LabResultStatus;
+import mz.org.fgh.disaapi.core.result.model.NotProcessingCause;
+import mz.org.fgh.disaapi.core.result.model.Page;
+import mz.org.fgh.disaapi.core.result.service.LabResultQueryService;
+import mz.org.fgh.disaapi.core.result.service.LabResultService;
 
 @Path("/v2/viralloads")
 @Service
 public class ViralLoadResourceV2 {
 
 	@Inject
-	private ViralLoadQueryService viralLoadQueryService;
+	private LabResultQueryService viralLoadQueryService;
 
 	@Inject
-	private ViralLoadService viralLoadService;
+	private LabResultService viralLoadService;
 
 	@GET
 	@Path("/search-form")
@@ -51,7 +51,7 @@ public class ViralLoadResourceV2 {
 			@QueryParam("nid") final String nid,
 			@QueryParam("healthFacilityLabCode") final List<String> healthFacilityLabCode,
 			@QueryParam("referringRequestID") final String referringRequestID,
-			@QueryParam("viralLoadStatus") final ViralLoadStatus viralLoadStatus,
+			@QueryParam("labResultStatus") final LabResultStatus labResultStatus,
 			@QueryParam("notProcessingCause") NotProcessingCause notProcessingCause,
 			@QueryParam("startDate") final LocalDateTime startDate,
 			@QueryParam("endDate") final LocalDateTime endDate,
@@ -62,8 +62,8 @@ public class ViralLoadResourceV2 {
 			@QueryParam("direction") String direction)
 			throws BusinessException {
 
-		Page<ViralLoad> vls = this.viralLoadQueryService.findByForm(requestId, nid,
-				healthFacilityLabCode, referringRequestID, viralLoadStatus, notProcessingCause,
+		Page<LabResult> vls = this.viralLoadQueryService.findByForm(requestId, nid,
+				healthFacilityLabCode, referringRequestID, labResultStatus, notProcessingCause,
 				startDate, endDate, search, pageNumber, pageSize, orderBy, direction);
 
 		return Response.ok(vls).build();
@@ -77,7 +77,7 @@ public class ViralLoadResourceV2 {
 			@QueryParam("nid") final String nid,
 			@QueryParam("healthFacilityLabCode") final List<String> healthFacilityLabCode,
 			@QueryParam("referringRequestID") final String referringRequestID,
-			@QueryParam("viralLoadStatus") final ViralLoadStatus viralLoadStatus,
+			@QueryParam("labResultStatus") final LabResultStatus labResultStatus,
 			@QueryParam("notProcessingCause") NotProcessingCause notProcessingCause,
 			@QueryParam("startDate") final LocalDateTime startDate,
 			@QueryParam("endDate") final LocalDateTime endDate,
@@ -85,8 +85,8 @@ public class ViralLoadResourceV2 {
 			@QueryParam("direction") String direction)
 			throws BusinessException {
 
-		List<ViralLoad> vls = this.viralLoadQueryService.findAllByForm(requestId, nid,
-				healthFacilityLabCode, referringRequestID, viralLoadStatus, notProcessingCause,
+		List<LabResult> vls = this.viralLoadQueryService.findAllByForm(requestId, nid,
+				healthFacilityLabCode, referringRequestID, labResultStatus, notProcessingCause,
 				startDate, endDate);
 
 		return Response.ok(vls).build();
@@ -97,13 +97,13 @@ public class ViralLoadResourceV2 {
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response get(@PathParam("requestId") String requestId) throws BusinessException {
 
-		List<ViralLoad> viralLoads = viralLoadQueryService.findViralLoadByRequestId(Arrays.asList(requestId));
+		List<LabResult> viralLoads = viralLoadQueryService.findViralLoadByRequestId(Arrays.asList(requestId));
 
 		if (viralLoads.isEmpty()) {
 			throw new NotFoundException("Viral load not found");
 		}
 
-		ViralLoad viralLoad = viralLoads.get(0);
+		LabResult viralLoad = viralLoads.get(0);
 
 		return Response.ok(viralLoad).build();
 	}
@@ -113,13 +113,13 @@ public class ViralLoadResourceV2 {
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response delete(@PathParam("requestId") String requestId) throws BusinessException {
 
-		List<ViralLoad> viralLoads = viralLoadQueryService.findViralLoadByRequestId(Arrays.asList(requestId));
+		List<LabResult> viralLoads = viralLoadQueryService.findViralLoadByRequestId(Arrays.asList(requestId));
 
 		if (viralLoads.isEmpty()) {
 			throw new NotFoundException("Viral load not found");
 		}
 
-		ViralLoad viralLoad = viralLoads.get(0);
+		LabResult viralLoad = viralLoads.get(0);
 		viralLoad.inactive();
 		updateViralLoad(viralLoad);
 
@@ -134,21 +134,21 @@ public class ViralLoadResourceV2 {
 			@RequestBody Map<String, Object> propertyValues) throws BusinessException {
 
 		try {
-			List<ViralLoad> viralLoads = viralLoadQueryService.findViralLoadByRequestId(Arrays.asList(requestId));
+			List<LabResult> viralLoads = viralLoadQueryService.findViralLoadByRequestId(Arrays.asList(requestId));
 			if (viralLoads.isEmpty()) {
 				throw new NotFoundException("Viral load not found");
 			}
-			ViralLoad viralLoad = viralLoads.get(0);
-			ViralLoad updatedVl = this.viralLoadService.updateViralLoad(viralLoad, propertyValues);
+			LabResult viralLoad = viralLoads.get(0);
+			LabResult updatedVl = this.viralLoadService.updateLabResult(viralLoad, propertyValues);
 			return Response.ok(updatedVl).build();
 		} catch (NotFoundBusinessException e) {
 			throw new NotFoundException("Viral load not found");
 		}
 	}
 
-	private void updateViralLoad(ViralLoad viralLoad) {
+	private void updateViralLoad(LabResult viralLoad) {
 		try {
-			viralLoadService.updateViralLoad(viralLoad);
+			viralLoadService.updateLabResult(viralLoad);
 		} catch (BusinessException e) {
 			e.printStackTrace();
 		}

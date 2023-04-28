@@ -31,9 +31,10 @@ import mz.co.fgh.disaapi.core.config.AbstractIntegServiceTest;
 import mz.co.fgh.disaapi.core.fixturefactory.OrgUnitTemplate;
 import mz.co.fgh.disaapi.core.fixturefactory.ViralLoadTemplate;
 import mz.co.msaude.boot.frameworks.exception.BusinessException;
-import mz.org.fgh.disaapi.core.viralload.model.ViralLoad;
-import mz.org.fgh.disaapi.core.viralload.model.ViralLoadStatus;
-import mz.org.fgh.disaapi.core.viralload.service.ViralLoadQueryService;
+import mz.org.fgh.disaapi.core.result.model.HIVVLLabResult;
+import mz.org.fgh.disaapi.core.result.model.LabResult;
+import mz.org.fgh.disaapi.core.result.model.LabResultStatus;
+import mz.org.fgh.disaapi.core.result.service.LabResultQueryService;
 
 /**
  * @author Stélio Moiane
@@ -43,12 +44,12 @@ import mz.org.fgh.disaapi.core.viralload.service.ViralLoadQueryService;
 public class ViralLoadQueryServiceTest extends AbstractIntegServiceTest {
 
 	@Inject
-	protected ViralLoadQueryService viralLoadQueryService;
+	protected LabResultQueryService viralLoadQueryService;
 
 	@Inject
 	private EntityManagerFactory emFactory;
 
-	private List<ViralLoad> viralLoads;
+	private List<LabResult> viralLoads;
 
 	@BeforeClass
 	public static void setUp() {
@@ -65,19 +66,19 @@ public class ViralLoadQueryServiceTest extends AbstractIntegServiceTest {
 
 			HibernateProcessor hibernateProcessor = new HibernateProcessor(session);
 
-			viralLoads = Fixture.from(ViralLoad.class)
+			viralLoads = Fixture.from(HIVVLLabResult.class)
 					.uses(hibernateProcessor)
 					.gimme(10, ViralLoadTemplate.VALID);
 
-			Fixture.from(ViralLoad.class)
+			Fixture.from(HIVVLLabResult.class)
 					.uses(hibernateProcessor)
 					.gimme(5, ViralLoadTemplate.MAPUTO);
 
-			Fixture.from(ViralLoad.class)
+			Fixture.from(HIVVLLabResult.class)
 					.uses(hibernateProcessor)
 					.gimme(2, ViralLoadTemplate.NOT_PROCESSED);
 
-			Fixture.from(ViralLoad.class)
+			Fixture.from(HIVVLLabResult.class)
 					.uses(hibernateProcessor)
 					.gimme(ViralLoadTemplate.PROCESSED);
 
@@ -89,7 +90,7 @@ public class ViralLoadQueryServiceTest extends AbstractIntegServiceTest {
 	@Test
 	public void findByLocationCodeAndStatusShouldReturnFromSpecificProvince() throws BusinessException {
 
-		final List<ViralLoad> viralLoads = this.viralLoadQueryService
+		final List<LabResult> viralLoads = this.viralLoadQueryService
 				.findPendingByLocationCodeAndProvince(Arrays.asList(OrgUnitTemplate.ZAMBEZIA_SISMA_CODES),
 						"Zambezia");
 
@@ -103,7 +104,7 @@ public class ViralLoadQueryServiceTest extends AbstractIntegServiceTest {
 				OrgUnitTemplate.ZAMBEZIA_SISMA_CODES.length + 1);
 		allCodes[allCodes.length - 1] = "1100100";
 
-		final List<ViralLoad> viralLoads = this.viralLoadQueryService
+		final List<LabResult> viralLoads = this.viralLoadQueryService
 				.findPendingByLocationCode(Arrays.asList(allCodes));
 
 		assertThat(viralLoads).hasSize(15);
@@ -115,9 +116,9 @@ public class ViralLoadQueryServiceTest extends AbstractIntegServiceTest {
 		LocalDate today = LocalDate.now();
 		LocalDateTime startDate = today.atStartOfDay();
 		LocalDateTime endDate = today.atTime(LocalTime.MAX);
-		ViralLoad example = new ViralLoad();
+		LabResult example = new HIVVLLabResult();
 		example.active();
-		List<ViralLoad> findAllByForm = this.viralLoadQueryService.findAllByForm(example,
+		List<LabResult> findAllByForm = this.viralLoadQueryService.findAllByForm(example,
 				Arrays.asList(OrgUnitTemplate.ZAMBEZIA_SISMA_CODES), startDate, endDate);
 		assertThat(findAllByForm).hasSize(13);
 	}
@@ -129,7 +130,7 @@ public class ViralLoadQueryServiceTest extends AbstractIntegServiceTest {
 				.limit(3)
 				.map(vl -> vl.getNid())
 				.collect(Collectors.toList());
-		List<ViralLoad> findAllByForm = this.viralLoadQueryService.findViralLoadByNid(nids);
+		List<LabResult> findAllByForm = this.viralLoadQueryService.findViralLoadByNid(nids);
 		assertThat(findAllByForm).hasSize(3);
 	}
 
@@ -140,15 +141,15 @@ public class ViralLoadQueryServiceTest extends AbstractIntegServiceTest {
 				.limit(2)
 				.map(vl -> vl.getRequestId())
 				.collect(Collectors.toList());
-		List<ViralLoad> findAllByForm = this.viralLoadQueryService.findViralLoadByRequestId(requestIds);
+		List<LabResult> findAllByForm = this.viralLoadQueryService.findViralLoadByRequestId(requestIds);
 		assertThat(findAllByForm).hasSize(2);
 	}
 
 	@Test
 	public void findByStatusShouldReturnResultsFromGivenHealthFacilitiesAndStatus() throws BusinessException {
-		List<ViralLoad> findByStatus = viralLoadQueryService.findByLocaationCodeAndStatus(
+		List<LabResult> findByStatus = viralLoadQueryService.findByLocaationCodeAndStatus(
 				Arrays.asList(OrgUnitTemplate.ZAMBEZIA_SISMA_CODES),
-				ViralLoadStatus.NOT_PROCESSED);
+				LabResultStatus.NOT_PROCESSED);
 		assertThat(findByStatus).hasSize(2);
 	}
 
@@ -158,9 +159,9 @@ public class ViralLoadQueryServiceTest extends AbstractIntegServiceTest {
 		LocalDate today = LocalDate.now();
 		LocalDateTime startDate = today.atStartOfDay();
 		LocalDateTime endDate = today.atTime(LocalTime.MAX);
-		List<ViralLoad> findByStatusAndDates = viralLoadQueryService.findByLocationCodeAndStatusBetweenDates(
+		List<LabResult> findByStatusAndDates = viralLoadQueryService.findByLocationCodeAndStatusBetweenDates(
 				Arrays.asList(OrgUnitTemplate.ZAMBEZIA_SISMA_CODES),
-				ViralLoadStatus.PROCESSED, startDate,
+				LabResultStatus.PROCESSED, startDate,
 				endDate);
 		assertThat(findByStatusAndDates).hasSize(1);
 	}
