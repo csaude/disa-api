@@ -50,10 +50,11 @@ import mz.co.fgh.disaapi.core.fixturefactory.ViralLoadTemplate;
 import mz.co.msaude.boot.frameworks.exception.BusinessException;
 import mz.org.fgh.disaapi.core.ip.ImplementingPartner;
 import mz.org.fgh.disaapi.core.orgunit.model.OrgUnit;
-import mz.org.fgh.disaapi.core.viralload.model.Page;
-import mz.org.fgh.disaapi.core.viralload.model.ViralLoad;
-import mz.org.fgh.disaapi.core.viralload.model.ViralLoadStatus;
-import mz.org.fgh.disaapi.core.viralload.service.ViralLoadQueryService;
+import mz.org.fgh.disaapi.core.result.model.HIVVLLabResult;
+import mz.org.fgh.disaapi.core.result.model.LabResult;
+import mz.org.fgh.disaapi.core.result.model.LabResultStatus;
+import mz.org.fgh.disaapi.core.result.model.Page;
+import mz.org.fgh.disaapi.core.result.service.LabResultQueryService;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
@@ -69,7 +70,7 @@ public class ViralLoadResourceV2Test {
 			+ "healthFacilityLabCode={healthFacilityLabCode}&"
 			+ "requestId={requestId}&"
 			+ "referringRequestID={referringRequestID}&"
-			+ "viralLoadStatus={viralLoadStatus}&"
+			+ "labResultStatus={labResultStatus}&"
 			+ "notProcessingCause={notProcessingCause}&"
 			+ "nid={nid}&"
 			+ "pageNumber={pageNumber}&";
@@ -80,7 +81,7 @@ public class ViralLoadResourceV2Test {
 			+ "healthFacilityLabCode={healthFacilityLabCode}&"
 			+ "requestId={requestId}&"
 			+ "referringRequestID={referringRequestID}&"
-			+ "viralLoadStatus={viralLoadStatus}&"
+			+ "labResultStatus={labResultStatus}&"
 			+ "notProcessingCause={notProcessingCause}&"
 			+ "nid={nid}&";
 
@@ -90,13 +91,13 @@ public class ViralLoadResourceV2Test {
 	@Inject
 	private EntityManagerFactory emFactory;
 
-	private List<ViralLoad> vls;
+	private List<LabResult> vls;
 
-	private ViralLoad notProcessedVl;
+	private LabResult notProcessedVl;
 
-	private ViralLoad inactiveVl;
+	private LabResult inactiveVl;
 
-	protected ViralLoad fromUnauthorizedOrgUnit;
+	protected LabResult fromUnauthorizedOrgUnit;
 
 	protected ImplementingPartner fgh;
 
@@ -115,19 +116,19 @@ public class ViralLoadResourceV2Test {
 
 			HibernateProcessor hibernateProcessor = new HibernateProcessor(session);
 
-			vls = Fixture.from(ViralLoad.class)
+			vls = Fixture.from(HIVVLLabResult.class)
 					.uses(hibernateProcessor)
 					.gimme(15, ViralLoadTemplate.VALID);
 
-			notProcessedVl = Fixture.from(ViralLoad.class)
+			notProcessedVl = Fixture.from(HIVVLLabResult.class)
 					.uses(hibernateProcessor)
 					.gimme(ViralLoadTemplate.NOT_PROCESSED);
 
-			inactiveVl = Fixture.from(ViralLoad.class)
+			inactiveVl = Fixture.from(HIVVLLabResult.class)
 					.uses(hibernateProcessor)
 					.gimme(ViralLoadTemplate.INACTIVE);
 
-			fromUnauthorizedOrgUnit = Fixture.from(ViralLoad.class)
+			fromUnauthorizedOrgUnit = Fixture.from(HIVVLLabResult.class)
 					.uses(hibernateProcessor)
 					.gimme(ViralLoadTemplate.MAPUTO);
 
@@ -186,16 +187,16 @@ public class ViralLoadResourceV2Test {
 
 		HttpHeaders headers = createHttpContentTypeAndAuthorizationHeaders();
 		JSONObject vlJson = new JSONObject();
-		vlJson.put("viralLoadStatus", "PENDING");
+		vlJson.put("labResultStatus", "PENDING");
 		HttpEntity<String> pendingVlEntity = new HttpEntity<String>(vlJson.toString(), headers);
 
 		Map<String, String> uriVariable = Collections.singletonMap("requestId", notProcessedVl.getRequestId());
 
-		ResponseEntity<ViralLoad> response = restTemplate.exchange(RESULT_URL, HttpMethod.PATCH, pendingVlEntity,
-				ViralLoad.class, uriVariable);
+		ResponseEntity<HIVVLLabResult> response = restTemplate.exchange(RESULT_URL, HttpMethod.PATCH, pendingVlEntity,
+				HIVVLLabResult.class, uriVariable);
 
 		assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
-		assertThat(response.getBody().getViralLoadStatus()).isEqualTo(ViralLoadStatus.PENDING);
+		assertThat(response.getBody().getLabResultStatus()).isEqualTo(LabResultStatus.PENDING);
 	}
 
 	@Test
@@ -203,7 +204,7 @@ public class ViralLoadResourceV2Test {
 
 		HttpHeaders headers = createHttpContentTypeAndAuthorizationHeaders();
 		JSONObject vlJson = new JSONObject();
-		vlJson.put("viralLoadStatus", "PENDING");
+		vlJson.put("labResultStatus", "PENDING");
 		HttpEntity<String> pendingVlEntity = new HttpEntity<String>(vlJson.toString(), headers);
 
 		Map<String, String> uriVariable = Collections.singletonMap("requestId", fromUnauthorizedOrgUnit.getRequestId());
@@ -219,7 +220,7 @@ public class ViralLoadResourceV2Test {
 
 		HttpHeaders headers = createHttpContentTypeAndAuthorizationHeaders();
 		JSONObject vlJson = new JSONObject();
-		vlJson.put("viralLoadStatus", "PENDING");
+		vlJson.put("labResultStatus", "PENDING");
 		HttpEntity<String> pendingVlEntity = new HttpEntity<String>(vlJson.toString(), headers);
 
 		Map<String, String> uriVariable = Collections.singletonMap("requestId", inactiveVl.getRequestId());
@@ -245,37 +246,37 @@ public class ViralLoadResourceV2Test {
 		uriVariables.add("requestId", null);
 		uriVariables.add("nid", null);
 		uriVariables.add("referringRequestID", null);
-		uriVariables.add("viralLoadStatus", null);
+		uriVariables.add("labResultStatus", null);
 		uriVariables.add("notProcessingCause", null);
 		uriVariables.add("pageNumber", "1");
 
 		UriComponentsBuilder builder = UriComponentsBuilder.fromUriString(SEARCH_URL).queryParams(uriVariables);
 
-		ParameterizedTypeReference<Page<ViralLoad>> responseType = new ParameterizedTypeReference<Page<ViralLoad>>() {
+		ParameterizedTypeReference<Page<HIVVLLabResult>> responseType = new ParameterizedTypeReference<Page<HIVVLLabResult>>() {
 		};
 
 		// Get first page
-		ResponseEntity<Page<ViralLoad>> response1 = restTemplate
+		ResponseEntity<Page<HIVVLLabResult>> response1 = restTemplate
 				.exchange(builder.build().toUri(), HttpMethod.GET, httpEntity, responseType);
-		Page<ViralLoad> page1 = response1.getBody();
+		Page<HIVVLLabResult> page1 = response1.getBody();
 		assertThat(response1.getStatusCode().is2xxSuccessful()).isTrue();
 		assertThat(response1.getHeaders().get("Content-Type").get(0)).isEqualTo("application/json");
 		assertThat(page1.getPageNumber()).isEqualTo(1);
-		assertThat(page1.getPageSize()).isEqualTo(ViralLoadQueryService.DEFAULT_PAGE_SIZE);
+		assertThat(page1.getPageSize()).isEqualTo(LabResultQueryService.DEFAULT_PAGE_SIZE);
 		assertThat(page1.getTotalResults()).isEqualTo(16);
-		assertThat(page1.getResultList()).hasSize(ViralLoadQueryService.DEFAULT_PAGE_SIZE);
+		assertThat(page1.getResultList()).hasSize(LabResultQueryService.DEFAULT_PAGE_SIZE);
 
 		// Get second page
 		builder.replaceQueryParam("pageNumber", "2");
-		ResponseEntity<Page<ViralLoad>> response2 = restTemplate.exchange(builder.build().toUri(), HttpMethod.GET,
+		ResponseEntity<Page<HIVVLLabResult>> response2 = restTemplate.exchange(builder.build().toUri(), HttpMethod.GET,
 				httpEntity,
 				responseType);
 
-		Page<ViralLoad> page2 = response2.getBody();
+		Page<HIVVLLabResult> page2 = response2.getBody();
 		assertThat(page2.getPageNumber()).isEqualTo(2);
-		assertThat(page2.getPageSize()).isEqualTo(ViralLoadQueryService.DEFAULT_PAGE_SIZE);
+		assertThat(page2.getPageSize()).isEqualTo(LabResultQueryService.DEFAULT_PAGE_SIZE);
 		assertThat(page2.getTotalResults()).isEqualTo(16);
-		assertThat(page2.getResultList()).hasSize(16 - ViralLoadQueryService.DEFAULT_PAGE_SIZE);
+		assertThat(page2.getResultList()).hasSize(16 - LabResultQueryService.DEFAULT_PAGE_SIZE);
 	}
 
 	@Test
@@ -297,7 +298,7 @@ public class ViralLoadResourceV2Test {
 		uriVariables.add("requestId", null);
 		uriVariables.add("nid", null);
 		uriVariables.add("referringRequestID", null);
-		uriVariables.add("viralLoadStatus", null);
+		uriVariables.add("labResultStatus", null);
 		uriVariables.add("notProcessingCause", null);
 		uriVariables.add("pageNumber", "1");
 
@@ -324,17 +325,17 @@ public class ViralLoadResourceV2Test {
 		uriVariables.add("requestId", null);
 		uriVariables.add("nid", null);
 		uriVariables.add("referringRequestID", null);
-		uriVariables.add("viralLoadStatus", null);
+		uriVariables.add("labResultStatus", null);
 		uriVariables.add("notProcessingCause", null);
 
 		UriComponentsBuilder builder = UriComponentsBuilder.fromUriString(EXPORT_URL).queryParams(uriVariables);
 
-		ParameterizedTypeReference<List<ViralLoad>> responseType = new ParameterizedTypeReference<List<ViralLoad>>() {
+		ParameterizedTypeReference<List<HIVVLLabResult>> responseType = new ParameterizedTypeReference<List<HIVVLLabResult>>() {
 		};
 
-		ResponseEntity<List<ViralLoad>> response = restTemplate
+		ResponseEntity<List<HIVVLLabResult>> response = restTemplate
 				.exchange(builder.build().toUri(), HttpMethod.GET, httpEntity, responseType);
-		List<ViralLoad> viralLoads = response.getBody();
+		List<HIVVLLabResult> viralLoads = response.getBody();
 		assertThat(response.getStatusCode().is2xxSuccessful()).isTrue();
 		assertThat(response.getHeaders().get("Content-Type").get(0)).isEqualTo("application/json");
 		assertThat(viralLoads).hasSize(16);
@@ -359,7 +360,7 @@ public class ViralLoadResourceV2Test {
 		uriVariables.add("requestId", null);
 		uriVariables.add("nid", null);
 		uriVariables.add("referringRequestID", null);
-		uriVariables.add("viralLoadStatus", null);
+		uriVariables.add("labResultStatus", null);
 		uriVariables.add("notProcessingCause", null);
 
 		UriComponentsBuilder builder = UriComponentsBuilder.fromUriString(EXPORT_URL).queryParams(uriVariables);

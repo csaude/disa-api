@@ -24,19 +24,20 @@ import mz.co.msaude.boot.frameworks.exception.BusinessException;
 import mz.co.msaude.boot.frameworks.fixturefactory.EntityFactory;
 import mz.co.msaude.boot.frameworks.model.EntityStatus;
 import mz.org.fgh.disaapi.core.exception.NotFoundBusinessException;
-import mz.org.fgh.disaapi.core.viralload.model.ViralLoad;
-import mz.org.fgh.disaapi.core.viralload.model.ViralLoadStatus;
-import mz.org.fgh.disaapi.core.viralload.repository.ViralLoadRepository;
-import mz.org.fgh.disaapi.core.viralload.service.ViralLoadService;
+import mz.org.fgh.disaapi.core.result.model.HIVVLLabResult;
+import mz.org.fgh.disaapi.core.result.model.LabResult;
+import mz.org.fgh.disaapi.core.result.model.LabResultStatus;
+import mz.org.fgh.disaapi.core.result.repository.LabResultRepository;
+import mz.org.fgh.disaapi.core.result.service.LabResultService;
 
 @ContextConfiguration
 public class ViralLoadServiceUnitTest extends AbstractUnitServiceTest {
 
     @Inject
-    private ViralLoadService viralLoadService;
+    private LabResultService viralLoadService;
 
     @MockBean
-    private ViralLoadRepository viralLoadRepository;
+    private LabResultRepository viralLoadRepository;
 
     @BeforeClass
     public static void setUp() {
@@ -45,32 +46,32 @@ public class ViralLoadServiceUnitTest extends AbstractUnitServiceTest {
 
     @Test
     @WithMockUser
-    public void updateViralLoadShouldUpdateViralLoadPropertyValues() throws BusinessException {
+    public void updateLabResultShouldUpdateViralLoadPropertyValues() throws BusinessException {
 
-        ViralLoad viralLoad = EntityFactory.gimme(ViralLoad.class, ViralLoadTemplate.NOT_PROCESSED);
+        LabResult viralLoad = EntityFactory.gimme(HIVVLLabResult.class, ViralLoadTemplate.NOT_PROCESSED);
 
         List<String> requestIds = Arrays.asList(viralLoad.getRequestId());
         Mockito.when(viralLoadRepository.findByRequestIdInAndEntityStatus(requestIds, EntityStatus.ACTIVE))
                 .thenReturn(Arrays.asList(viralLoad));
 
         Map<String, Object> propertyValues = new HashMap<>();
-        propertyValues.put("viralLoadStatus", "PENDING");
+        propertyValues.put("labResultStatus", "PENDING");
         propertyValues.put("healthFacilityLabCode", "1040107");
         propertyValues.put("requestingFacilityName", "CS 24 de Julho");
-        this.viralLoadService.updateViralLoad(
+        this.viralLoadService.updateLabResult(
                 viralLoad,
                 propertyValues);
 
-        assertThat(viralLoad.getViralLoadStatus()).isEqualTo(ViralLoadStatus.PENDING);
+        assertThat(viralLoad.getLabResultStatus()).isEqualTo(LabResultStatus.PENDING);
         assertThat(viralLoad.getHealthFacilityLabCode()).isEqualTo("1040107");
 
     }
 
     @Test
     @WithMockUser
-    public void updateViralLoadShouldUpdateAllowedViralLoadPropertyValues() throws BusinessException {
+    public void updateLabResultShouldUpdateAllowedViralLoadPropertyValues() throws BusinessException {
 
-        ViralLoad viralLoad = EntityFactory.gimme(ViralLoad.class, ViralLoadTemplate.NOT_PROCESSED);
+        LabResult viralLoad = EntityFactory.gimme(HIVVLLabResult.class, ViralLoadTemplate.NOT_PROCESSED);
 
         List<String> requestIds = Arrays.asList(viralLoad.getRequestId());
         Mockito.when(viralLoadRepository.findByRequestIdInAndEntityStatus(requestIds, EntityStatus.ACTIVE))
@@ -78,7 +79,7 @@ public class ViralLoadServiceUnitTest extends AbstractUnitServiceTest {
 
         Map<String, Object> propertyValues = new HashMap<>();
         propertyValues.put("reasonForTest", "Suspected treatment failure");
-        this.viralLoadService.updateViralLoad(
+        this.viralLoadService.updateLabResult(
                 viralLoad,
                 propertyValues);
 
@@ -87,54 +88,54 @@ public class ViralLoadServiceUnitTest extends AbstractUnitServiceTest {
     }
 
     @Test(expected = BusinessException.class)
-    public void updateViralLoadShouldFailWhenViralLoadProcessed() throws BusinessException {
+    public void updateLabResultShouldFailWhenViralLoadProcessed() throws BusinessException {
 
-        ViralLoad viralLoad = EntityFactory.gimme(ViralLoad.class, ViralLoadTemplate.PROCESSED);
+        LabResult viralLoad = EntityFactory.gimme(HIVVLLabResult.class, ViralLoadTemplate.PROCESSED);
 
         List<String> requestIds = Arrays.asList(viralLoad.getRequestId());
         Mockito.when(viralLoadRepository.findByRequestIdInAndEntityStatus(requestIds, EntityStatus.ACTIVE))
                 .thenReturn(Arrays.asList(viralLoad));
 
         Map<String, Object> propertyValues = new HashMap<>();
-        propertyValues.put("viralLoadStatus", "PENDING");
+        propertyValues.put("labResultStatus", "PENDING");
         propertyValues.put("healthFacilityLabCode", "1040107");
         propertyValues.put("requestingFacilityName", "CS 24 de Julho");
-        this.viralLoadService.updateViralLoad(
+        this.viralLoadService.updateLabResult(
                 viralLoad,
                 propertyValues);
 
     }
 
     @Test(expected = BusinessException.class)
-    public void updateViralLoadShouldFailWhenPropertyEmpty() throws BusinessException {
+    public void updateLabResultShouldFailWhenPropertyEmpty() throws BusinessException {
 
-        ViralLoad viralLoad = EntityFactory.gimme(ViralLoad.class, ViralLoadTemplate.NOT_PROCESSED);
+        LabResult viralLoad = EntityFactory.gimme(HIVVLLabResult.class, ViralLoadTemplate.NOT_PROCESSED);
 
         List<String> requestIds = Arrays.asList(viralLoad.getRequestId());
         Mockito.when(viralLoadRepository.findByRequestIdInAndEntityStatus(requestIds, EntityStatus.ACTIVE))
                 .thenReturn(Arrays.asList(viralLoad));
 
         Map<String, Object> propertyValues = new HashMap<>();
-        propertyValues.put("viralLoadStatus", "");
-        this.viralLoadService.updateViralLoad(
+        propertyValues.put("labResultStatus", "");
+        this.viralLoadService.updateLabResult(
                 viralLoad,
                 propertyValues);
     }
 
     @Test(expected = NotFoundBusinessException.class)
-    public void updateViralLoadShouldFailWhenViralNotFound() throws BusinessException {
+    public void updateLabResultShouldFailWhenViralNotFound() throws BusinessException {
 
-        ViralLoad viralLoad = EntityFactory.gimme(ViralLoad.class, ViralLoadTemplate.PROCESSED);
+        LabResult viralLoad = EntityFactory.gimme(HIVVLLabResult.class, ViralLoadTemplate.PROCESSED);
 
         List<String> requestIds = Arrays.asList(viralLoad.getRequestId());
         Mockito.when(viralLoadRepository.findByRequestIdInAndEntityStatus(requestIds, EntityStatus.ACTIVE))
                 .thenReturn(Collections.emptyList());
 
         Map<String, Object> propertyValues = new HashMap<>();
-        propertyValues.put("viralLoadStatus", "PENDING");
+        propertyValues.put("labResultStatus", "PENDING");
         propertyValues.put("healthFacilityLabCode", "1040107");
         propertyValues.put("requestingFacilityName", "CS 24 de Julho");
-        this.viralLoadService.updateViralLoad(
+        this.viralLoadService.updateLabResult(
                 viralLoad,
                 propertyValues);
 

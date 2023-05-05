@@ -1,4 +1,4 @@
-package mz.org.fgh.disaapi.core.viralload.model;
+package mz.org.fgh.disaapi.core.result.model;
 
 import java.util.List;
 

@@ -1,4 +1,4 @@
-package mz.org.fgh.disaapi.core.viralload.repository;
+package mz.org.fgh.disaapi.core.result.repository;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -9,17 +9,17 @@ import javax.persistence.criteria.Predicate;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.util.StringUtils;
 
-import mz.org.fgh.disaapi.core.viralload.model.ViralLoad;
+import mz.org.fgh.disaapi.core.result.model.LabResult;
 
-public class ViralLoadSpecifications {
+public class LabResultSpecifications {
 
-    public static Specification<ViralLoad> createdInLocationBetweenDates(
-            ViralLoad example,
+    public static Specification<LabResult> createdInLocationBetweenDates(
+            LabResult example,
             List<String> healthFacilityLabCodes,
             LocalDateTime startDate,
             LocalDateTime endDate) {
 
-        return (Specification<ViralLoad>) (root, query, builder) -> {
+        return (Specification<LabResult>) (root, query, builder) -> {
 
             List<Predicate> predicates = new ArrayList<>();
 
@@ -42,8 +42,8 @@ public class ViralLoadSpecifications {
                 predicates.add(builder.equal(root.get("referringRequestID"), example.getReferringRequestID()));
             }
 
-            if (example.getViralLoadStatus() != null) {
-                predicates.add(builder.equal(root.get("viralLoadStatus"), example.getViralLoadStatus()));
+            if (example.getLabResultStatus() != null) {
+                predicates.add(builder.equal(root.get("labResultStatus"), example.getLabResultStatus()));
             }
 
             if (example.getNotProcessingCause() != null) {

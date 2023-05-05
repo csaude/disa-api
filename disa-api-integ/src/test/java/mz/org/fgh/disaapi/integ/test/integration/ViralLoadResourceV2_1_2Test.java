@@ -39,7 +39,7 @@ public class ViralLoadResourceV2_1_2Test extends ViralLoadResourceV2Test {
 			+ "healthFacilityLabCode={healthFacilityLabCode}&"
 			+ "requestId={requestId}&"
 			+ "referringRequestID={referringRequestID}&"
-			+ "viralLoadStatus={viralLoadStatus}&"
+			+ "labResultStatus={labResultStatus}&"
 			+ "notProcessingCause={notProcessingCause}&"
 			+ "nid={nid}&"
 			+ "pageNumber={pageNumber}&";
@@ -60,7 +60,7 @@ public class ViralLoadResourceV2_1_2Test extends ViralLoadResourceV2Test {
 		uriVariables.add("requestId", null);
 		uriVariables.add("nid", null);
 		uriVariables.add("referringRequestID", null);
-		uriVariables.add("viralLoadStatus", null);
+		uriVariables.add("labResultStatus", null);
 		uriVariables.add("notProcessingCause", null);
 		uriVariables.add("pageNumber", null);
 
@@ -106,7 +106,7 @@ public class ViralLoadResourceV2_1_2Test extends ViralLoadResourceV2Test {
 		uriVariables.add("requestId", null);
 		uriVariables.add("nid", null);
 		uriVariables.add("referringRequestID", null);
-		uriVariables.add("viralLoadStatus", null);
+		uriVariables.add("labResultStatus", null);
 		uriVariables.add("notProcessingCause", null);
 		uriVariables.add("pageNumber", "1");
 

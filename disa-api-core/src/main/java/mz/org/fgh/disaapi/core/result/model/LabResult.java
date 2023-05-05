@@ -1,22 +1,26 @@
 /**
  *
  */
-package mz.org.fgh.disaapi.core.viralload.model;
+package mz.org.fgh.disaapi.core.result.model;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 import javax.persistence.Basic;
 import javax.persistence.Column;
+import javax.persistence.DiscriminatorColumn;
+import javax.persistence.DiscriminatorType;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.Inheritance;
+import javax.persistence.InheritanceType;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 
 import mz.co.msaude.boot.frameworks.model.GenericEntity;
-import mz.org.fgh.disaapi.core.viralload.dao.ViralLoadDAO;
+import mz.org.fgh.disaapi.core.result.dao.LabResultDAO;
 
 /**
  * @author Stélio Moiane
@@ -24,15 +28,17 @@ import mz.org.fgh.disaapi.core.viralload.dao.ViralLoadDAO;
  *
  */
 @NamedQueries({
-		@NamedQuery(name = ViralLoadDAO.QUERY_NAME.findByLocationCodeAndStatus, query = ViralLoadDAO.QUERY.findByLocationCodeAndStatus),
-		@NamedQuery(name = ViralLoadDAO.QUERY_NAME.findByLocationCodeAndStatusSimple, query = ViralLoadDAO.QUERY.findByLocationCodeAndStatusSimple),
-		@NamedQuery(name = ViralLoadDAO.QUERY_NAME.findViralLoadByNid, query = ViralLoadDAO.QUERY.findViralLoadByNid),
-		@NamedQuery(name = ViralLoadDAO.QUERY_NAME.findViralLoadByRequestId, query = ViralLoadDAO.QUERY.findViralLoadByRequestId),
-		@NamedQuery(name = ViralLoadDAO.QUERY_NAME.findByStatusAndDates, query = ViralLoadDAO.QUERY.findByStatusAndDates),
-		@NamedQuery(name = ViralLoadDAO.QUERY_NAME.findByLocationCodeStatusAndNotProcessingCause, query = ViralLoadDAO.QUERY.findByLocationCodeStatusAndNotProcessingCause) })
+		@NamedQuery(name = LabResultDAO.QUERY_NAME.findByLocationCodeAndStatus, query = LabResultDAO.QUERY.findByLocationCodeAndStatus),
+		@NamedQuery(name = LabResultDAO.QUERY_NAME.findByLocationCodeAndStatusSimple, query = LabResultDAO.QUERY.findByLocationCodeAndStatusSimple),
+		@NamedQuery(name = LabResultDAO.QUERY_NAME.findByNid, query = LabResultDAO.QUERY.findByNid),
+		@NamedQuery(name = LabResultDAO.QUERY_NAME.findByRequestId, query = LabResultDAO.QUERY.findByRequestId),
+		@NamedQuery(name = LabResultDAO.QUERY_NAME.findByStatusAndDates, query = LabResultDAO.QUERY.findByStatusAndDates),
+		@NamedQuery(name = LabResultDAO.QUERY_NAME.findByLocationCodeStatusAndNotProcessingCause, query = LabResultDAO.QUERY.findByLocationCodeStatusAndNotProcessingCause) })
 @Entity
 @Table(name = "VlData")
-public class ViralLoad extends GenericEntity {
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+@DiscriminatorColumn(name = "TypeOfResult", discriminatorType=DiscriminatorType.STRING ,length = 50)
+public abstract class LabResult extends GenericEntity {
 
 	private static final long serialVersionUID = 1L;
 
@@ -99,17 +105,11 @@ public class ViralLoad extends GenericEntity {
 	@Column(name = "LIMSSpecimenSourceCode")
 	private String sampleType;
 
-	@Column(name = "HIVVL_ViralLoadCAPCTM")
-	private String viralLoadResultCopies;
-
-	@Column(name = "HIVVL_VRLogValue")
-	private String viralLoadResultLog;
-
 	@Column(name = "ViralLoadResultCategory")
 	private String viralLoadResultQualitative;
 
 	@Column(name = "AuthorisedDateTime")
-	private LocalDateTime viralLoadResultDate;
+	private LocalDateTime labResultDate;
 
 	@Column(name = "AuthorisedBy")
 	private String aprovedBy;
@@ -120,20 +120,11 @@ public class ViralLoad extends GenericEntity {
 	@Basic(optional = false)
 	@Column(name = "VIRAL_LOAD_STATUS", columnDefinition = "enum('PENDING','PROCESSED','NOT_PROCESSED')")
 	@Enumerated(EnumType.STRING)
-	private ViralLoadStatus viralLoadStatus;
-
-	@Column(name = "HIVVL_ViralLoadResult")
-	private String hivViralLoadResult;
+	private LabResultStatus labResultStatus;
 
 	@Enumerated(EnumType.STRING)
 	@Column(name = "NOT_PROCESSING_CAUSE")
 	private NotProcessingCause notProcessingCause;
-
-	@Column(name = "LastViralLoadResult")
-	private String lastViralLoadResult;
-
-	@Column(name = "LastViralLoadDate")
-	private String lastViralLoadDate;
 
 	@Column(name = "ARTRegimen")
 	private String artRegimen;
@@ -153,17 +144,15 @@ public class ViralLoad extends GenericEntity {
 	@Column(name = "RequestingDistrictName")
 	private String requestingDistrictName;
 
-	@Column(name = "FinalViralLoadResult")
-	private String finalViralLoadResult;
-
-	@Column(name = "IsPoc")
-	private byte isPoc;
-
 	@Column(name = "SYNCHRONIZED_BY")
 	private String synchronizedBy;
 
 	@Column
 	private Integer ageInYears;
+
+	@Column(name = "TypeOfResult", insertable = false, updatable = false)
+	@Enumerated(EnumType.STRING)
+	private TypeOfResult typeOfResult;
 
 	public String getSynchronizedBy() {
 		return synchronizedBy;
@@ -171,14 +160,6 @@ public class ViralLoad extends GenericEntity {
 
 	public void setSynchronizedBy(String synchronizedBy) {
 		this.synchronizedBy = synchronizedBy;
-	}
-
-	public String getFinalViralLoadResult() {
-		return finalViralLoadResult;
-	}
-
-	public void setFinalViralLoadResult(String finalViralLoadResult) {
-		this.finalViralLoadResult = finalViralLoadResult;
 	}
 
 	public String getDataDeInicioDoTARV() {
@@ -325,22 +306,6 @@ public class ViralLoad extends GenericEntity {
 		this.sampleType = sampleType;
 	}
 
-	public String getViralLoadResultCopies() {
-		return viralLoadResultCopies;
-	}
-
-	public void setViralLoadResultCopies(String viralLoadResultCopies) {
-		this.viralLoadResultCopies = viralLoadResultCopies;
-	}
-
-	public String getViralLoadResultLog() {
-		return viralLoadResultLog;
-	}
-
-	public void setViralLoadResultLog(String viralLoadResultLog) {
-		this.viralLoadResultLog = viralLoadResultLog;
-	}
-
 	public String getViralLoadResultQualitative() {
 		return viralLoadResultQualitative;
 	}
@@ -409,40 +374,32 @@ public class ViralLoad extends GenericEntity {
 		this.processingDate = processingDate;
 	}
 
-	public LocalDateTime getViralLoadResultDate() {
-		return viralLoadResultDate;
+	public LocalDateTime getLabResultDate() {
+		return labResultDate;
 	}
 
-	public void setViralLoadResultDate(LocalDateTime viralLoadResultDate) {
-		this.viralLoadResultDate = viralLoadResultDate;
+	public void setLabResultDate(LocalDateTime labResultDate) {
+		this.labResultDate = labResultDate;
 	}
 
-	public ViralLoadStatus getViralLoadStatus() {
-		return viralLoadStatus;
+	public LabResultStatus getLabResultStatus() {
+		return labResultStatus;
 	}
 
-	public void setViralLoadStatus(ViralLoadStatus viralLoadStatus) {
-		this.viralLoadStatus = viralLoadStatus;
+	public void setLabResultStatus(LabResultStatus labResultStatus) {
+		this.labResultStatus = labResultStatus;
 	}
 
 	public void setNotProcessed() {
-		viralLoadStatus = ViralLoadStatus.NOT_PROCESSED;
+		labResultStatus = LabResultStatus.NOT_PROCESSED;
 	}
 
 	public void setProcessed() {
-		viralLoadStatus = ViralLoadStatus.PROCESSED;
+		labResultStatus = LabResultStatus.PROCESSED;
 	}
 
 	public void setPending() {
-		viralLoadStatus = ViralLoadStatus.PENDING;
-	}
-
-	public String getHivViralLoadResult() {
-		return hivViralLoadResult;
-	}
-
-	public void setHivViralLoadResult(String hivViralLoadResult) {
-		this.hivViralLoadResult = hivViralLoadResult;
+		labResultStatus = LabResultStatus.PENDING;
 	}
 
 	public NotProcessingCause getNotProcessingCause() {
@@ -489,22 +446,6 @@ public class ViralLoad extends GenericEntity {
 		this.referringRequestID = referringRequestID;
 	}
 
-	public String getLastViralLoadResult() {
-		return lastViralLoadResult;
-	}
-
-	public void setLastViralLoadResult(String lastViralLoadResult) {
-		this.lastViralLoadResult = lastViralLoadResult;
-	}
-
-	public String getLastViralLoadDate() {
-		return lastViralLoadDate;
-	}
-
-	public void setLastViralLoadDate(String lastViralLoadDate) {
-		this.lastViralLoadDate = lastViralLoadDate;
-	}
-
 	public String getRequestingProvinceName() {
 		return requestingProvinceName;
 	}
@@ -527,5 +468,13 @@ public class ViralLoad extends GenericEntity {
 
 	public void setAgeInYears(Integer ageInYears) {
 		this.ageInYears = ageInYears;
+	}
+
+	public TypeOfResult getTypeOfResult() {
+		return typeOfResult;
+	}
+
+	public void setTypeOfResult(TypeOfResult typeOfResult) {
+		this.typeOfResult = typeOfResult;
 	}
 }

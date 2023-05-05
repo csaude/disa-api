@@ -20,9 +20,10 @@ import br.com.six2six.fixturefactory.processor.HibernateProcessor;
 import mz.co.fgh.disaapi.core.config.AbstractIntegServiceTest;
 import mz.co.fgh.disaapi.core.fixturefactory.ViralLoadTemplate;
 import mz.co.msaude.boot.frameworks.exception.BusinessException;
-import mz.org.fgh.disaapi.core.viralload.model.ViralLoad;
-import mz.org.fgh.disaapi.core.viralload.model.ViralLoadStatus;
-import mz.org.fgh.disaapi.core.viralload.service.ViralLoadService;
+import mz.org.fgh.disaapi.core.result.model.HIVVLLabResult;
+import mz.org.fgh.disaapi.core.result.model.LabResult;
+import mz.org.fgh.disaapi.core.result.model.LabResultStatus;
+import mz.org.fgh.disaapi.core.result.service.LabResultService;
 
 @ContextConfiguration
 public class ViralLoadServiceTest extends AbstractIntegServiceTest {
@@ -31,9 +32,9 @@ public class ViralLoadServiceTest extends AbstractIntegServiceTest {
 	private EntityManagerFactory emFactory;
 
 	@Inject
-	protected ViralLoadService viralLoadService;
+	protected LabResultService viralLoadService;
 
-	private ViralLoad viralLoad;
+	private LabResult viralLoad;
 
 
     @BeforeClass
@@ -50,7 +51,7 @@ public class ViralLoadServiceTest extends AbstractIntegServiceTest {
 
 			HibernateProcessor hibernateProcessor = new HibernateProcessor(session);
 
-			viralLoad = Fixture.from(ViralLoad.class)
+			viralLoad = Fixture.from(HIVVLLabResult.class)
 					.uses(hibernateProcessor)
 					.gimme(ViralLoadTemplate.VALID);
 
@@ -60,15 +61,15 @@ public class ViralLoadServiceTest extends AbstractIntegServiceTest {
 
 	@Test
 	@WithMockUser
-	public void shouldUpdateViralLoad() throws BusinessException {
+	public void shouldUpdateLabResult() throws BusinessException {
 
-		assertThat(viralLoad.getViralLoadStatus()).isEqualTo(ViralLoadStatus.PENDING);
+		assertThat(viralLoad.getLabResultStatus()).isEqualTo(LabResultStatus.PENDING);
 
-		viralLoad.setViralLoadStatus(ViralLoadStatus.NOT_PROCESSED);
+		viralLoad.setLabResultStatus(LabResultStatus.NOT_PROCESSED);
 
-		viralLoadService.updateViralLoad(viralLoad);
+		viralLoadService.updateLabResult(viralLoad);
 
-		assertThat(viralLoad.getViralLoadStatus()).isEqualTo(ViralLoadStatus.NOT_PROCESSED);
+		assertThat(viralLoad.getLabResultStatus()).isEqualTo(LabResultStatus.NOT_PROCESSED);
 
 	}
 }
