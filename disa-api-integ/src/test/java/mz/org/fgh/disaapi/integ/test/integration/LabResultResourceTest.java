@@ -31,9 +31,9 @@ import org.springframework.web.util.UriComponentsBuilder;
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
 @DirtiesContext(classMode = ClassMode.BEFORE_EACH_TEST_METHOD)
-public class ViralLoadResourceV2_1_2Test extends ViralLoadResourceV2Test {
+public class LabResultResourceTest extends ViralLoadResourceV2Test {
 
-	private static final String SEARCH_URL = "/v2.1.2/viralloads/search?"
+	private static final String SEARCH_URL = "/lab-results/search?"
 			+ "startDate={startDate}&"
 			+ "endDate={endDate}&"
 			+ "healthFacilityLabCode={healthFacilityLabCode}&"

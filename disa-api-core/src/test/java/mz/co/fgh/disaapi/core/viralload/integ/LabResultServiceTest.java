@@ -20,27 +20,28 @@ import br.com.six2six.fixturefactory.processor.HibernateProcessor;
 import mz.co.fgh.disaapi.core.config.AbstractIntegServiceTest;
 import mz.co.fgh.disaapi.core.fixturefactory.ViralLoadTemplate;
 import mz.co.msaude.boot.frameworks.exception.BusinessException;
+import mz.co.msaude.boot.frameworks.model.EntityStatus;
 import mz.org.fgh.disaapi.core.result.model.HIVVLLabResult;
 import mz.org.fgh.disaapi.core.result.model.LabResult;
 import mz.org.fgh.disaapi.core.result.model.LabResultStatus;
+import mz.org.fgh.disaapi.core.result.model.NotProcessingCause;
 import mz.org.fgh.disaapi.core.result.service.LabResultService;
 
 @ContextConfiguration
-public class ViralLoadServiceTest extends AbstractIntegServiceTest {
+public class LabResultServiceTest extends AbstractIntegServiceTest {
 
 	@Inject
 	private EntityManagerFactory emFactory;
 
 	@Inject
-	protected LabResultService viralLoadService;
+	protected LabResultService labResultService;
 
 	private LabResult viralLoad;
 
-
-    @BeforeClass
-    public static void setUp() {
-            FixtureFactoryLoader.loadTemplates("mz.co.fgh.disaapi.core.fixturefactory");
-    }
+	@BeforeClass
+	public static void setUp() {
+		FixtureFactoryLoader.loadTemplates("mz.co.fgh.disaapi.core.fixturefactory");
+	}
 
 	@Before
 	public void before() {
@@ -67,9 +68,21 @@ public class ViralLoadServiceTest extends AbstractIntegServiceTest {
 
 		viralLoad.setLabResultStatus(LabResultStatus.NOT_PROCESSED);
 
-		viralLoadService.updateLabResult(viralLoad);
+		labResultService.updateLabResult(viralLoad);
 
 		assertThat(viralLoad.getLabResultStatus()).isEqualTo(LabResultStatus.NOT_PROCESSED);
+
+	}
+
+	@Test
+	@WithMockUser
+	public void updateDuplicateRequestIdShouldInactivate() throws BusinessException {
+		viralLoad.setLabResultStatus(LabResultStatus.NOT_PROCESSED);
+		viralLoad.setNotProcessingCause(NotProcessingCause.DUPLICATED_REQUEST_ID);
+
+		labResultService.updateLabResult(viralLoad);
+
+		assertThat(viralLoad.getEntityStatus()).isEqualTo(EntityStatus.INACTIVE);
 
 	}
 }

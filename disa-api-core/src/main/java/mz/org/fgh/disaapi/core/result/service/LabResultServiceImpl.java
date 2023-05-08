@@ -20,6 +20,7 @@ import mz.co.msaude.boot.frameworks.model.EntityStatus;
 import mz.org.fgh.disaapi.core.exception.NotFoundBusinessException;
 import mz.org.fgh.disaapi.core.result.model.LabResult;
 import mz.org.fgh.disaapi.core.result.model.LabResultStatus;
+import mz.org.fgh.disaapi.core.result.model.NotProcessingCause;
 import mz.org.fgh.disaapi.core.result.repository.LabResultRepository;
 
 @Service
@@ -33,7 +34,10 @@ public class LabResultServiceImpl implements LabResultService {
         UserDetails user = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         labResult.setUpdatedBy(user.getUsername());
         labResult.setUpdatedAt(LocalDateTime.now());
-
+        if (LabResultStatus.NOT_PROCESSED == labResult.getLabResultStatus()
+                && NotProcessingCause.DUPLICATED_REQUEST_ID == labResult.getNotProcessingCause()) {
+            labResult.inactive();
+        }
         return viralLoadRepository.save(labResult);
     }
 
@@ -71,10 +75,12 @@ public class LabResultServiceImpl implements LabResultService {
     public List<String> getAllowedPropertiesForUpdate() {
         return Arrays.asList(
                 "labResultStatus",
+                "notProcessingCause",
                 "requestingProvinceName",
                 "requestingDistrictName",
                 "requestingFacilityName",
-                "healthFacilityLabCode");
+                "healthFacilityLabCode",
+                "synchronizedBy");
     }
 
     private void validateStatus(LabResult labResult, LabResult dbVl) throws BusinessException {

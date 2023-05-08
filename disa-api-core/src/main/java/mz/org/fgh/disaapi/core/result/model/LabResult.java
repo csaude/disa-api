@@ -157,6 +157,9 @@ public abstract class LabResult extends GenericEntity {
 	@Enumerated(EnumType.STRING)
 	private TypeOfResult typeOfResult;
 
+	@Column(name = "RegisteredDateTime")
+	private LocalDateTime registeredDateTime;
+
 	public String getSynchronizedBy() {
 		return synchronizedBy;
 	}
@@ -487,5 +490,13 @@ public abstract class LabResult extends GenericEntity {
 
 	public void setFinalResult(String finalResult) {
 		this.finalResult = finalResult;
+	}
+
+	public LocalDateTime getRegisteredDateTime() {
+		return registeredDateTime;
+	}
+
+	public void setRegisteredDateTime(LocalDateTime registeredDateTime) {
+		this.registeredDateTime = registeredDateTime;
 	}
 }
