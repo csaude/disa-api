@@ -1,7 +1,9 @@
 ALTER TABLE `VlData`
     ADD COLUMN `TypeOfResult` VARCHAR(50) NOT NULL,
-    ADD COLUMN `CD4Percentage` VARCHAR(80) NULL AFTER `TypeOfResult`,
-    ADD COLUMN `CD4FinalResult` INT NULL AFTER `CD4Percentage`;
+    ADD COLUMN `Attribute1` VARCHAR(100) NULL,
+    ADD COLUMN `Attribute2` VARCHAR(100) NULL,
+    ADD COLUMN `Attribute3` VARCHAR(100) NULL,
+    CHANGE COLUMN `FinalViralLoadResult` `FinalResult` VARCHAR(100) NULL DEFAULT NULL;
 
 -- Set all current results to HIV Viral Load
 UPDATE `VlData` SET `TypeOfResult` = 'HIVVL';

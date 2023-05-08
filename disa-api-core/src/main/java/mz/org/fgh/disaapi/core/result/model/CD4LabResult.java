@@ -8,11 +8,8 @@ import javax.persistence.Entity;
 @DiscriminatorValue("CD4")
 public class CD4LabResult extends LabResult {
 
-    @Column(name = "CD4Percentage")
+    @Column(name = "Attribute1")
     private String cd4Percentage;
-
-    @Column(name = "CD4FinalResult")
-    private Integer cd4FinalResult;
 
     public String getCd4Percentage() {
         return cd4Percentage;
@@ -20,13 +17,5 @@ public class CD4LabResult extends LabResult {
 
     public void setCd4Percentage(String cd4Percentage) {
         this.cd4Percentage = cd4Percentage;
-    }
-
-    public Integer getCd4FinalResult() {
-        return cd4FinalResult;
-    }
-
-    public void setCd4FinalResult(Integer cd4FinalResult) {
-        this.cd4FinalResult = cd4FinalResult;
     }
 }
