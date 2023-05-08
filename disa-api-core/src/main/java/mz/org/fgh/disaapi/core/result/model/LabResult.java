@@ -37,10 +37,13 @@ import mz.org.fgh.disaapi.core.result.dao.LabResultDAO;
 @Entity
 @Table(name = "VlData")
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
-@DiscriminatorColumn(name = "TypeOfResult", discriminatorType=DiscriminatorType.STRING ,length = 50)
+@DiscriminatorColumn(name = "TypeOfResult", discriminatorType = DiscriminatorType.STRING, length = 50)
 public abstract class LabResult extends GenericEntity {
 
 	private static final long serialVersionUID = 1L;
+
+	@Column(name = "FinalResult")
+	private String finalResult;
 
 	@Column(name = "UNIQUEID")
 	private String nid;
@@ -476,5 +479,13 @@ public abstract class LabResult extends GenericEntity {
 
 	public void setTypeOfResult(TypeOfResult typeOfResult) {
 		this.typeOfResult = typeOfResult;
+	}
+
+	public String getFinalResult() {
+		return finalResult;
+	}
+
+	public void setFinalResult(String finalResult) {
+		this.finalResult = finalResult;
 	}
 }

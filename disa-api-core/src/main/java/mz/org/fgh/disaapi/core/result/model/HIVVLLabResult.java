@@ -8,9 +8,6 @@ import javax.persistence.Entity;
 @DiscriminatorValue("HIVVL")
 public class HIVVLLabResult extends LabResult {
 
-    @Column(name = "FinalViralLoadResult")
-    private String finalViralLoadResult;
-
     @Column(name = "LastViralLoadResult")
     private String lastViralLoadResult;
 
@@ -25,14 +22,6 @@ public class HIVVLLabResult extends LabResult {
 
 	@Column(name = "HIVVL_VRLogValue")
 	private String viralLoadResultLog;
-
-    public String getFinalViralLoadResult() {
-        return finalViralLoadResult;
-    }
-
-    public void setFinalViralLoadResult(String finalViralLoadResult) {
-        this.finalViralLoadResult = finalViralLoadResult;
-    }
 
     public String getLastViralLoadResult() {
         return lastViralLoadResult;
