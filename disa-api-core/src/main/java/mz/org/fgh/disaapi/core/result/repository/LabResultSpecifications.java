@@ -50,6 +50,10 @@ public class LabResultSpecifications {
                 predicates.add(builder.equal(root.get("notProcessingCause"), example.getNotProcessingCause()));
             }
 
+            if (example.getTypeOfResult() != null) {
+                predicates.add(builder.equal(root.get("typeOfResult"), example.getTypeOfResult()));
+            }
+
             if (!StringUtils.isEmpty(example.getNid())) {
                 predicates.add(builder.equal(root.get("nid"), example.getNid()));
             }

@@ -28,6 +28,7 @@ import mz.org.fgh.disaapi.core.result.model.LabResult;
 import mz.org.fgh.disaapi.core.result.model.LabResultStatus;
 import mz.org.fgh.disaapi.core.result.model.NotProcessingCause;
 import mz.org.fgh.disaapi.core.result.model.Page;
+import mz.org.fgh.disaapi.core.result.model.TypeOfResult;
 
 /**
  * @author Stélio Moiane
@@ -69,6 +70,7 @@ public class LabResultDAOImpl implements LabResultDAO {
 			String referringRequestID,
 			LabResultStatus labResultStatus,
 			NotProcessingCause notProcessingCause,
+			TypeOfResult typeOfResult,
 			LocalDateTime startDate,
 			LocalDateTime endDate,
 			String search,
@@ -89,7 +91,7 @@ public class LabResultDAOImpl implements LabResultDAO {
 		// Build query predicates
 		Predicate restrictions = getSearchQueryRestrictions(
 				requestId, nid, healthFacilityLabCode, referringRequestID,
-				labResultStatus, notProcessingCause, startDate, endDate, search,
+				labResultStatus, notProcessingCause, typeOfResult, startDate, endDate, search,
 				entityStatus, cb, vl);
 
 		// Build count query
@@ -123,6 +125,7 @@ public class LabResultDAOImpl implements LabResultDAO {
 			String referringRequestID,
 			LabResultStatus labResultStatus,
 			NotProcessingCause notProcessingCause,
+			TypeOfResult typeOfResult,
 			LocalDateTime startDate,
 			LocalDateTime endDate,
 			String orderBy,
@@ -136,7 +139,7 @@ public class LabResultDAOImpl implements LabResultDAO {
 		// Build query predicates
 		Predicate restrictions = getSearchQueryRestrictions(
 				requestId, nid, healthFacilityLabCode, referringRequestID,
-				labResultStatus, notProcessingCause, startDate, endDate, null,
+				labResultStatus, notProcessingCause, typeOfResult, startDate, endDate, null,
 				entityStatus, cb, vl);
 
 		criteriaQuery.select(vl);
@@ -234,6 +237,7 @@ public class LabResultDAOImpl implements LabResultDAO {
 			String referringRequestID,
 			LabResultStatus labResultStatus,
 			NotProcessingCause notProcessingCause,
+			TypeOfResult typeOfResult,
 			LocalDateTime startDate,
 			LocalDateTime endDate,
 			String search,
@@ -267,6 +271,10 @@ public class LabResultDAOImpl implements LabResultDAO {
 
 		if (notProcessingCause != null) {
 			predicates.add(cb.equal(vl.get("notProcessingCause"), notProcessingCause));
+		}
+
+		if (typeOfResult != null) {
+			predicates.add(cb.equal(vl.get("typeOfResult"), typeOfResult));
 		}
 
 		if (!StringUtils.isEmpty(nid)) {

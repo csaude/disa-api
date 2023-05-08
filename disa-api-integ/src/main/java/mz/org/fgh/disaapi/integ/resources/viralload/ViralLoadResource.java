@@ -82,7 +82,7 @@ public class ViralLoadResource {
 			throws BusinessException {
 
 		List<LabResult> vls = this.labResultQueryService.findAllByForm(requestId, nid,
-				healthFacilityLabCode, referringRequestID, labResultStatus, notProcessingCause,
+				healthFacilityLabCode, referringRequestID, labResultStatus, notProcessingCause, null,
 				startDate, endDate);
 
 		return Response.ok(vls).build();

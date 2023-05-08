@@ -22,6 +22,7 @@ import mz.org.fgh.disaapi.core.result.dao.LabResultDAO;
 import mz.org.fgh.disaapi.core.result.model.LabResult;
 import mz.org.fgh.disaapi.core.result.model.LabResultStatus;
 import mz.org.fgh.disaapi.core.result.model.NotProcessingCause;
+import mz.org.fgh.disaapi.core.result.model.TypeOfResult;
 import mz.org.fgh.disaapi.core.result.repository.LabResultRepository;
 
 /**
@@ -81,6 +82,7 @@ public class LabResultQueryServiceImpl implements LabResultQueryService {
 			String referringRequestID,
 			LabResultStatus labResultStatus,
 			NotProcessingCause notProcessingCause,
+			TypeOfResult typeOfResult,
 			LocalDateTime startDate,
 			LocalDateTime endDate,
 			String search,
@@ -117,7 +119,7 @@ public class LabResultQueryServiceImpl implements LabResultQueryService {
 		}
 
 		return this.labResultDAO.findByForm(requestId, nid,
-				orgUnitCodes, referringRequestID, labResultStatus, notProcessingCause, startDate, endDate,
+				orgUnitCodes, referringRequestID, labResultStatus, notProcessingCause, typeOfResult, startDate, endDate,
 				search,
 				pageNumber, pageSize, orderBy, direction, EntityStatus.ACTIVE);
 	}
@@ -136,6 +138,7 @@ public class LabResultQueryServiceImpl implements LabResultQueryService {
 	@Override
 	public List<LabResult> findAllByForm(String requestId, String nid, List<String> orgUnitCodes,
 			String referringRequestID, LabResultStatus labResultStatus, NotProcessingCause notProcessingCause,
+			TypeOfResult typeOfResult,
 			LocalDateTime startDate, LocalDateTime endDate) throws BusinessException {
 
 		if (orgUnitCodes.isEmpty()) {
@@ -149,6 +152,7 @@ public class LabResultQueryServiceImpl implements LabResultQueryService {
 				referringRequestID,
 				labResultStatus,
 				notProcessingCause,
+				typeOfResult,
 				startDate,
 				endDate,
 				DEFAULT_ORDER_BY,
