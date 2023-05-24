@@ -62,4 +62,8 @@ public class OrgUnit {
         this.implementingPartnerId = implementingPartnerId;
     }
 
+    @Override
+    public String toString() {
+        return "OrgUnit [code=" + code + ", facility=" + facility + "]";
+    }
 }

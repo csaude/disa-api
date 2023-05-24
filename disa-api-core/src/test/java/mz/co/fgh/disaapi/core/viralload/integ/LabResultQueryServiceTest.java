@@ -41,10 +41,10 @@ import mz.org.fgh.disaapi.core.result.service.LabResultQueryService;
  *
  */
 @DirtiesContext(classMode = ClassMode.BEFORE_EACH_TEST_METHOD)
-public class ViralLoadQueryServiceTest extends AbstractIntegServiceTest {
+public class LabResultQueryServiceTest extends AbstractIntegServiceTest {
 
 	@Inject
-	protected LabResultQueryService viralLoadQueryService;
+	protected LabResultQueryService labResultQueryService;
 
 	@Inject
 	private EntityManagerFactory emFactory;
@@ -90,7 +90,7 @@ public class ViralLoadQueryServiceTest extends AbstractIntegServiceTest {
 	@Test
 	public void findByLocationCodeAndStatusShouldReturnFromSpecificProvince() throws BusinessException {
 
-		final List<LabResult> viralLoads = this.viralLoadQueryService
+		final List<LabResult> viralLoads = this.labResultQueryService
 				.findPendingByLocationCodeAndProvince(Arrays.asList(OrgUnitTemplate.ZAMBEZIA_SISMA_CODES),
 						"Zambezia");
 
@@ -104,7 +104,7 @@ public class ViralLoadQueryServiceTest extends AbstractIntegServiceTest {
 				OrgUnitTemplate.ZAMBEZIA_SISMA_CODES.length + 1);
 		allCodes[allCodes.length - 1] = "1100100";
 
-		final List<LabResult> viralLoads = this.viralLoadQueryService
+		final List<LabResult> viralLoads = this.labResultQueryService
 				.findPendingByLocationCode(Arrays.asList(allCodes));
 
 		assertThat(viralLoads).hasSize(15);
@@ -118,7 +118,7 @@ public class ViralLoadQueryServiceTest extends AbstractIntegServiceTest {
 		LocalDateTime endDate = today.atTime(LocalTime.MAX);
 		LabResult example = new HIVVLLabResult();
 		example.active();
-		List<LabResult> findAllByForm = this.viralLoadQueryService.findAllByForm(example,
+		List<LabResult> findAllByForm = this.labResultQueryService.findAllByForm(example,
 				Arrays.asList(OrgUnitTemplate.ZAMBEZIA_SISMA_CODES), startDate, endDate);
 		assertThat(findAllByForm).hasSize(13);
 	}
@@ -130,7 +130,7 @@ public class ViralLoadQueryServiceTest extends AbstractIntegServiceTest {
 				.limit(3)
 				.map(vl -> vl.getNid())
 				.collect(Collectors.toList());
-		List<LabResult> findAllByForm = this.viralLoadQueryService.findViralLoadByNid(nids);
+		List<LabResult> findAllByForm = this.labResultQueryService.findViralLoadByNid(nids);
 		assertThat(findAllByForm).hasSize(3);
 	}
 
@@ -141,13 +141,13 @@ public class ViralLoadQueryServiceTest extends AbstractIntegServiceTest {
 				.limit(2)
 				.map(vl -> vl.getRequestId())
 				.collect(Collectors.toList());
-		List<LabResult> findAllByForm = this.viralLoadQueryService.findViralLoadByRequestId(requestIds);
+		List<LabResult> findAllByForm = this.labResultQueryService.findViralLoadByRequestId(requestIds);
 		assertThat(findAllByForm).hasSize(2);
 	}
 
 	@Test
 	public void findByStatusShouldReturnResultsFromGivenHealthFacilitiesAndStatus() throws BusinessException {
-		List<LabResult> findByStatus = viralLoadQueryService.findByLocaationCodeAndStatus(
+		List<LabResult> findByStatus = labResultQueryService.findByLocaationCodeAndStatus(
 				Arrays.asList(OrgUnitTemplate.ZAMBEZIA_SISMA_CODES),
 				LabResultStatus.NOT_PROCESSED);
 		assertThat(findByStatus).hasSize(2);
@@ -159,7 +159,7 @@ public class ViralLoadQueryServiceTest extends AbstractIntegServiceTest {
 		LocalDate today = LocalDate.now();
 		LocalDateTime startDate = today.atStartOfDay();
 		LocalDateTime endDate = today.atTime(LocalTime.MAX);
-		List<LabResult> findByStatusAndDates = viralLoadQueryService.findByLocationCodeAndStatusBetweenDates(
+		List<LabResult> findByStatusAndDates = labResultQueryService.findByLocationCodeAndStatusBetweenDates(
 				Arrays.asList(OrgUnitTemplate.ZAMBEZIA_SISMA_CODES),
 				LabResultStatus.PROCESSED, startDate,
 				endDate);

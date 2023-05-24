@@ -12,7 +12,7 @@ import mz.org.fgh.disaapi.integ.resources.converter.LocalDateTimeParamConverterP
 import mz.org.fgh.disaapi.integ.resources.orgunit.OrgUnitResource;
 import mz.org.fgh.disaapi.integ.resources.viralload.ViralLoadResource;
 import mz.org.fgh.disaapi.integ.resources.viralload.ViralLoadResourceV2;
-import mz.org.fgh.disaapi.integ.resources.viralload.ViralLoadResourceV2_1_2;
+import mz.org.fgh.disaapi.integ.resources.viralload.LabResultResource;
 
 /**
  * @author Stélio Moiane
@@ -24,7 +24,7 @@ public class JerseyConfig extends ResourceConfig {
 	public JerseyConfig() {
 		this.register(ViralLoadResource.class);
 		this.register(ViralLoadResourceV2.class);
-		this.register(ViralLoadResourceV2_1_2.class);
+		this.register(LabResultResource.class);
 		this.register(OrgUnitResource.class);
 		this.register(LocalDateTimeParamConverterProvider.class);
 		// Configure Jersey to use setStatus(int) rather sendError(int).
