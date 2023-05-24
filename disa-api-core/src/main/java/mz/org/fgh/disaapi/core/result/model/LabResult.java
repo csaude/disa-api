@@ -420,20 +420,16 @@ public abstract class LabResult extends GenericEntity {
 		notProcessingCause = NotProcessingCause.NID_NOT_FOUND;
 	}
 
-	public void setCauseNoResult() {
-		notProcessingCause = NotProcessingCause.NO_RESULT;
-	}
-
-	public void setCauseFlaggedForReview() {
-		notProcessingCause = NotProcessingCause.FLAGGED_FOR_REVIEW;
-	}
-
 	public void setCauseDuplicateNid() {
 		notProcessingCause = NotProcessingCause.DUPLICATE_NID;
 	}
 
 	public void setCauseDuplicateReqId() {
 		notProcessingCause = NotProcessingCause.DUPLICATED_REQUEST_ID;
+	}
+
+	public void setCauseInvalidResult() {
+		notProcessingCause = NotProcessingCause.INVALID_RESULT;
 	}
 
 	public String getLocation() {

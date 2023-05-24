@@ -6,6 +6,7 @@ package mz.org.fgh.disaapi.integ.resources.viralload;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.inject.Inject;
 import javax.ws.rs.GET;
@@ -22,6 +23,7 @@ import mz.co.msaude.boot.frameworks.exception.BusinessException;
 import mz.org.fgh.disaapi.core.result.model.LabResult;
 import mz.org.fgh.disaapi.core.result.model.LabResultStatus;
 import mz.org.fgh.disaapi.core.result.model.NotProcessingCause;
+import mz.org.fgh.disaapi.core.result.model.TypeOfResult;
 import mz.org.fgh.disaapi.core.result.service.LabResultQueryService;
 import mz.org.fgh.disaapi.core.result.service.LabResultService;
 
@@ -53,7 +55,9 @@ public class ViralLoadResource {
 			@QueryParam("requestingProvinceName") String requestingProvinceName)
 			throws BusinessException {
 		viralLoads = this.labResultQueryService.findPendingByLocationCodeAndProvince(locationCodes, requestingProvinceName);
-		return Response.ok(viralLoads).build();
+		// This endpoint should only return viral loads
+		List<LabResult> vls = viralLoads.stream().filter(vl -> vl.getTypeOfResult() == TypeOfResult.HIVVL).collect(Collectors.toList());
+		return Response.ok(vls).build();
 
 	}
 
@@ -125,9 +129,9 @@ public class ViralLoadResource {
 			if (reasonForNotProcessing.equals("nid")) {
 				viralLoad.setCauseNoNID();
 			} else if (reasonForNotProcessing.equals("result")) {
-				viralLoad.setCauseNoResult();
+				viralLoad.setCauseInvalidResult();
 			} else if (reasonForNotProcessing.equals("review")) {
-				viralLoad.setCauseFlaggedForReview();
+				viralLoad.setCauseInvalidResult();
 			} else if (reasonForNotProcessing.equals("duplicate")) {
 				viralLoad.setCauseDuplicateNid();
 			} else if (reasonForNotProcessing.equals("duplicatedReqId")) {
