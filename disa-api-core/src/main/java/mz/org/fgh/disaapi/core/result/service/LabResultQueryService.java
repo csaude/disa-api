@@ -94,6 +94,8 @@ public interface LabResultQueryService {
 	@PostFilter("principal.orgUnitCodes.contains(filterObject.healthFacilityLabCode)")
 	List<LabResult> findViralLoadByRequestId(List<String> requestIds) throws BusinessException;
 
+	LabResult findById(Long id);
+
 	@PreAuthorize("principal.orgUnitCodes.containsAll(#orgUnitCodes)")
 	List<LabResult> findByLocaationCodeAndStatus(List<String> orgUnitCodes, LabResultStatus labResultStatus)
 			throws BusinessException;

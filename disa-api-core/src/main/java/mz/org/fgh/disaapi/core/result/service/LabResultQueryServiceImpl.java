@@ -40,7 +40,8 @@ public class LabResultQueryServiceImpl implements LabResultQueryService {
 	private LabResultRepository labResultRepository;
 
 	@Override
-	public List<LabResult> findPendingByLocationCodeAndProvince(List<String> orgUnitCodes, String requestingProvinceName)
+	public List<LabResult> findPendingByLocationCodeAndProvince(List<String> orgUnitCodes,
+			String requestingProvinceName)
 			throws BusinessException {
 
 		if (orgUnitCodes.isEmpty()) {
@@ -58,7 +59,8 @@ public class LabResultQueryServiceImpl implements LabResultQueryService {
 
 			return new ArrayList<LabResult>();
 		}
-		return labResultRepository.findByHealthFacilityLabCodeInAndLabResultStatusAndEntityStatus(orgUnitCodes, LabResultStatus.PENDING,
+		return labResultRepository.findByHealthFacilityLabCodeInAndLabResultStatusAndEntityStatus(orgUnitCodes,
+				LabResultStatus.PENDING,
 				EntityStatus.ACTIVE);
 	}
 
@@ -180,17 +182,24 @@ public class LabResultQueryServiceImpl implements LabResultQueryService {
 	}
 
 	@Override
+	public LabResult findById(Long id) {
+		return labResultRepository.findByIdAndEntityStatus(id, EntityStatus.ACTIVE);
+	}
+
+	@Override
 	public List<LabResult> findByLocaationCodeAndStatus(List<String> orgUnitCodes, LabResultStatus labResultStatus)
 			throws BusinessException {
 
 		if (orgUnitCodes.isEmpty()) {
 			return new ArrayList<LabResult>();
 		}
-		return labResultRepository.findByHealthFacilityLabCodeInAndLabResultStatusAndEntityStatus(orgUnitCodes, labResultStatus, EntityStatus.ACTIVE);
+		return labResultRepository.findByHealthFacilityLabCodeInAndLabResultStatusAndEntityStatus(orgUnitCodes,
+				labResultStatus, EntityStatus.ACTIVE);
 	}
 
 	@Override
-	public List<LabResult> findByLocationCodeAndStatusBetweenDates(List<String> orgUnitCodes, LabResultStatus labResultStatus,
+	public List<LabResult> findByLocationCodeAndStatusBetweenDates(List<String> orgUnitCodes,
+			LabResultStatus labResultStatus,
 			LocalDateTime startDate, LocalDateTime endDate) throws BusinessException {
 
 		if (orgUnitCodes.isEmpty()) {

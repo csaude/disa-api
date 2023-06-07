@@ -1,7 +1,6 @@
 package mz.org.fgh.disaapi.integ.resources.viralload;
 
 import java.time.LocalDateTime;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -131,52 +130,49 @@ public class LabResultResource {
     }
 
     @GET
-	@Path("/{requestId}")
-	@Produces(MediaType.APPLICATION_JSON)
-	public Response get(@PathParam("requestId") String requestId) throws BusinessException {
-
-		List<LabResult> viralLoads = viralLoadQueryService.findViralLoadByRequestId(Arrays.asList(requestId));
-
-		if (viralLoads.isEmpty()) {
-			throw new NotFoundException("Viral load not found");
-		}
-
-		LabResult viralLoad = viralLoads.get(0);
-
-		return Response.ok(viralLoad).build();
-	}
-
-    @DELETE
-    @Path("/{requestId}")
+    @Path("/{id}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response delete(@PathParam("requestId") String requestId) throws BusinessException {
+    public Response get(@PathParam("id") Long id) {
 
-        List<LabResult> viralLoads = viralLoadQueryService.findViralLoadByRequestId(Arrays.asList(requestId));
+        LabResult labResult = viralLoadQueryService.findById(id);
 
-        if (viralLoads.isEmpty()) {
+        if (labResult == null) {
             throw new NotFoundException("Viral load not found");
         }
 
-        LabResult viralLoad = viralLoads.get(0);
-        viralLoad.inactive();
-        updateViralLoad(viralLoad);
+        return Response.ok(labResult).build();
+    }
+
+    @DELETE
+    @Path("/{id}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response delete(@PathParam("id") Long id) {
+
+        LabResult labResult = viralLoadQueryService.findById(id);
+
+        if (labResult == null) {
+            throw new NotFoundException("Viral load not found");
+        }
+
+        labResult.inactive();
+        updateViralLoad(labResult);
 
         return Response.ok().build();
     }
 
     @PATCH
-    @Path("/{requestId}")
+    @Path("/{id}")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response update(@PathParam("requestId") String requestId,
+    public Response update(@PathParam("id") Long id,
             @RequestBody Map<String, Object> propertyValues) throws BusinessException {
 
         try {
-            List<LabResult> viralLoads = this.viralLoadQueryService.findViralLoadByRequestId(Arrays.asList(requestId));
-            if (viralLoads.isEmpty()) {
+            LabResult labResult = viralLoadQueryService.findById(id);
+            if (labResult == null) {
                 throw new NotFoundException("Viral load not found");
             }
-            LabResult updatedVl = this.viralLoadService.updateLabResult(viralLoads.get(0), propertyValues);
+            LabResult updatedVl = this.viralLoadService.updateLabResult(labResult, propertyValues);
             return Response.ok(updatedVl).build();
         } catch (NotFoundBusinessException e) {
             throw new NotFoundException("Viral load not found");

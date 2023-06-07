@@ -8,6 +8,8 @@ import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Base64;
+import java.util.Collections;
+import java.util.Map;
 
 import org.json.JSONException;
 import org.junit.Test;
@@ -33,6 +35,8 @@ import org.springframework.web.util.UriComponentsBuilder;
 @DirtiesContext(classMode = ClassMode.BEFORE_EACH_TEST_METHOD)
 public class LabResultResourceTest extends ViralLoadResourceV2Test {
 
+	private static final String RESULT_URL = "/lab-results/{id}";
+
 	private static final String SEARCH_URL = "/lab-results/search?"
 			+ "startDate={startDate}&"
 			+ "endDate={endDate}&"
@@ -43,6 +47,28 @@ public class LabResultResourceTest extends ViralLoadResourceV2Test {
 			+ "notProcessingCause={notProcessingCause}&"
 			+ "nid={nid}&"
 			+ "pageNumber={pageNumber}&";
+
+	@Test
+	public void deleteShouldReturnOk() {
+		HttpHeaders headers = createHttpContentTypeAndAuthorizationHeaders();
+		HttpEntity<String> httpEntity = new HttpEntity<>("", headers);
+		Map<String, Long> uriVariable = Collections.singletonMap("id", vls.get(0).getId());
+		ResponseEntity<String> response = restTemplate.exchange(RESULT_URL, HttpMethod.DELETE, httpEntity, String.class,
+				uriVariable);
+
+		assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+	}
+
+	@Test
+	public void deleteShouldReturnNotFound() {
+		HttpHeaders headers = createHttpContentTypeAndAuthorizationHeaders();
+		HttpEntity<String> httpEntity = new HttpEntity<>("", headers);
+		Map<String, Long> uriVariable = Collections.singletonMap("id", 0l);
+		ResponseEntity<String> response = restTemplate.exchange(RESULT_URL, HttpMethod.DELETE, httpEntity, String.class,
+				uriVariable);
+
+		assertThat(response.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
+	}
 
 	@Test
 	@Override
