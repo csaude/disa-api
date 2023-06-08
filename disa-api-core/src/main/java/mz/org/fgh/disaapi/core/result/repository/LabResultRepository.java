@@ -41,4 +41,6 @@ public interface LabResultRepository extends JpaRepository<LabResult, Long>, Jpa
             @Param("labResultStatus") LabResultStatus labResultStatus,
             @Param("entityStatus") EntityStatus entityStatus,
             @Param("notProcessingCause") NotProcessingCause notProcessingCause);
+
+    LabResult findByIdAndEntityStatus(Long id, EntityStatus active);
 }

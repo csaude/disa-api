@@ -91,7 +91,7 @@ public class ViralLoadResourceV2Test {
 	@Inject
 	private EntityManagerFactory emFactory;
 
-	private List<LabResult> vls;
+	protected List<LabResult> vls;
 
 	private LabResult notProcessedVl;
 
