@@ -13,6 +13,8 @@ import javax.inject.Inject;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
@@ -134,7 +136,8 @@ public class LabResultQueryServiceImpl implements LabResultQueryService {
 			throw new BusinessException("The HF code should be informed");
 		}
 
-		return labResultRepository.findAll(createdInLocationBetweenDates(example, orgUnitCodes, startDate, endDate));
+		return labResultRepository.findAll(createdInLocationBetweenDates(example, orgUnitCodes, startDate, endDate),
+				Sort.by(Direction.DESC, "createdAt"));
 	}
 
 	@Override

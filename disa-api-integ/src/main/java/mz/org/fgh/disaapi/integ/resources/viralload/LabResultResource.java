@@ -107,9 +107,7 @@ public class LabResultResource {
             @QueryParam("notProcessingCause") NotProcessingCause notProcessingCause,
             @QueryParam("typeOfResult") TypeOfResult typeOfResult,
             @QueryParam("startDate") final LocalDateTime startDate,
-            @QueryParam("endDate") final LocalDateTime endDate,
-            @QueryParam("orderBy") String orderBy,
-            @QueryParam("direction") String direction)
+            @QueryParam("endDate") final LocalDateTime endDate)
             throws BusinessException {
 
         // TODO use one of typeOfResult or the class
