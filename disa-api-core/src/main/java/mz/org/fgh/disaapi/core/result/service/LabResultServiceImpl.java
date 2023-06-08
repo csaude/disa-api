@@ -44,15 +44,13 @@ public class LabResultServiceImpl implements LabResultService {
     @Override
     public LabResult updateLabResult(LabResult labResult, Map<String, Object> propertyValues)
             throws BusinessException {
-        List<String> requestIds = Arrays.asList(labResult.getRequestId());
-        List<LabResult> results = viralLoadRepository.findByRequestIdInAndEntityStatus(requestIds, EntityStatus.ACTIVE);
 
-        if (results.isEmpty()) {
+        LabResult dbResult = viralLoadRepository.findByIdAndEntityStatus(labResult.getId(), EntityStatus.ACTIVE);
+
+        if (dbResult == null) {
             throw new NotFoundBusinessException(
-                    "Viral load " + labResult.getRequestId() + " was not found.");
+                    "Viral load " + labResult.getId() + " was not found.");
         }
-
-        LabResult dbResult = results.get(0);
 
         validateStatus(labResult, dbResult);
 
