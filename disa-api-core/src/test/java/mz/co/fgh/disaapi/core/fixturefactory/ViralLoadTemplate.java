@@ -37,6 +37,7 @@ public class ViralLoadTemplate implements TemplateLoader {
 
 		Fixture.of(HIVVLLabResult.class).addTemplate(VALID, new Rule() {
 			{
+				this.add("id", 12345l);
 				this.add("nid", regex("0001041137/\\d{4}/\\d{5}"));
 				this.add("requestId", regex("MZDISAPQM\\d{7}"));
 				this.add("dateOfBirth", LocalDate.now());

@@ -50,9 +50,8 @@ public class ViralLoadServiceUnitTest extends AbstractUnitServiceTest {
 
         LabResult viralLoad = EntityFactory.gimme(HIVVLLabResult.class, ViralLoadTemplate.NOT_PROCESSED);
 
-        List<String> requestIds = Arrays.asList(viralLoad.getRequestId());
-        Mockito.when(viralLoadRepository.findByRequestIdInAndEntityStatus(requestIds, EntityStatus.ACTIVE))
-                .thenReturn(Arrays.asList(viralLoad));
+        Mockito.when(viralLoadRepository.findByIdAndEntityStatus(viralLoad.getId(), EntityStatus.ACTIVE))
+                .thenReturn(viralLoad);
 
         Map<String, Object> propertyValues = new HashMap<>();
         propertyValues.put("labResultStatus", "PENDING");
@@ -73,9 +72,8 @@ public class ViralLoadServiceUnitTest extends AbstractUnitServiceTest {
 
         LabResult viralLoad = EntityFactory.gimme(HIVVLLabResult.class, ViralLoadTemplate.NOT_PROCESSED);
 
-        List<String> requestIds = Arrays.asList(viralLoad.getRequestId());
-        Mockito.when(viralLoadRepository.findByRequestIdInAndEntityStatus(requestIds, EntityStatus.ACTIVE))
-                .thenReturn(Arrays.asList(viralLoad));
+        Mockito.when(viralLoadRepository.findByIdAndEntityStatus(viralLoad.getId(), EntityStatus.ACTIVE))
+                .thenReturn(viralLoad);
 
         Map<String, Object> propertyValues = new HashMap<>();
         propertyValues.put("reasonForTest", "Suspected treatment failure");

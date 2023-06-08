@@ -91,6 +91,7 @@ public interface LabResultQueryService {
 	@PostFilter("principal.orgUnitCodes.contains(filterObject.healthFacilityLabCode)")
 	List<LabResult> findViralLoadByNid(List<String> nids) throws BusinessException;
 
+	@Deprecated
 	@PostFilter("principal.orgUnitCodes.contains(filterObject.healthFacilityLabCode)")
 	List<LabResult> findViralLoadByRequestId(List<String> requestIds) throws BusinessException;
 
