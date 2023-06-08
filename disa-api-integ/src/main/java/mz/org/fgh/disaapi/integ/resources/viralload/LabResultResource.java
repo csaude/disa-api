@@ -8,6 +8,7 @@ import javax.inject.Inject;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
+import javax.ws.rs.NotAuthorizedException;
 import javax.ws.rs.NotFoundException;
 import javax.ws.rs.PATCH;
 import javax.ws.rs.Path;
@@ -16,6 +17,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.Status;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -132,11 +134,7 @@ public class LabResultResource {
     @Produces(MediaType.APPLICATION_JSON)
     public Response get(@PathParam("id") Long id) {
 
-        LabResult labResult = viralLoadQueryService.findById(id);
-
-        if (labResult == null) {
-            throw new NotFoundException("Viral load not found");
-        }
+        LabResult labResult = findById(id);
 
         return Response.ok(labResult).build();
     }
@@ -146,11 +144,7 @@ public class LabResultResource {
     @Produces(MediaType.APPLICATION_JSON)
     public Response delete(@PathParam("id") Long id) {
 
-        LabResult labResult = viralLoadQueryService.findById(id);
-
-        if (labResult == null) {
-            throw new NotFoundException("Viral load not found");
-        }
+        LabResult labResult = findById(id);
 
         labResult.inactive();
         updateViralLoad(labResult);
@@ -166,10 +160,7 @@ public class LabResultResource {
             @RequestBody Map<String, Object> propertyValues) throws BusinessException {
 
         try {
-            LabResult labResult = viralLoadQueryService.findById(id);
-            if (labResult == null) {
-                throw new NotFoundException("Viral load not found");
-            }
+            LabResult labResult = findById(id);
             LabResult updatedVl = this.viralLoadService.updateLabResult(labResult, propertyValues);
             return Response.ok(updatedVl).build();
         } catch (NotFoundBusinessException e) {
@@ -183,6 +174,18 @@ public class LabResultResource {
             viralLoadService.updateLabResult(viralLoad);
         } catch (BusinessException e) {
             e.printStackTrace();
+        }
+    }
+
+    private LabResult findById(Long id) {
+        try {
+            List<LabResult> labResult = viralLoadQueryService.findById(id);
+            if (labResult.isEmpty()) {
+                throw new NotAuthorizedException(Response.status(Status.UNAUTHORIZED));
+            }
+            return labResult.get(0);
+        } catch (NotFoundBusinessException e) {
+            throw new NotFoundException("Viral load not found");
         }
     }
 }

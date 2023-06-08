@@ -7,6 +7,7 @@ import static mz.org.fgh.disaapi.core.result.repository.LabResultSpecifications.
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -20,6 +21,7 @@ import org.springframework.util.StringUtils;
 
 import mz.co.msaude.boot.frameworks.exception.BusinessException;
 import mz.co.msaude.boot.frameworks.model.EntityStatus;
+import mz.org.fgh.disaapi.core.exception.NotFoundBusinessException;
 import mz.org.fgh.disaapi.core.result.dao.LabResultDAO;
 import mz.org.fgh.disaapi.core.result.model.LabResult;
 import mz.org.fgh.disaapi.core.result.model.LabResultStatus;
@@ -185,8 +187,12 @@ public class LabResultQueryServiceImpl implements LabResultQueryService {
 	}
 
 	@Override
-	public LabResult findById(Long id) {
-		return labResultRepository.findByIdAndEntityStatus(id, EntityStatus.ACTIVE);
+	public List<LabResult> findById(Long id) throws NotFoundBusinessException {
+		LabResult labResult = labResultRepository.findByIdAndEntityStatus(id, EntityStatus.ACTIVE);
+		if (labResult == null) {
+			throw new NotFoundBusinessException();
+		}
+		return new ArrayList<>(Arrays.asList(labResult));
 	}
 
 	@Override
