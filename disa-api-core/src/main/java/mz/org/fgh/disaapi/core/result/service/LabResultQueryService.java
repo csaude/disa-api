@@ -12,6 +12,7 @@ import org.springframework.security.access.prepost.PostFilter;
 import org.springframework.security.access.prepost.PreAuthorize;
 
 import mz.co.msaude.boot.frameworks.exception.BusinessException;
+import mz.org.fgh.disaapi.core.exception.NotFoundBusinessException;
 import mz.org.fgh.disaapi.core.result.model.LabResult;
 import mz.org.fgh.disaapi.core.result.model.LabResultStatus;
 import mz.org.fgh.disaapi.core.result.model.NotProcessingCause;
@@ -95,7 +96,13 @@ public interface LabResultQueryService {
 	@PostFilter("principal.orgUnitCodes.contains(filterObject.healthFacilityLabCode)")
 	List<LabResult> findViralLoadByRequestId(List<String> requestIds) throws BusinessException;
 
-	LabResult findById(Long id);
+	/**
+	 * @param id
+	 * @return A List containing a single result. For now a List is used instead of
+	 *         the actual LabResult so it is possible to use @PostFilter.
+	 */
+	@PostFilter("principal.orgUnitCodes.contains(filterObject.healthFacilityLabCode)")
+	List<LabResult> findById(Long id) throws NotFoundBusinessException;
 
 	@PreAuthorize("principal.orgUnitCodes.containsAll(#orgUnitCodes)")
 	List<LabResult> findByLocaationCodeAndStatus(List<String> orgUnitCodes, LabResultStatus labResultStatus)
