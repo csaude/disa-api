@@ -19,6 +19,8 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import mz.co.msaude.boot.frameworks.model.GenericEntity;
 import mz.org.fgh.disaapi.core.result.dao.LabResultDAO;
 
@@ -494,5 +496,23 @@ public abstract class LabResult extends GenericEntity {
 
 	public void setRegisteredDateTime(LocalDateTime registeredDateTime) {
 		this.registeredDateTime = registeredDateTime;
+	}
+
+	/**
+	 * @deprecated Added in 2.1.3 to support backward compatibility.
+	 */
+	@Deprecated
+	@JsonProperty("viralLoadStatus")
+	public LabResultStatus getViralLoadStatus() {
+		return getLabResultStatus();
+	}
+
+	/**
+	 * @deprecated Added in 2.1.3 to support backward compatibility.
+	 */
+	@Deprecated
+	@JsonProperty("viralLoadResultDate")
+	public LocalDateTime getViralLoadResultDate() {
+		return getLabResultDate();
 	}
 }

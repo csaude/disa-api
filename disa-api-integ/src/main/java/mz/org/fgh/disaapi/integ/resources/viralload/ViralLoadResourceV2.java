@@ -52,6 +52,7 @@ public class ViralLoadResourceV2 {
 			@QueryParam("nid") final String nid,
 			@QueryParam("healthFacilityLabCode") final List<String> healthFacilityLabCode,
 			@QueryParam("referringRequestID") final String referringRequestID,
+			@QueryParam("viralLoadStatus") final LabResultStatus viralLoadStatus,
 			@QueryParam("labResultStatus") final LabResultStatus labResultStatus,
 			@QueryParam("notProcessingCause") NotProcessingCause notProcessingCause,
 			@QueryParam("typeOfResult") TypeOfResult typeOfResult,
@@ -64,8 +65,10 @@ public class ViralLoadResourceV2 {
 			@QueryParam("direction") String direction)
 			throws BusinessException {
 
+		LabResultStatus status = labResultStatus != null ? labResultStatus : viralLoadStatus;
+
 		Page<LabResult> vls = this.viralLoadQueryService.findByForm(requestId, nid,
-				healthFacilityLabCode, referringRequestID, labResultStatus, notProcessingCause, typeOfResult,
+				healthFacilityLabCode, referringRequestID, status, notProcessingCause, typeOfResult,
 				startDate, endDate, search, pageNumber, pageSize, orderBy, direction);
 
 		return Response.ok(vls).build();
@@ -79,6 +82,7 @@ public class ViralLoadResourceV2 {
 			@QueryParam("nid") final String nid,
 			@QueryParam("healthFacilityLabCode") final List<String> healthFacilityLabCode,
 			@QueryParam("referringRequestID") final String referringRequestID,
+			@QueryParam("viralLoadStatus") final LabResultStatus viralLoadStatus,
 			@QueryParam("labResultStatus") final LabResultStatus labResultStatus,
 			@QueryParam("notProcessingCause") NotProcessingCause notProcessingCause,
 			@QueryParam("typeOfResult") TypeOfResult typeOfResult,
@@ -88,8 +92,10 @@ public class ViralLoadResourceV2 {
 			@QueryParam("direction") String direction)
 			throws BusinessException {
 
+		LabResultStatus status = labResultStatus != null ? labResultStatus : viralLoadStatus;
+
 		List<LabResult> vls = this.viralLoadQueryService.findAllByForm(requestId, nid,
-				healthFacilityLabCode, referringRequestID, labResultStatus, notProcessingCause, typeOfResult,
+				healthFacilityLabCode, referringRequestID, status, notProcessingCause, typeOfResult,
 				startDate, endDate);
 
 		return Response.ok(vls).build();
