@@ -1,7 +1,9 @@
 package mz.org.fgh.disaapi.core.ip;
 
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -29,6 +31,7 @@ public class ImplementingPartner implements UserDetails {
     private String orgName;
     private String password;
     private boolean enabled;
+    private String mailList;
 
     /**
      * Stores the HFs a partner is authorized to access.
@@ -107,4 +110,17 @@ public class ImplementingPartner implements UserDetails {
     public void setOrgUnits(Set<OrgUnit> orgUnits) {
         this.orgUnits = orgUnits;
     }
+
+    public String getMailList() {
+        return mailList;
+    }
+
+    public void setMailList(String mailList) {
+        this.mailList = mailList;
+    }
+
+    public List<String> getMailListItems() {
+        return Arrays.asList(mailList.split(","));
+    }
+
 }
