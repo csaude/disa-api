@@ -72,29 +72,8 @@ public interface LabResultQueryService {
 	List<LabResult> findAllByForm(LabResult example, List<String> orgUnitCodes, LocalDateTime startDate,
 			LocalDateTime endDate) throws BusinessException;
 
-	/**
-	 * @deprecated see
-	 *             {@link #findAllByForm(LabResult, List, LocalDateTime, LocalDateTime)}
-	 */
-	@Deprecated
-	@PreAuthorize("principal.orgUnitCodes.containsAll(#orgUnitCodes)")
-	List<LabResult> findAllByForm(
-			String requestId,
-			String nid,
-			List<String> orgUnitCodes,
-			String referringRequestID,
-			LabResultStatus labResultStatus,
-			NotProcessingCause notProcessingCause,
-			TypeOfResult typeOfResult,
-			LocalDateTime startDate,
-			LocalDateTime endDate) throws BusinessException;
-
 	@PostFilter("principal.orgUnitCodes.contains(filterObject.healthFacilityLabCode)")
 	List<LabResult> findViralLoadByNid(List<String> nids) throws BusinessException;
-
-	@Deprecated
-	@PostFilter("principal.orgUnitCodes.contains(filterObject.healthFacilityLabCode)")
-	List<LabResult> findViralLoadByRequestId(List<String> requestIds) throws BusinessException;
 
 	/**
 	 * @param id

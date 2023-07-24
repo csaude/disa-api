@@ -34,9 +34,6 @@ public interface LabResultRepository extends JpaRepository<LabResult, Long>, Jpa
 
     List<LabResult> findByNidInAndEntityStatus(List<String> nids, EntityStatus entityStatus);
 
-    @Deprecated
-    List<LabResult> findByRequestIdInAndEntityStatus(List<String> requestIds, EntityStatus entityStatus);
-
     @Query("SELECT vl FROM LabResult vl WHERE vl.healthFacilityLabCode IN (:locationCodes) and vl.labResultStatus = :labResultStatus AND vl.entityStatus = :entityStatus and vl.notProcessingCause = :notProcessingCause")
     List<LabResult> findByLocationCodeStatusAndNotProcessingCause(@Param("locationCodes") List<String> locationCodes,
             @Param("labResultStatus") LabResultStatus labResultStatus,
