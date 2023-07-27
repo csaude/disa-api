@@ -166,7 +166,6 @@ public class LabResultResource {
         } catch (NotFoundBusinessException e) {
             throw new NotFoundException("Viral load not found");
         }
-
     }
 
     private void updateViralLoad(LabResult viralLoad) {

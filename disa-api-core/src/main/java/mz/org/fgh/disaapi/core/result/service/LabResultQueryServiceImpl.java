@@ -38,10 +38,10 @@ import mz.org.fgh.disaapi.core.result.repository.LabResultRepository;
 public class LabResultQueryServiceImpl implements LabResultQueryService {
 
 	@Inject
-	private LabResultDAO labResultDAO;
+	private LabResultRepository labResultRepository;
 
 	@Inject
-	private LabResultRepository labResultRepository;
+	private LabResultDAO labResultDAO;
 
 	@Override
 	public List<LabResult> findPendingByLocationCodeAndProvince(List<String> orgUnitCodes,
@@ -50,7 +50,7 @@ public class LabResultQueryServiceImpl implements LabResultQueryService {
 
 		if (orgUnitCodes.isEmpty()) {
 
-			return new ArrayList<LabResult>();
+			return new ArrayList<>();
 		}
 		return labResultRepository.findByLocationCodeAndStatus(orgUnitCodes, LabResultStatus.PENDING,
 				EntityStatus.ACTIVE, requestingProvinceName);
@@ -61,23 +61,11 @@ public class LabResultQueryServiceImpl implements LabResultQueryService {
 
 		if (orgUnitCodes.isEmpty()) {
 
-			return new ArrayList<LabResult>();
+			return new ArrayList<>();
 		}
 		return labResultRepository.findByHealthFacilityLabCodeInAndLabResultStatusAndEntityStatus(orgUnitCodes,
 				LabResultStatus.PENDING,
 				EntityStatus.ACTIVE);
-	}
-
-	@Override
-	public Page<LabResult> findByForm(LabResult example, List<String> orgUnitCodes, LocalDateTime startDate,
-			LocalDateTime endDate, Pageable pageable) throws BusinessException {
-
-		if (orgUnitCodes.isEmpty()) {
-			throw new BusinessException("The HF code should be informed");
-		}
-
-		return labResultRepository.findAll(createdInLocationBetweenDates(example, orgUnitCodes, startDate, endDate),
-				pageable);
 	}
 
 	@Override
@@ -131,6 +119,18 @@ public class LabResultQueryServiceImpl implements LabResultQueryService {
 	}
 
 	@Override
+	public Page<LabResult> findByForm(LabResult example, List<String> orgUnitCodes, LocalDateTime startDate,
+			LocalDateTime endDate, Pageable pageable) throws BusinessException {
+
+		if (orgUnitCodes.isEmpty()) {
+			throw new BusinessException("The HF code should be informed");
+		}
+
+		return labResultRepository.findAll(createdInLocationBetweenDates(example, orgUnitCodes, startDate, endDate),
+				pageable);
+	}
+
+	@Override
 	public List<LabResult> findAllByForm(LabResult example, List<String> orgUnitCodes,
 			LocalDateTime startDate, LocalDateTime endDate) throws BusinessException {
 
@@ -143,47 +143,13 @@ public class LabResultQueryServiceImpl implements LabResultQueryService {
 	}
 
 	@Override
-	public List<LabResult> findAllByForm(String requestId, String nid, List<String> orgUnitCodes,
-			String referringRequestID, LabResultStatus labResultStatus, NotProcessingCause notProcessingCause,
-			TypeOfResult typeOfResult,
-			LocalDateTime startDate, LocalDateTime endDate) throws BusinessException {
-
-		if (orgUnitCodes.isEmpty()) {
-			throw new BusinessException("The HF code should be informed");
-		}
-
-		return this.labResultDAO.findAllByForm(
-				requestId,
-				nid,
-				orgUnitCodes,
-				referringRequestID,
-				labResultStatus,
-				notProcessingCause,
-				typeOfResult,
-				startDate,
-				endDate,
-				DEFAULT_ORDER_BY,
-				DEFAULT_DIRECTION,
-				EntityStatus.ACTIVE);
-	}
-
-	@Override
 	public List<LabResult> findViralLoadByNid(List<String> nids) throws BusinessException {
 
 		if (nids.isEmpty()) {
 
-			return new ArrayList<LabResult>();
+			return new ArrayList<>();
 		}
 		return labResultRepository.findByNidInAndEntityStatus(nids, EntityStatus.ACTIVE);
-	}
-
-	@Override
-	public List<LabResult> findViralLoadByRequestId(List<String> requestIds) throws BusinessException {
-		if (requestIds.isEmpty()) {
-
-			return new ArrayList<LabResult>();
-		}
-		return labResultRepository.findByRequestIdInAndEntityStatus(requestIds, EntityStatus.ACTIVE);
 	}
 
 	@Override
@@ -200,7 +166,7 @@ public class LabResultQueryServiceImpl implements LabResultQueryService {
 			throws BusinessException {
 
 		if (orgUnitCodes.isEmpty()) {
-			return new ArrayList<LabResult>();
+			return new ArrayList<>();
 		}
 		return labResultRepository.findByHealthFacilityLabCodeInAndLabResultStatusAndEntityStatus(orgUnitCodes,
 				labResultStatus, EntityStatus.ACTIVE);
@@ -212,7 +178,7 @@ public class LabResultQueryServiceImpl implements LabResultQueryService {
 			LocalDateTime startDate, LocalDateTime endDate) throws BusinessException {
 
 		if (orgUnitCodes.isEmpty()) {
-			return new ArrayList<LabResult>();
+			return new ArrayList<>();
 		}
 		return labResultRepository.findByStatusAndDates(orgUnitCodes, labResultStatus, EntityStatus.ACTIVE, startDate,
 				endDate);

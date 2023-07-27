@@ -1,6 +1,5 @@
 package mz.org.fgh.disaapi.integ.resources.orgunit;
 
-import javax.inject.Inject;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
@@ -11,14 +10,15 @@ import javax.ws.rs.core.Response;
 
 import org.springframework.stereotype.Service;
 
-import mz.org.fgh.disaapi.core.orgunit.service.OrgUnitService;
-
-@Path("/orgunits")
+/**
+ * @deprecated Added to support old clients that use v2 versining in the URI
+ *             since
+ *             we are moving away from this pattern.
+ */
+@Deprecated
+@Path("/v2/orgunits")
 @Service
-public class OrgUnitResource {
-
-    @Inject
-    protected OrgUnitService orgUnitService;
+public class OrgUnitResourceV2 extends OrgUnitResource {
 
     @GET
     @Path("/search")

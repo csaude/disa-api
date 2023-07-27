@@ -111,19 +111,6 @@ public class LabResultQueryServiceTest extends AbstractIntegServiceTest {
 	}
 
 	@Test
-	public void findAllByFormShouldReturnResultsByExampleVlLocationCodeAndBetweenDates() throws BusinessException {
-
-		LocalDate today = LocalDate.now();
-		LocalDateTime startDate = today.atStartOfDay();
-		LocalDateTime endDate = today.atTime(LocalTime.MAX);
-		LabResult example = new HIVVLLabResult();
-		example.active();
-		List<LabResult> findAllByForm = this.labResultQueryService.findAllByForm(example,
-				Arrays.asList(OrgUnitTemplate.ZAMBEZIA_SISMA_CODES), startDate, endDate);
-		assertThat(findAllByForm).hasSize(13);
-	}
-
-	@Test
 	public void findViralLoadByNidShouldReturnResultsWithGivensNids() throws BusinessException {
 
 		List<String> nids = viralLoads.stream()
@@ -132,17 +119,6 @@ public class LabResultQueryServiceTest extends AbstractIntegServiceTest {
 				.collect(Collectors.toList());
 		List<LabResult> findAllByForm = this.labResultQueryService.findViralLoadByNid(nids);
 		assertThat(findAllByForm).hasSize(3);
-	}
-
-	@Test
-	public void findViralLoadByRequestIdShouldReturnResultsWithGivenRequestIds() throws BusinessException {
-
-		List<String> requestIds = viralLoads.stream()
-				.limit(2)
-				.map(vl -> vl.getRequestId())
-				.collect(Collectors.toList());
-		List<LabResult> findAllByForm = this.labResultQueryService.findViralLoadByRequestId(requestIds);
-		assertThat(findAllByForm).hasSize(2);
 	}
 
 	@Test

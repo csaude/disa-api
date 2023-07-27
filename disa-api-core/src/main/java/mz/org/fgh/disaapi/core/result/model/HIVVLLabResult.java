@@ -4,8 +4,6 @@ import javax.persistence.Column;
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-
 @Entity(name = "HIVVLLabResult")
 @DiscriminatorValue("HIVVL")
 public class HIVVLLabResult extends LabResult {
@@ -64,14 +62,4 @@ public class HIVVLLabResult extends LabResult {
     public void setViralLoadResultLog(String viralLoadResultLog) {
         this.viralLoadResultLog = viralLoadResultLog;
     }
-
-    /**
-     * @deprecated Added in 2.1.3 to support backward compatibility.
-     */
-    @Deprecated
-    @JsonProperty("finalViralLoadResult")
-    public String getFinalViralLoadResult() {
-        return getFinalResult();
-    }
-
 }

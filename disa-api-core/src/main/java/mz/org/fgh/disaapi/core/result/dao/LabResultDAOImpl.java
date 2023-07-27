@@ -6,7 +6,6 @@ package mz.org.fgh.disaapi.core.result.dao;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -21,9 +20,6 @@ import org.springframework.util.StringUtils;
 
 import mz.co.msaude.boot.frameworks.exception.BusinessException;
 import mz.co.msaude.boot.frameworks.model.EntityStatus;
-import mz.co.msaude.boot.frameworks.model.UserContext;
-import mz.co.msaude.boot.frameworks.util.ParamBuilder;
-import mz.co.msaude.boot.frameworks.util.UuidFactory;
 import mz.org.fgh.disaapi.core.result.model.LabResult;
 import mz.org.fgh.disaapi.core.result.model.LabResultStatus;
 import mz.org.fgh.disaapi.core.result.model.NotProcessingCause;
@@ -42,25 +38,6 @@ public class LabResultDAOImpl implements LabResultDAO {
 
 	@PersistenceContext
 	private EntityManager entityManager;
-
-	@Override
-	public List<LabResult> findByLocationCodeAndStatus(List<String> locationCodes, LabResultStatus labResultStatus,
-			EntityStatus entityStatus, String requestingProvinceName) throws BusinessException {
-
-		return this.findByNamedQuery(LabResultDAO.QUERY_NAME.findByLocationCodeAndStatus,
-				new ParamBuilder().add("labResultStatus", labResultStatus).add("entityStatus", entityStatus)
-						.add("locationCodes", locationCodes).add("requestingProvinceName", requestingProvinceName)
-						.process());
-	}
-
-	@Override
-	public List<LabResult> findByLocationCodeAndStatus(List<String> locationCodes, LabResultStatus labResultStatus,
-			EntityStatus entityStatus) throws BusinessException {
-
-		return this.findByNamedQuery(LabResultDAO.QUERY_NAME.findByLocationCodeAndStatusSimple,
-				new ParamBuilder().add("labResultStatus", labResultStatus).add("entityStatus", entityStatus)
-						.add("locationCodes", locationCodes).process());
-	}
 
 	@Override
 	public Page<LabResult> findByForm(
@@ -115,119 +92,6 @@ public class LabResultDAOImpl implements LabResultDAO {
 		q.setMaxResults(pageSize);
 
 		return new Page<>(pageNumber, pageSize, count.longValue(), q.getResultList());
-	}
-
-	@Override
-	public List<LabResult> findAllByForm(
-			String requestId,
-			String nid,
-			List<String> healthFacilityLabCode,
-			String referringRequestID,
-			LabResultStatus labResultStatus,
-			NotProcessingCause notProcessingCause,
-			TypeOfResult typeOfResult,
-			LocalDateTime startDate,
-			LocalDateTime endDate,
-			String orderBy,
-			String direction,
-			EntityStatus entityStatus) throws BusinessException {
-
-		CriteriaBuilder cb = entityManager.getCriteriaBuilder();
-		CriteriaQuery<LabResult> criteriaQuery = cb.createQuery(LabResult.class);
-		Root<LabResult> vl = criteriaQuery.from(LabResult.class);
-
-		// Build query predicates
-		Predicate restrictions = getSearchQueryRestrictions(
-				requestId, nid, healthFacilityLabCode, referringRequestID,
-				labResultStatus, notProcessingCause, typeOfResult, startDate, endDate, null,
-				entityStatus, cb, vl);
-
-		criteriaQuery.select(vl);
-		criteriaQuery.where(restrictions);
-
-		setSearchQueryOrder(orderBy, direction, cb, criteriaQuery, vl);
-
-		TypedQuery<LabResult> q = entityManager.createQuery(criteriaQuery);
-
-		return q.getResultList();
-	}
-
-	@Override
-	public List<LabResult> findViralLoadByNid(List<String> nids, EntityStatus entityStatus) throws BusinessException {
-		return this.findByNamedQuery(LabResultDAO.QUERY_NAME.findByNid,
-				new ParamBuilder().add("nids", nids).add("entityStatus", entityStatus).process());
-	}
-
-	@Override
-	public List<LabResult> findViralLoadByRequestId(List<String> requestIds, EntityStatus entityStatus)
-			throws BusinessException {
-		return this.findByNamedQuery(LabResultDAO.QUERY_NAME.findByRequestId,
-				new ParamBuilder().add("requestIds", requestIds).add("entityStatus", entityStatus).process());
-	}
-
-	@Override
-	public List<LabResult> findByStatus(List<String> locationCodes, LabResultStatus labResultStatus,
-			EntityStatus entityStatus) throws BusinessException {
-		return this.findByNamedQuery(LabResultDAO.QUERY_NAME.findByLocationCodeAndStatus,
-				new ParamBuilder().add("labResultStatus", labResultStatus).add("entityStatus", entityStatus)
-						.add("locationCodes", locationCodes).process());
-	}
-
-	@Override
-	public List<LabResult> findByStatusAndDates(List<String> locationCodes, LabResultStatus labResultStatus,
-			EntityStatus entityStatus, LocalDateTime startDate, LocalDateTime endDate) throws BusinessException {
-		return this.findByNamedQuery(LabResultDAO.QUERY_NAME.findByStatusAndDates,
-				new ParamBuilder().add("labResultStatus", labResultStatus).add("entityStatus", entityStatus)
-						.add("locationCodes", locationCodes).add("startDate", startDate).add("endDate", endDate)
-						.process());
-	}
-
-	@Override
-	public List<LabResult> findByLocationCodeStatusAndNotProcessingCause(List<String> locationCodes,
-			LabResultStatus labResultStatus, EntityStatus entityStatus, NotProcessingCause notProcessingCause)
-			throws BusinessException {
-
-		return this.findByNamedQuery(LabResultDAO.QUERY_NAME.findByLocationCodeStatusAndNotProcessingCause,
-				new ParamBuilder().add("labResultStatus", labResultStatus).add("entityStatus", entityStatus)
-						.add("locationCodes", locationCodes).add("notProcessingCause", notProcessingCause)
-						.process());
-	}
-
-	private List<LabResult> findByNamedQuery(final String queryName, final Map<String, ? extends Object> params)
-			throws BusinessException {
-
-		final TypedQuery<LabResult> query = this.entityManager.createNamedQuery(queryName, LabResult.class);
-
-		for (final Map.Entry<String, ? extends Object> param : params.entrySet()) {
-			query.setParameter(param.getKey(), param.getValue());
-		}
-
-		return query.getResultList();
-	}
-
-	@Override
-	public LabResult create(final UserContext context, final LabResult entity) throws BusinessException {
-		entity.setCreatedBy(context.getUuid());
-		entity.setCreatedAt(LocalDateTime.now());
-		entity.active();
-
-		if (entity.getUuid() == null) {
-			entity.setUuid(UuidFactory.generate());
-		}
-
-		this.entityManager.persist(entity);
-
-		return entity;
-	}
-
-	@Override
-	public LabResult update(final UserContext context, final LabResult entity) throws BusinessException {
-		entity.setUpdatedBy(context.getUuid());
-		entity.setUpdatedAt(LocalDateTime.now());
-
-		this.entityManager.merge(entity);
-
-		return entity;
 	}
 
 	private Predicate getSearchQueryRestrictions(
@@ -301,4 +165,5 @@ public class LabResultDAOImpl implements LabResultDAO {
 			criteriaQuery.orderBy(cb.desc(vl.get(orderBy)));
 		}
 	}
+
 }
