@@ -31,3 +31,4 @@ disa-api-integ/.mvn/*
 .settings/
 
 passwd
+.java-version
