@@ -13,6 +13,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.NamedAttributeNode;
+import javax.persistence.NamedEntityGraph;
 import javax.persistence.OneToMany;
 
 import org.springframework.security.core.GrantedAuthority;
@@ -22,6 +24,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import mz.org.fgh.disaapi.core.orgunit.model.OrgUnit;
 
 @Entity
+@NamedEntityGraph(name = "graph.ImplementingPartner.orgUnits", attributeNodes = @NamedAttributeNode(value = "orgUnits"))
 public class ImplementingPartner implements UserDetails {
 
     @Id
