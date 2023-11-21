@@ -138,8 +138,7 @@ public class LabResultQueryServiceImpl implements LabResultQueryService {
 			throw new BusinessException("The HF code should be informed");
 		}
 
-		return labResultRepository.findAll(createdInLocationBetweenDates(example, orgUnitCodes, startDate, endDate),
-				Sort.by(Direction.DESC, "createdAt"));
+		return labResultRepository.findAll(createdInLocationBetweenDates(example, orgUnitCodes, startDate, endDate));
 	}
 
 	@Override

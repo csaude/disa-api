@@ -1,0 +1,1 @@
+CREATE INDEX vl_data_viral_load_status ON VlData (VIRAL_LOAD_STATUS);

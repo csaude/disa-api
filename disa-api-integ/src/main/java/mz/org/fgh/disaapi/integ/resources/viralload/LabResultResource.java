@@ -49,7 +49,7 @@ public class LabResultResource {
     @GET
     @Path("/search")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response findViralLoadsByForm(
+    public Response findLabResultsByForm(
             @QueryParam("requestId") final String requestId,
             @QueryParam("nid") final String nid,
             @QueryParam("healthFacilityLabCode") final List<String> healthFacilityLabCode,
@@ -100,7 +100,7 @@ public class LabResultResource {
     @GET
     @Path("/export")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response exportViralLoads(
+    public Response exportLabResults(
             @QueryParam("requestId") final String requestId,
             @QueryParam("nid") final String nid,
             @QueryParam("healthFacilityLabCode") final List<String> healthFacilityLabCode,
