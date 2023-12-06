@@ -1,0 +1,327 @@
+orgName,province,district,facility,code
+ariel,Cabo Delgado,Pemba,Hospital Provincial de Pemba HP,1020100
+ariel,Cabo Delgado,Pemba,B. Cariacó CS III,1020106
+ariel,Cabo Delgado,Pemba,B. Ingonane CS III,1020107
+ariel,Cabo Delgado,Pemba,Natite PS,1020108
+ariel,Cabo Delgado,Pemba,B. Cimento CSURB,1020109
+ariel,Cabo Delgado,Pemba,Mahate PS,1020111
+ariel,Cabo Delgado,Pemba,B. Muxara PS,1020112
+ariel,Cabo Delgado,Mecufi,Mecufi CS II,1020706
+ariel,Cabo Delgado,Metuge,Metuge CS II,1021601
+ariel,Cabo Delgado,Metuge,Mieze CS III,1021609
+ariel,Maputo,Matola,Machava HG,1100100
+ariel,Maputo,Matola,Matola II CS III,1100106
+ariel,Maputo,Matola,Machava II CS III,1100107
+ariel,Maputo,Matola,Matola Gare PS,1100108
+ariel,Maputo,Matola,Ndlavela PSA,1100109
+ariel,Maputo,Matola,Matola I CSURB,1100110
+ariel,Maputo,Matola,São Damanso CS II,1100111
+ariel,Maputo,Matola,Komgolote PSA,1100117
+ariel,Maputo Provincia,Matola,CS Matola C,1100127
+ariel,Maputo,Matola,Tsalala CS,1100167
+ariel,Maputo,Boane,Boane CS I,1100206
+ariel,Maputo,Boane,Campuane PS,1100207
+ariel,Maputo,Boane,Beleluane PS,1100210
+ariel,Maputo,Magude,Magude CS I,1100306
+ariel,Maputo,Manhiça,Manhiça CS I,1100402
+ariel,Maputo,Manhiça,Maragra CS III,1100406
+ariel,Maputo Provincia,Manhica,HD Manhica,1100407
+ariel,Maputo,Manhiça,Whamatibjana (Palmeira) CS III,1100413
+ariel,Maputo,Manhiça,Xinavane HR,1100419
+ariel,Maputo,Marracuene,Nhongonhane (Ed.Mondl.) PSA,1100510
+ariel,Maputo Provincia,Marracuene,CS Habel Jafar,1100515
+ariel,Maputo,Matutuine,Ponta de Ouro PS,1100611
+ariel,Maputo,Moamba,Moamba CS I,1100706
+ariel,Maputo,Moamba,Ressano Garcia CS II,1100707
+ariel,Maputo,Moamba,Sabié PS,1100709
+ariel,Maputo,Moamba,Tenga PS,1100710
+ariel,Maputo,Namaacha,Namaacha CS I,1100806
+ariel,Maputo,Namaacha,Mafuiane PS,1100811
+ccs,Cidade De Maputo,Kampfumu,Alto-Maé CSURB,1110106
+ccs,Cidade De Maputo,Kampfumu,Maxaquene CSURB,1110107
+ccs,Cidade De Maputo,Kampfumu,Malhangalene CS,1110109
+ccs,Cidade De Maputo,Kampfumu,Porto CSURB,1110111
+ccs,Cidade De Maputo,Nlhamankulu,Centro de Saude do Chamanculo,1110214
+ccs,Cidade De Maputo,Kamaxakeni,1º de Maio PS,1110307
+ccs,Cidade De Maputo,Kamaxakeni,Polana Caniço CS II,1110317
+ccs,Maputo Cidade,Kamaxakeni,HG Polana Canico,1110318
+ccs,Cidade De Maputo,Kamavota,Romão PSA,1110412
+ccs,Cidade De Maputo,Kamavota,Mavalane CS,1110422
+ccs,Cidade De Maputo,Kamubukwana,Bagamoio CS III,1110507
+ccs,Cidade De Maputo,Kamubukwana,Magoanine PS,1110514
+ccs,Cidade De Maputo,Katembe,Catembe CS II,1110609
+echo,Niassa,Lichinga,Lichinga HP,1010100
+echo,Niassa,Lichinga,CS Lichinga,1010106
+echo,Niassa,Lichinga,Chiuaula PS,1010108
+echo,Niassa,Cuamba,Cuamba HR,1010201
+echo,Niassa,Cuamba,Adine 3 CS,1010202
+echo,Niassa,Cuamba,Mitucué CS,1010209
+echo,Niassa,Cuamba,Cuamba CS,1010216
+echo,Niassa,Cuamba,Meripo CS,1010225
+echo,Niassa,Mandimba,Mandimba CS,1010606
+echo,Niassa,Mecanhelas,Chissaua CS,1011007
+echo,Niassa,Mecanhelas,Entre-Lagos CS,1011009
+echo,Niassa,Mecanhelas,Mecanhelas CS,1011011
+echo,Niassa,Metarica,Metarica CS,1011209
+echo,Tete,Changara,Changara CS ,1050406
+echo,Tete,Changara,Dzunga CS,1050409
+echo,Tete,Changara,Mazoe Ponte CS,1050411
+echo,Tete,Changara,M'Saua  CS,1050415
+echo,Tete,Moatize,Ncondezi CS,1051003
+echo,Tete,Moatize,Zobue CS ,1051006
+echo,Tete,Moatize,Mameme II CS ,1051007
+echo,Tete,Moatize,Moatize CS ,1051008
+echo,Tete,Moatize,Caphirizange PS,1051011
+echo,Tete,Moatize,CFM CS,1051013
+echo,Tete,Moatize,Cateme CS,1051017
+echo,Tete,Moatize,25 de Setembro CS,1051018
+echo,Manica,Chimoio,Eduardo Mondlane CS,1060106
+echo,Manica,Chimoio,7 de Abril CS,1060110
+echo,Manica,Chimoio,Vila Nova CS,1060112
+echo,Manica,Gondola,Gondola Sede CS,1060300
+echo,Manica,Gondola,Amatongas CS,1060307
+echo,Manica,Gondola,Inchope CS,1060309
+echo,Manica,Gondola,Muda Serração CS,1060313
+echo,Manica,Machaze,Bassane CS,1060506
+echo,Manica,Machaze,Chipopopo CS,1060507
+echo,Manica,Machaze,Chipudji CS,1060508
+echo,Manica,Machaze,Chitobe CS,1060509
+echo,Manica,Machaze,Mazwissanga CS,1060510
+echo,Manica,Machaze,Save CS,1060511
+echo,Manica,Machaze,Mavende CS,1060596
+echo,Manica,Manica,Manica HD,1060706
+echo,Manica,Manica,Machipanda CS,1060712
+echo,Manica,Manica,Messica CS,1060714
+echo,Manica,Manica,4º Congresso CS,1060798
+echo,Manica,Sussundenga,Sussundenga CS,1060906
+echo,Manica,Sussundenga,Munhinga CS,1060908
+echo,Manica,Sussundenga,Dombe CS,1060911
+echo,Manica,Sussundenga,Sembezea CS,1060913
+echo,Manica,Sussundenga,Darue CS,1060995
+echo,Sofala,Beira,Manga Loforte,1070104
+echo,Sofala,Beira,Munhava CS,1070106
+echo,Sofala,Beira,Manga Nhaconjo PS,1070107
+echo,Sofala,Beira,Ponta Gêa PS,1070109
+echo,Sofala,Beira,Macurungo PSA,1070113
+echo,Sofala,Caia,Caia HD,1070306
+echo,Sofala,Caia,Murraça CS,1070308
+echo,Sofala,Caia,Sena  CS,1070312
+echo,Sofala,Caia,Nhambalo CS,1070315
+echo,Sofala,Dondo,Dondo Sede CS I,1070706
+echo,Sofala,Dondo,Savane PS,1070711
+echo,Sofala,Dondo,Maxarote PS,1070714
+echo,Sofala,Dondo,Igreja Baptista CS,1070719
+echo,Sofala,Dondo,Samora Machel PS,1070777
+echo,Sofala,Marromeu,Marromeu HR,1071100
+echo,Sofala,Nhamatanda,Nhamatanda HR ,1071301
+echo,Sofala,Nhamatanda,Metuchira Lomaco CS,1071307
+echo,Sofala,Nhamatanda,Lamego CS,1071308
+echo,Sofala,Nhamatanda,Nharuchonga PS,1071312
+echo,Sofala,Nhamatanda,Siluvo PS,1071313
+echo,Sofala,Nhamatanda,Tica PS,1071318
+echo,Sofala,Nhamatanda,Chirassicua CS,1071321
+egpaf,Inhambane,Massinga,Rio Das Pedras PS,1080913
+egpaf,Gaza,Xai-Xai,Ngoabi CS,1090106
+egpaf,Gaza,Xai-Xai,Patrice Lumumba CS,1090108
+egpaf,Gaza,Limpopo,Licilo PS,1090211
+egpaf,Gaza,Bilene,Mazivila PS,1090212
+egpaf,Gaza,Bilene,Messano PS,1090213
+egpaf,Gaza,Bilene,Olombe PS,1090214
+egpaf,Gaza,Chibuto,Célula Missavene CS II,1090304
+egpaf,Gaza,Chibuto,Coca Mussava CS II,1090305
+egpaf,Gaza,Chibuto,Chaimite PS,1090312
+egpaf,Gaza,Chibuto,Mocotuene CS II,1090315
+egpaf,Gaza,Chibuto,Meboi CS,1090318
+egpaf,Gaza,Chokwe,Manjangue CS II,1090601
+egpaf,Gaza,Chokwe,Chilembene PS,1090619
+egpaf,Gaza,Chokwe,Lionde PS,1090620
+egpaf,Gaza,Guija,Javanhane CS,1090708
+egpaf,Gaza,Guija,Chinhacanine PS,1090710
+egpaf,Gaza,Guija,Chivonguene PSA,1090711
+egpaf,Gaza,Guija,Mubanguene PSA,1090713
+egpaf,Gaza,Guija,Chibabel Novo CS II,1090715
+egpaf,Gaza,Chonguene,CS Mangunze,1090914
+egpaf,Gaza,Limpopo,Chipenhe PS,1091208
+egpaf,Gaza,Chonguene,Inhacutse PS,1091210
+egpaf,Gaza,Chonguene,Siaia PS,1091213
+egpaf,Gaza,Limpopo,Vladimir Lénine PS,1091215
+egpaf,Gaza,Chonguene,Bungane PSA,1091217
+egpaf,Gaza,Chonguene,PS Ndambine 2000,1091222
+fgh,Zambezia,Quelimane,Hospital Provincial de Quelimane HP,1040100
+fgh,Zambezia,Quelimane,17 de Setembro CSURB,1040106
+fgh,Zambezia,Quelimane,24 de Julho CSURB,1040107
+fgh,Zambezia,Quelimane,Coalane CSURB,1040108
+fgh,Zambezia,Quelimane,4 de Dezembro CSURB,1040109
+fgh,Zambezia,Quelimane,Namuinho CS III,1040111
+fgh,Zambezia,Quelimane,Sangarivera PS,1040112
+fgh,Zambezia,Quelimane,Chabeco CSURB,1040114
+fgh,Zambezia,Quelimane,Centro de Saude de Micajune,1040116
+fgh,Zambezia,Quelimane,Centro de Saude de Icidua,1040117
+fgh,Zambezia,Quelimane,Zalala CS,1040118
+fgh,Zambezia,Quelimane,Malanha CS,1040119
+fgh,Zambezia,Quelimane,Ionge CS,1040120
+fgh,Zambezia,Quelimane,Madal CS,1040121
+fgh,Zambezia,Quelimane,Maquival Sede CS III,1040122
+fgh,Zambezia,Quelimane,Maquival Rio CS III,1040123
+fgh,Zambezia,Quelimane,Varela CS III,1040124
+fgh,Zambezia,Quelimane,Inhangulue CS III,1040125
+fgh,Zambezia,Alto Molocue,Hospital Rural de Alto Molocue HR,1040200
+fgh,Zambezia,Alto Molocue,CS Alto Molocue,1040206
+fgh,Zambezia,Alto Molocue,Nauela CS III,1040213
+fgh,Zambezia,Alto Molocue,Bonifacio Gruveta CS,1040299
+fgh,Zambezia,Gile,Alto Ligonha PS -,1040406
+fgh,Zambezia,Gile,Gilé CS II -,1040407
+fgh,Zambezia,Gile,Moneia PS,1040408
+fgh,Zambezia,Gile,Muiane CS III -,1040409
+fgh,Zambezia,Gile,Uapé PS,1040410
+fgh,Zambezia,Gile,Caiane CS II,1040439
+fgh,Zambezia,Gile,Mamala CS,1040455
+fgh,Zambezia,Gurue,HD Gurue,1040500
+fgh,Zambezia,Gurue,Centro de Saude de Gurue,1040506
+fgh,Zambezia,Gurue,Lioma CS III,1040507
+fgh,Zambezia,Ile,Ile CS I,1040601
+fgh,Zambezia,Ile,Mugulama CS III,1040608
+fgh,Zambezia,Ile,Socone CS III,1040613
+fgh,Zambezia,Ile,Namanda CS,1040661
+fgh,Zambezia,Inhassunge,Cherimane CS III,1040706
+fgh,Zambezia,Inhassunge,Gonhane CS III,1040707
+fgh,Zambezia,Inhassunge,Inhassunge CS I,1040708
+fgh,Zambezia,Inhassunge,Olinda CS II,1040710
+fgh,Zambezia,Inhassunge,Bingagira PS,1040711
+fgh,Zambezia,Inhassunge,Centro de Saude de Palane-Mucula,1040713
+fgh,Zambezia,Lugela,Lugela CS II,1040806
+fgh,Zambezia,Lugela,Munhamade CS III,1040807
+fgh,Zambezia,Lugela,Namagoa CS III,1040808
+fgh,Zambezia,Lugela,Putine PS,1040814
+fgh,Zambezia,Lugela,Mulide CS II,1040836
+fgh,Zambezia,Maganja Da Costa,Cabuir CS II,1040902
+fgh,Zambezia,Maganja Da Costa,Maganja da Costa CS I,1040906
+fgh,Zambezia,Maganja Da Costa,Mabala CS,1040908
+fgh,Zambezia,Maganja Da Costa,Moloua CS,1040909
+fgh,Zambezia,Maganja Da Costa,Nante CS III,1040911
+fgh,Zambezia,Maganja Da Costa,Cariua CS,1040913
+fgh,Zambezia,Maganja Da Costa,Vila Valdez PS,1040915
+fgh,Zambezia,Maganja Da Costa,Alto Mutola PSA,1040916
+fgh,Zambezia,Maganja Da Costa,Namurrumo CS,1040917
+fgh,Zambezia,Maganja Da Costa,Mapira CS II,1040936
+fgh,Zambezia,Maganja Da Costa,Moneia CS,1040937
+fgh,Zambezia,Maganja Da Costa,Muzo CS II,1040961
+fgh,Zambezia,Milange,Milange HR,1041000
+fgh,Zambezia,Milange,Muanhambo CS II,1041004
+fgh,Zambezia,Milange,Milange CSURB,1041006
+fgh,Zambezia,Milange,Carico PS,1041007
+fgh,Zambezia,Milange,Majaua PS,1041010
+fgh,Zambezia,Milange,Dulanha CS,1041011
+fgh,Zambezia,Milange,Tengua PS,1041012
+fgh,Zambezia,Milange,Vulalo PS,1041013
+fgh,Zambezia,Milange,Liciro PS,1041014
+fgh,Zambezia,Milange,Mongue PS,1041015
+fgh,Zambezia,Milange,Dachudua PSA,1041016
+fgh,Zambezia,Milange,CS Nambuzi,1041017
+fgh,Zambezia,Milange,Gurgunha CS II,1041018
+fgh,Zambezia,Milange,Chitambo CS III,1041020
+fgh,Zambezia,Milange,Sabelua CS II,1041067
+fgh,Zambezia,Mocuba,Mocuba HR,1041100
+fgh,Zambezia,Mocuba,Mocuba CSURB,1041106
+fgh,Zambezia,Mocuba,Mocuba Sisal PS,1041107
+fgh,Zambezia,Mocuba,Mugeba CS III,1041108
+fgh,Zambezia,Mocuba,Muaquiua PS,1041109
+fgh,Zambezia,Mocuba,Caiave PSA,1041110
+fgh,Zambezia,Mocuba,Padre Usera (Privado) CSURB,1041111
+fgh,Zambezia,Mocuba,Muloe CS,1041112
+fgh,Zambezia,Mocuba,Intome PS,1041113
+fgh,Zambezia,Mocuba,Alto Benfica PS,1041114
+fgh,Zambezia,Mocuba,Namanjavira CS III,1041116
+fgh,Zambezia,Mocuba,Munhiba PS,1041117
+fgh,Zambezia,Mocuba,Centro de Saude de Nhaluanda,1041118
+fgh,Zambezia,Mocuba,Magogodo CS,1041119
+fgh,Zambezia,Mocuba,Samora Machel CS,1041120
+fgh,Zambezia,Mocuba,Pedreira CS II,1041121
+fgh,Zambezia,Mocuba,Mataia CS,1041122
+fgh,Zambezia,Mocuba,Muanaco CS I,1041136
+fgh,Zambezia,Mocuba,16 de Junho CS I,1041137
+fgh,Zambezia,Mocuba,Chimbua CS II,1041155
+fgh,Zambezia,Mocuba,Namabida CS II,1041156
+fgh,Zambezia,Mocuba,Namagoa CS II,1041158
+fgh,Zambezia,Mopeia,Chimuara PS,1041206
+fgh,Zambezia,Mopeia,Lua-Lua PS,1041208
+fgh,Zambezia,Mopeia,Mopeia CS I,1041209
+fgh,Zambezia,Morrumbala,CS Morrumbala,1041306
+fgh,Zambezia,Morrumbala,Cumbapo CS,1041308
+fgh,Zambezia,Morrumbala,Megaza CS III,1041311
+fgh,Zambezia,Morrumbala,Mepinha CS III,1041312
+fgh,Zambezia,Morrumbala,Pinda CS III,1041313
+fgh,Zambezia,Morrumbala,Morrumbala CS I,1041336
+fgh,Zambezia,Namacurra,Namacurra CS I,1041406
+fgh,Zambezia,Namacurra,Furquia PS,1041407
+fgh,Zambezia,Namacurra,Macuse CS I,1041408
+fgh,Zambezia,Namacurra,Malei PS,1041409
+fgh,Zambezia,Namacurra,Mixixine CS III,1041410
+fgh,Zambezia,Namacurra,M'Baua CS III,1041414
+fgh,Zambezia,Namacurra,Muebele PS,1041415
+fgh,Zambezia,Namacurra,Mutange CS,1041416
+fgh,Zambezia,Namacurra,Muceliua CS UC,1041417
+fgh,Zambezia,Namacurra,Centro de Saude de Mugubia,1041418
+fgh,Zambezia,Nicoadala,Ilalane CS III,1041606
+fgh,Zambezia,Nicoadala,Licuare CS III,1041609
+fgh,Zambezia,Nicoadala,Marrongane PS,1041612
+fgh,Zambezia,Nicoadala,Namacata CS III,1041613
+fgh,Zambezia,Nicoadala,Nicoadala CS II,1041614
+fgh,Zambezia,Nicoadala,Posto de Saude de Quinta Girassol,1041617
+fgh,Zambezia,Nicoadala,Amoro Health Center,1041618
+fgh,Zambezia,Nicoadala,Domela CS II,1041620
+fgh,Zambezia,Pebane,Pebane CS II,1041706
+fgh,Zambezia,Pebane,Magiga PSA,1041708
+fgh,Zambezia,Pebane,Malema CS III,1041709
+fgh,Zambezia,Pebane,Mulela CS III,1041711
+fgh,Zambezia,Pebane,Muligode CS III,1041712
+fgh,Zambezia,Pebane,Naburi CS III,1041713
+fgh,Zambezia,Pebane,7 de Abril CS III,1041715
+fgh,Zambezia,Pebane,Impaca CS III,1041716
+fgh,Zambezia,Pebane,Tomeia PSA,1041717
+fgh,Zambezia,Pebane,Alto Maganha CS,1041737
+fgh,Zambezia,Pebane,Centro de Saude de Pele-Pele,1041757
+fgh,Zambezia,Derre,Derre CS III,1041803
+fgh,Zambezia,Luabo,CS Luabo,1041902
+fgh,Zambezia,Mocubela,Gurai PSA,1042003
+fgh,Zambezia,Mocubela,Ilha de Idugo,1042004
+fgh,Zambezia,Mocubela,Maneia CS II,1042005
+fgh,Zambezia,Mocubela,Mocubela CS III,1042006
+fgh,Zambezia,Mocubela,Nahico CS,1042007
+fgh,Zambezia,Mocubela,Bajone CS,1042008
+fgh,Zambezia,Mocubela,Missal CS II,1042009
+fgh,Zambezia,Mocubela,Tapata CS III,1042010
+fgh,Zambezia,Molumbo,Molumbo CS III,1042104
+fgh,Zambezia,Molumbo,Corromana PS,1042105
+fgh,Zambezia,Molumbo,Namucumua CS II,1042108
+icap,Nampula,Cidade de Nampula,HC Nampula,1030100
+icap,Nampula,Nampula,25 de Setembro CS II,1030106
+icap,Nampula,Nampula,Marrere CS I,1030107
+icap,Nampula,Nampula,1 de Maio CSURB,1030108
+icap,Nampula,Nampula,Napipine PS,1030109
+icap,Nampula,Nampula,Namihepe CS,1030110
+icap,Nampula,Nampula,Namutequeliua PS,1030112
+icap,Nampula,Nampula,Namicopo PS,1030113
+icap,Nampula,Nampula,Hospital Psiquiatrico Nampula HP,1030115
+icap,Nampula,Nampula,Muhala PS,1030117
+icap,Nampula,Nampula,Mutavarex CS,1030120
+icap,Nampula,Angoche,Namitoria PS,1030208
+icap,Nampula,Erati,HD Namapa,1030301
+icap,Nampula,Erati,Odinepa PS,1030311
+icap,Nampula,Malema,Mutuali CS III,1030607
+icap,Nampula,Meconta,Meconta CS I,1030707
+icap,Nampula,Meconta,CS Corrane,1030708
+icap,Nampula,Meconta,CS Nacavala,1030710
+icap,Nampula,Mecuburi,Namina (2) PS,1030808
+icap,Nampula,Mogovolas,Nametil CS I,1031106
+icap,Nampula,Moma,Chalaua CS III,1031207
+icap,Nampula,Moma,Pilivili PS,1031215
+icap,Nampula,Moma,Micane CS II,1031218
+icap,Nampula,Monapo,Carapira CS I,1031307
+icap,Nampula,Muecate,CS Imala,1031507
+icap,Nampula,Nacala,Nacala-Porto CS I,1031700
+icap,Nampula,Nacala,Murrupelane PS,1031708
+icap,Nampula,Nacala,Akumi CS,1031715
+icap,Nampula,Nacala-A-Velha,Barragem PS,1031808
+icap,Nampula,Nacala-A-Velha,Namalala PS,1031811
+icap,Nampula,Nampula,Anchilo CS I,1032007
