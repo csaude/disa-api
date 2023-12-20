@@ -3,7 +3,10 @@ package db.migration;
 import static java.nio.file.StandardOpenOption.APPEND;
 import static java.nio.file.StandardOpenOption.CREATE;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -66,11 +69,15 @@ public class V1_1_0__CreateDefaultUsers extends BaseSpringJdbcMigration {
             deleteUser(username);
             e.printStackTrace();
         }
-
     }
 
+    /**
+     * @return A map of implementing partner and respective health facilities.
+     */
     private Map<String, Set<String>> loadOrgUnits() throws IOException {
-        try (Stream<String> lines = Files.lines(Paths.get(IMPLEMENTATION_REPORT_CSV))) {
+        InputStream inputStream = getClass().getClassLoader().getResourceAsStream(IMPLEMENTATION_REPORT_CSV);
+        BufferedReader br = new BufferedReader(new InputStreamReader(inputStream));
+        try (Stream<String> lines = br.lines()) {
             return lines
                     .skip(1)
                     .map(l -> l.split(","))
@@ -80,6 +87,13 @@ public class V1_1_0__CreateDefaultUsers extends BaseSpringJdbcMigration {
 
     }
 
+    /**
+     * Creates a user with random encoded password and writes the plaintext version to a file.
+     * @param username Username to create
+     * @param orgUnits Org units the user has access to
+     * @param pwdFileStream The plaintext password file
+     * @throws IOException
+     */
     private void createUser(String username, Set<String> orgUnits, OutputStream pwdFileStream) throws IOException {
 
         String password = generateRandomPassword();
