@@ -59,17 +59,7 @@ public class ViralLoadResourceTest {
 
 	private static final int VL_COUNT = 15;
 
-	private static final String SEARCH_URL = "/v2/viralloads/search-form?"
-			+ "startDate={startDate}&"
-			+ "endDate={endDate}&"
-			+ "healthFacilityLabCode={healthFacilityLabCode}&"
-			+ "requestId={requestId}&"
-			+ "referringRequestID={referringRequestID}&"
-			+ "labResultStatus={labResultStatus}&"
-			+ "notProcessingCause={notProcessingCause}&"
-			+ "nid={nid}&"
-			+ "pageNumber={pageNumber}&";
-
+	private static final String SEARCH_URL = "/v2/viralloads/search-form";
 	@Inject
 	protected TestRestTemplate restTemplate;
 

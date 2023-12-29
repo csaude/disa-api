@@ -53,34 +53,18 @@ import mz.org.fgh.disaapi.core.orgunit.model.OrgUnit;
 import mz.org.fgh.disaapi.core.result.model.HIVVLLabResult;
 import mz.org.fgh.disaapi.core.result.model.LabResult;
 import mz.org.fgh.disaapi.core.result.model.LabResultStatus;
+import mz.org.fgh.disaapi.integ.DisaApiIntegApplication;
 
 @RunWith(SpringRunner.class)
-@SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
+@SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT, classes = DisaApiIntegApplication.class)
 @DirtiesContext(classMode = ClassMode.BEFORE_EACH_TEST_METHOD)
 public class LabResultResourceTest {
 
 	private static final String RESULT_URL = "/lab-results/{id}";
 
-	private static final String SEARCH_URL = "/lab-results/search?"
-			+ "startDate={startDate}&"
-			+ "endDate={endDate}&"
-			+ "healthFacilityLabCode={healthFacilityLabCode}&"
-			+ "requestId={requestId}&"
-			+ "referringRequestID={referringRequestID}&"
-			+ "labResultStatus={labResultStatus}&"
-			+ "notProcessingCause={notProcessingCause}&"
-			+ "nid={nid}&"
-			+ "pageNumber={pageNumber}&";
+	private static final String SEARCH_URL = "/lab-results/search";
 
-	private static final String EXPORT_URL = "/lab-results/export?"
-			+ "startDate={startDate}&"
-			+ "endDate={endDate}&"
-			+ "healthFacilityLabCode={healthFacilityLabCode}&"
-			+ "requestId={requestId}&"
-			+ "referringRequestID={referringRequestID}&"
-			+ "labResultStatus={labResultStatus}&"
-			+ "notProcessingCause={notProcessingCause}&"
-			+ "nid={nid}&";
+	private static final String EXPORT_URL = "/lab-results/export";
 
 	@Inject
 	protected TestRestTemplate restTemplate;

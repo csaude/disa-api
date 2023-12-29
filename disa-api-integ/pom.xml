@@ -96,11 +96,11 @@
 							<goal>run</goal>
 						</goals>
 						<configuration>
-							<tasks>
+							<target>
 								<delete file="${jar.deployment.dir}*.jar" />
 								<copy file="${project.basedir}/target/disa-api-integ.jar"
 									todir="${jar.deployment.dir}" />
-							</tasks>
+							</target>
 						</configuration>
 					</execution>
 				</executions>
