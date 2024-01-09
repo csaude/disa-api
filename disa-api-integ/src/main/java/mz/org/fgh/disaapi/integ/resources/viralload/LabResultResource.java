@@ -66,6 +66,12 @@ public class LabResultResource {
             @QueryParam("direction") String direction)
             throws BusinessException {
 
+        if (healthFacilityLabCode.isEmpty()) {
+            return Response.status(Response.Status.BAD_REQUEST)
+                    .entity("Please provide at least one healthFacilityLabCode param.")
+                    .build();
+        }
+
         // TODO use one of typeOfResult or the class
         LabResult result = new HIVVLLabResult();
         result.setTypeOfResult(typeOfResult);
@@ -111,6 +117,12 @@ public class LabResultResource {
             @QueryParam("startDate") final LocalDateTime startDate,
             @QueryParam("endDate") final LocalDateTime endDate)
             throws BusinessException {
+
+        if (healthFacilityLabCode.isEmpty()) {
+            return Response.status(Response.Status.BAD_REQUEST)
+                    .entity("Please provide at least one healthFacilityLabCode param.")
+                    .build();
+        }
 
         // TODO use one of typeOfResult or the class
         LabResult result = new HIVVLLabResult();
