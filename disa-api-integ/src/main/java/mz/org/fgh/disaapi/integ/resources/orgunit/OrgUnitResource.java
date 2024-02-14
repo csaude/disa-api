@@ -24,6 +24,11 @@ public class OrgUnitResource {
     @Path("/search")
     @Produces(MediaType.APPLICATION_JSON)
     public Response search(@QueryParam("term") String term) {
+        if (term == null || term.isEmpty()) {
+            return Response.status(Response.Status.BAD_REQUEST)
+                    .entity("Please provide the term param.")
+                    .build();
+        }
         return Response.ok(this.orgUnitService.search(term)).build();
     }
 

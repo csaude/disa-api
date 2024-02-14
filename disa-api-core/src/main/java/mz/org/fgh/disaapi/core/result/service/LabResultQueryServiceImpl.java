@@ -17,16 +17,12 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
-import org.springframework.util.StringUtils;
 
 import mz.co.msaude.boot.frameworks.exception.BusinessException;
 import mz.co.msaude.boot.frameworks.model.EntityStatus;
 import mz.org.fgh.disaapi.core.exception.NotFoundBusinessException;
-import mz.org.fgh.disaapi.core.result.dao.LabResultDAO;
 import mz.org.fgh.disaapi.core.result.model.LabResult;
 import mz.org.fgh.disaapi.core.result.model.LabResultStatus;
-import mz.org.fgh.disaapi.core.result.model.NotProcessingCause;
-import mz.org.fgh.disaapi.core.result.model.TypeOfResult;
 import mz.org.fgh.disaapi.core.result.repository.LabResultRepository;
 
 /**
@@ -39,9 +35,6 @@ public class LabResultQueryServiceImpl implements LabResultQueryService {
 
 	@Inject
 	private LabResultRepository labResultRepository;
-
-	@Inject
-	private LabResultDAO labResultDAO;
 
 	@Override
 	public List<LabResult> findPendingByLocationCodeAndProvince(List<String> orgUnitCodes,
@@ -66,56 +59,6 @@ public class LabResultQueryServiceImpl implements LabResultQueryService {
 		return labResultRepository.findByHealthFacilityLabCodeInAndLabResultStatusAndEntityStatus(orgUnitCodes,
 				LabResultStatus.PENDING,
 				EntityStatus.ACTIVE);
-	}
-
-	@Override
-	public mz.org.fgh.disaapi.core.result.model.Page<LabResult> findByForm(
-			String requestId,
-			String nid,
-			List<String> orgUnitCodes,
-			String referringRequestID,
-			LabResultStatus labResultStatus,
-			NotProcessingCause notProcessingCause,
-			TypeOfResult typeOfResult,
-			LocalDateTime startDate,
-			LocalDateTime endDate,
-			String search,
-			int pageNumber,
-			int pageSize,
-			String orderBy,
-			String direction) throws BusinessException {
-
-		// Should always start with page 1
-		if (pageNumber == 0) {
-			pageNumber = 1;
-		}
-
-		if (pageSize == 0) {
-			pageSize = DEFAULT_PAGE_SIZE;
-		}
-
-		if (pageSize > MAX_PAGE_SIZE) {
-			pageSize = MAX_PAGE_SIZE;
-		}
-
-		// If no order by order, use DEFAULT_ORDER_BY and DEFAULT_DIRECTION
-		if (StringUtils.isEmpty(orderBy)) {
-			orderBy = DEFAULT_ORDER_BY;
-			direction = DEFAULT_DIRECTION;
-
-			// If order by but no direction, sort ASCENDING
-		} else if (StringUtils.isEmpty(direction)) {
-			direction = ASCENDING;
-		}
-
-		if (orgUnitCodes.isEmpty()) {
-			throw new BusinessException("The HF code should be informed");
-		}
-
-		return this.labResultDAO.findByForm(requestId, nid,
-				orgUnitCodes, referringRequestID, labResultStatus, notProcessingCause, typeOfResult, startDate, endDate,
-				search,
-				pageNumber, pageSize, orderBy, direction, EntityStatus.ACTIVE);
 	}
 
 	@Override

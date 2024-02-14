@@ -46,28 +46,6 @@ public interface LabResultQueryService {
 	Page<LabResult> findByForm(LabResult example, List<String> orgUnitCodes, LocalDateTime startDate,
 			LocalDateTime endDate, Pageable pageable) throws BusinessException;
 
-	/**
-	 * @deprecated see
-	 *             {@link #findByForm(LabResult, List, LocalDateTime, LocalDateTime, Pageable)}
-	 */
-	@Deprecated
-	@PreAuthorize("principal.orgUnitCodes.containsAll(#orgUnitCodes)")
-	mz.org.fgh.disaapi.core.result.model.Page<LabResult> findByForm(
-			String requestId,
-			String nid,
-			List<String> orgUnitCodes,
-			String ReferringRequestID,
-			LabResultStatus labResultStatus,
-			NotProcessingCause notProcessingCause,
-			TypeOfResult typeOfResult,
-			LocalDateTime startDate,
-			LocalDateTime endDate,
-			String search,
-			int pageNumber,
-			int pageSize,
-			String orderBy,
-			String direction) throws BusinessException;
-
 	@PreAuthorize("principal.orgUnitCodes.containsAll(#orgUnitCodes)")
 	List<LabResult> findAllByForm(LabResult example, List<String> orgUnitCodes, LocalDateTime startDate,
 			LocalDateTime endDate) throws BusinessException;

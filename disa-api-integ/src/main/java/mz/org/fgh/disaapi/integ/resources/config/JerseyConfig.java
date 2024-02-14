@@ -10,9 +10,7 @@ import org.springframework.stereotype.Service;
 
 import mz.org.fgh.disaapi.integ.resources.converter.LocalDateTimeParamConverterProvider;
 import mz.org.fgh.disaapi.integ.resources.orgunit.OrgUnitResource;
-import mz.org.fgh.disaapi.integ.resources.orgunit.OrgUnitResourceV2;
 import mz.org.fgh.disaapi.integ.resources.viralload.LabResultResource;
-import mz.org.fgh.disaapi.integ.resources.viralload.ViralLoadResource;
 
 /**
  * @author Stélio Moiane
@@ -22,8 +20,6 @@ import mz.org.fgh.disaapi.integ.resources.viralload.ViralLoadResource;
 public class JerseyConfig extends ResourceConfig {
 
 	public JerseyConfig() {
-		this.register(ViralLoadResource.class);
-		this.register(OrgUnitResourceV2.class);
 		this.register(LabResultResource.class);
 		this.register(OrgUnitResource.class);
 		this.register(LocalDateTimeParamConverterProvider.class);
