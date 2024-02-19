@@ -8,6 +8,7 @@ import java.time.LocalDateTime;
 
 import javax.persistence.Basic;
 import javax.persistence.Column;
+import javax.persistence.Convert;
 import javax.persistence.DiscriminatorColumn;
 import javax.persistence.DiscriminatorType;
 import javax.persistence.Entity;
@@ -18,6 +19,7 @@ import javax.persistence.InheritanceType;
 import javax.persistence.Table;
 
 import mz.co.msaude.boot.frameworks.model.GenericEntity;
+import mz.org.fgh.disaapi.core.hibernate.SampleTypeAttributeConverter;
 
 /**
  * @author Stélio Moiane
@@ -96,7 +98,8 @@ public abstract class LabResult extends GenericEntity {
 	private LocalDateTime processingDate;
 
 	@Column(name = "LIMSSpecimenSourceCode")
-	private String sampleType;
+	@Convert(converter = SampleTypeAttributeConverter.class)
+	private SampleType sampleType;
 
 	@Column(name = "ViralLoadResultCategory")
 	private String viralLoadResultQualitative;
@@ -294,11 +297,11 @@ public abstract class LabResult extends GenericEntity {
 		this.harvestType = harvestType;
 	}
 
-	public String getSampleType() {
+	public SampleType getSampleType() {
 		return sampleType;
 	}
 
-	public void setSampleType(String sampleType) {
+	public void setSampleType(SampleType sampleType) {
 		this.sampleType = sampleType;
 	}
 
