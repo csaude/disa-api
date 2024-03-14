@@ -54,7 +54,7 @@ public class ViralLoadTemplate implements TemplateLoader {
 				this.add("dateOfSampleReceive", LocalDateTime.now());
 				this.add("rejectedReason", "N/A");
 				this.add("processingDate", LocalDateTime.now());
-				this.add("sampleType", "Dry Blood Spot");
+				this.add("sampleType", null);
 				this.add("viralLoadResultCopies", "1000");
 				this.add("viralLoadResultLog", "133");
 				this.add("viralLoadResultQualitative", "Suppressed");
