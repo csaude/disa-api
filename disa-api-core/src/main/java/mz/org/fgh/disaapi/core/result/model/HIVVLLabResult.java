@@ -1,8 +1,8 @@
 package mz.org.fgh.disaapi.core.result.model;
 
-import javax.persistence.Column;
-import javax.persistence.DiscriminatorValue;
-import javax.persistence.Entity;
+import jakarta.persistence.Column;
+import jakarta.persistence.DiscriminatorValue;
+import jakarta.persistence.Entity;
 
 @Entity(name = "HIVVLLabResult")
 @DiscriminatorValue("HIVVL")

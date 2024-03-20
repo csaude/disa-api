@@ -13,15 +13,9 @@ import java.util.List;
 import java.util.Map;
 
 import javax.inject.Inject;
-import javax.persistence.EntityManagerFactory;
 
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
-import org.hibernate.Transaction;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.skyscreamer.jsonassert.JSONAssert;
@@ -37,19 +31,13 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.annotation.DirtiesContext.ClassMode;
+import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import br.com.six2six.fixturefactory.Fixture;
-import br.com.six2six.fixturefactory.loader.FixtureFactoryLoader;
-import br.com.six2six.fixturefactory.processor.HibernateProcessor;
-import mz.co.fgh.disaapi.core.fixturefactory.ImplementingPartnerTemplate;
-import mz.co.fgh.disaapi.core.fixturefactory.ViralLoadTemplate;
-import mz.co.msaude.boot.frameworks.exception.BusinessException;
 import mz.org.fgh.disaapi.core.ip.ImplementingPartner;
-import mz.org.fgh.disaapi.core.orgunit.model.OrgUnit;
 import mz.org.fgh.disaapi.core.result.model.HIVVLLabResult;
 import mz.org.fgh.disaapi.core.result.model.LabResult;
 import mz.org.fgh.disaapi.core.result.model.LabResultStatus;
@@ -58,6 +46,7 @@ import mz.org.fgh.disaapi.integ.DisaApiIntegApplication;
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT, classes = DisaApiIntegApplication.class)
 @DirtiesContext(classMode = ClassMode.BEFORE_EACH_TEST_METHOD)
+@Sql("classpath:LabResultResourceTest.sql")
 public class LabResultResourceTest {
 
 	private static final String RESULT_URL = "/lab-results/{id}";
@@ -69,9 +58,6 @@ public class LabResultResourceTest {
 	@Inject
 	protected TestRestTemplate restTemplate;
 
-	@Inject
-	private EntityManagerFactory emFactory;
-
 	protected List<LabResult> vls;
 
 	private LabResult notProcessedVl;
@@ -82,55 +68,11 @@ public class LabResultResourceTest {
 
 	protected ImplementingPartner fgh;
 
-	@BeforeClass
-	public static void setUp() {
-		FixtureFactoryLoader.loadTemplates("mz.co.fgh.disaapi.core.fixturefactory");
-	}
-
-	@Before
-	public void before() throws BusinessException {
-
-		SessionFactory sessionFactory = emFactory.unwrap(SessionFactory.class);
-		try (Session session = sessionFactory.openSession()) {
-
-			Transaction tx = session.beginTransaction();
-
-			HibernateProcessor hibernateProcessor = new HibernateProcessor(session);
-
-			vls = Fixture.from(HIVVLLabResult.class)
-					.uses(hibernateProcessor)
-					.gimme(15, ViralLoadTemplate.VALID);
-
-			notProcessedVl = Fixture.from(HIVVLLabResult.class)
-					.uses(hibernateProcessor)
-					.gimme(ViralLoadTemplate.NOT_PROCESSED);
-
-			inactiveVl = Fixture.from(HIVVLLabResult.class)
-					.uses(hibernateProcessor)
-					.gimme(ViralLoadTemplate.INACTIVE);
-
-			fromUnauthorizedOrgUnit = Fixture.from(HIVVLLabResult.class)
-					.uses(hibernateProcessor)
-					.gimme(ViralLoadTemplate.MAPUTO);
-
-			fgh = Fixture.from(ImplementingPartner.class)
-					.uses(hibernateProcessor)
-					.gimme(ImplementingPartnerTemplate.FGH);
-
-			for (OrgUnit orgUnit : fgh.getOrgUnits()) {
-				orgUnit.setImplementingPartnerId(fgh.getId());
-				session.save(orgUnit);
-			}
-
-			tx.commit();
-		}
-	}
-
 	@Test
 	public void deleteShouldReturnOk() {
 		HttpHeaders headers = createHttpContentTypeAndAuthorizationHeaders();
 		HttpEntity<String> httpEntity = new HttpEntity<>("", headers);
-		Map<String, Long> uriVariable = Collections.singletonMap("id", vls.get(0).getId());
+		Map<String, Long> uriVariable = Collections.singletonMap("id", 1l);
 		ResponseEntity<String> response = restTemplate.exchange(RESULT_URL, HttpMethod.DELETE, httpEntity, String.class,
 				uriVariable);
 
@@ -192,12 +134,9 @@ public class LabResultResourceTest {
 	@Test
 	public void deleteShouldNotProceedForViralLoadsFromUnauthorizedOrgUnit() {
 
-		// Id is not null, proves that the record exists in the DB.
-		assertThat(fromUnauthorizedOrgUnit.getId()).isNotNull();
-
 		HttpHeaders headers = createHttpContentTypeAndAuthorizationHeaders();
 		HttpEntity<String> httpEntity = new HttpEntity<>("", headers);
-		Map<String, Long> uriVariable = Collections.singletonMap("id", fromUnauthorizedOrgUnit.getId());
+		Map<String, Long> uriVariable = Collections.singletonMap("id", 18l);
 		ResponseEntity<String> response = restTemplate.exchange(RESULT_URL, HttpMethod.DELETE, httpEntity, String.class,
 				uriVariable);
 
@@ -229,7 +168,7 @@ public class LabResultResourceTest {
 		vlJson.put("labResultStatus", "PENDING");
 		HttpEntity<String> pendingVlEntity = new HttpEntity<String>(vlJson.toString(), headers);
 
-		Map<String, Long> uriVariable = Collections.singletonMap("id", fromUnauthorizedOrgUnit.getId());
+		Map<String, Long> uriVariable = Collections.singletonMap("id", 18l);
 
 		ResponseEntity<String> response = restTemplate.exchange(RESULT_URL, HttpMethod.PATCH, pendingVlEntity,
 				String.class, uriVariable);

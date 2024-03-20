@@ -13,7 +13,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import javax.inject.Inject;
-import javax.persistence.EntityManagerFactory;
 
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -26,8 +25,9 @@ import org.springframework.test.annotation.DirtiesContext.ClassMode;
 
 import br.com.six2six.fixturefactory.Fixture;
 import br.com.six2six.fixturefactory.loader.FixtureFactoryLoader;
-import br.com.six2six.fixturefactory.processor.HibernateProcessor;
+import jakarta.persistence.EntityManagerFactory;
 import mz.co.fgh.disaapi.core.config.AbstractIntegServiceTest;
+import mz.co.fgh.disaapi.core.fixturefactory.HibernateProcessor;
 import mz.co.fgh.disaapi.core.fixturefactory.OrgUnitTemplate;
 import mz.co.fgh.disaapi.core.fixturefactory.ViralLoadTemplate;
 import mz.co.msaude.boot.frameworks.exception.BusinessException;
