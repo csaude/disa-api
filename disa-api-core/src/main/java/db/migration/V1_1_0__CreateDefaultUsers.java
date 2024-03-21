@@ -55,7 +55,7 @@ public class V1_1_0__CreateDefaultUsers extends BaseJavaMigration {
 
     @Override
     public void migrate(Context context) throws Exception {
-        setConnection(connection);
+        setConnection(context.getConnection());
 
         Map<String, Set<String>> orgUnits = loadOrgUnits();
 
@@ -117,9 +117,8 @@ public class V1_1_0__CreateDefaultUsers extends BaseJavaMigration {
     }
 
     private void updateOrgUnits(String username, Set<String> orgUnits) throws SQLException {
-        try (PreparedStatement statement = connection.prepareStatement(UPDATE_ORGUNITS_QUERY)) {
-            statement.setString(1, username);
-            statement.setString(2, String.join(",", orgUnits));
+        String query = String.format(UPDATE_ORGUNITS_QUERY, username, String.join(",", orgUnits));
+        try (PreparedStatement statement = connection.prepareStatement(query)) {
             statement.executeUpdate();
         }
     }
@@ -128,6 +127,7 @@ public class V1_1_0__CreateDefaultUsers extends BaseJavaMigration {
         try (PreparedStatement statement = connection.prepareStatement(INSERT_QUERY)) {
             statement.setString(1, userDetails.getUsername());
             statement.setString(2, userDetails.getPassword());
+            statement.setBoolean(3, userDetails.isEnabled());
             statement.executeUpdate();
         }
     }
