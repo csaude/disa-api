@@ -7,15 +7,20 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Base64;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.LongStream;
 
 import javax.inject.Inject;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.skyscreamer.jsonassert.JSONAssert;
@@ -38,6 +43,7 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import mz.org.fgh.disaapi.core.ip.ImplementingPartner;
+import mz.org.fgh.disaapi.core.orgunit.model.OrgUnit;
 import mz.org.fgh.disaapi.core.result.model.HIVVLLabResult;
 import mz.org.fgh.disaapi.core.result.model.LabResult;
 import mz.org.fgh.disaapi.core.result.model.LabResultStatus;
@@ -68,11 +74,40 @@ public class LabResultResourceTest {
 
 	protected ImplementingPartner fgh;
 
+	@Before
+	public void setUp() {
+
+		vls = LongStream.range(1l, 16l)
+				.mapToObj(l -> {
+					HIVVLLabResult hivvlLabResult = new HIVVLLabResult();
+					hivvlLabResult.setId(l);
+					return hivvlLabResult;
+				})
+				.collect(Collectors.toList());
+
+		List<String> codes = Arrays.asList("1040111", "1040107", "1040106", "1040114");
+		Set<OrgUnit> orgUnits = codes.stream()
+				.map(code -> {
+					OrgUnit ou = new OrgUnit();
+					ou.setCode(code);
+					return ou;
+				})
+				.collect(Collectors.toSet());
+		fgh = new ImplementingPartner();
+		fgh.setOrgUnits(orgUnits);
+
+		inactiveVl = new HIVVLLabResult();
+		inactiveVl.setId(17l);
+
+		fromUnauthorizedOrgUnit = new HIVVLLabResult();
+		fromUnauthorizedOrgUnit.setId(18l);
+	}
+
 	@Test
 	public void deleteShouldReturnOk() {
 		HttpHeaders headers = createHttpContentTypeAndAuthorizationHeaders();
 		HttpEntity<String> httpEntity = new HttpEntity<>("", headers);
-		Map<String, Long> uriVariable = Collections.singletonMap("id", 1l);
+		Map<String, Long> uriVariable = Collections.singletonMap("id", vls.get(0).getId());
 		ResponseEntity<String> response = restTemplate.exchange(RESULT_URL, HttpMethod.DELETE, httpEntity, String.class,
 				uriVariable);
 
@@ -136,7 +171,7 @@ public class LabResultResourceTest {
 
 		HttpHeaders headers = createHttpContentTypeAndAuthorizationHeaders();
 		HttpEntity<String> httpEntity = new HttpEntity<>("", headers);
-		Map<String, Long> uriVariable = Collections.singletonMap("id", 18l);
+		Map<String, Long> uriVariable = Collections.singletonMap("id", fromUnauthorizedOrgUnit.getId());
 		ResponseEntity<String> response = restTemplate.exchange(RESULT_URL, HttpMethod.DELETE, httpEntity, String.class,
 				uriVariable);
 
@@ -151,7 +186,7 @@ public class LabResultResourceTest {
 		vlJson.put("labResultStatus", "PENDING");
 		HttpEntity<String> pendingVlEntity = new HttpEntity<String>(vlJson.toString(), headers);
 
-		Map<String, Long> uriVariable = Collections.singletonMap("id", notProcessedVl.getId());
+		Map<String, Long> uriVariable = Collections.singletonMap("id", 16l);
 
 		ResponseEntity<HIVVLLabResult> response = restTemplate.exchange(RESULT_URL, HttpMethod.PATCH, pendingVlEntity,
 				HIVVLLabResult.class, uriVariable);
