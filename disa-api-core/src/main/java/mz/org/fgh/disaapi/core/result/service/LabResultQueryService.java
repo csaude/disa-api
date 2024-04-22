@@ -15,8 +15,6 @@ import mz.co.msaude.boot.frameworks.exception.BusinessException;
 import mz.org.fgh.disaapi.core.exception.NotFoundBusinessException;
 import mz.org.fgh.disaapi.core.result.model.LabResult;
 import mz.org.fgh.disaapi.core.result.model.LabResultStatus;
-import mz.org.fgh.disaapi.core.result.model.NotProcessingCause;
-import mz.org.fgh.disaapi.core.result.model.TypeOfResult;
 
 /**
  * @author Stélio Moiane
