@@ -10,6 +10,9 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
@@ -18,17 +21,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import org.flywaydb.core.api.migration.spring.BaseSpringJdbcMigration;
+import org.flywaydb.core.api.migration.BaseJavaMigration;
+import org.flywaydb.core.api.migration.Context;
 import org.passay.CharacterRule;
 import org.passay.EnglishCharacterData;
 import org.passay.PasswordGenerator;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-public class V1_1_0__CreateDefaultUsers extends BaseSpringJdbcMigration {
+public class V1_1_0__CreateDefaultUsers extends BaseJavaMigration {
 
     private static final String PASSWORD_FILE = "passwd";
     private static final String IMPLEMENTATION_REPORT_CSV = "Implementation_report.csv";
@@ -48,12 +51,11 @@ public class V1_1_0__CreateDefaultUsers extends BaseSpringJdbcMigration {
             "fgh"
     };
 
-    private JdbcTemplate jdbcTemplate;
+    private Connection connection;
 
     @Override
-    public void migrate(JdbcTemplate jdbcTemplate) throws Exception {
-
-        setJdbcTemplate(jdbcTemplate);
+    public void migrate(Context context) throws Exception {
+        setConnection(context.getConnection());
 
         Map<String, Set<String>> orgUnits = loadOrgUnits();
 
@@ -88,13 +90,17 @@ public class V1_1_0__CreateDefaultUsers extends BaseSpringJdbcMigration {
     }
 
     /**
-     * Creates a user with random encoded password and writes the plaintext version to a file.
-     * @param username Username to create
-     * @param orgUnits Org units the user has access to
+     * Creates a user with random encoded password and writes the plaintext version
+     * to a file.
+     * 
+     * @param username      Username to create
+     * @param orgUnits      Org units the user has access to
      * @param pwdFileStream The plaintext password file
+     * @throws SQLException
      * @throws IOException
      */
-    private void createUser(String username, Set<String> orgUnits, OutputStream pwdFileStream) throws IOException {
+    private void createUser(String username, Set<String> orgUnits, OutputStream pwdFileStream)
+            throws SQLException, IOException {
 
         String password = generateRandomPassword();
         createUser(User
@@ -110,16 +116,27 @@ public class V1_1_0__CreateDefaultUsers extends BaseSpringJdbcMigration {
         pwdFileStream.write((username + ":" + password + "\n").getBytes());
     }
 
-    private void updateOrgUnits(String username, Set<String> orgUnits) {
-        jdbcTemplate.update(String.format(UPDATE_ORGUNITS_QUERY, username, String.join(",", orgUnits)));
+    private void updateOrgUnits(String username, Set<String> orgUnits) throws SQLException {
+        String query = String.format(UPDATE_ORGUNITS_QUERY, username, String.join(",", orgUnits));
+        try (PreparedStatement statement = connection.prepareStatement(query)) {
+            statement.executeUpdate();
+        }
     }
 
-    private void createUser(UserDetails userDetails) {
-        jdbcTemplate.update(INSERT_QUERY, userDetails.getUsername(), userDetails.getPassword(), true);
+    private void createUser(UserDetails userDetails) throws SQLException {
+        try (PreparedStatement statement = connection.prepareStatement(INSERT_QUERY)) {
+            statement.setString(1, userDetails.getUsername());
+            statement.setString(2, userDetails.getPassword());
+            statement.setBoolean(3, userDetails.isEnabled());
+            statement.executeUpdate();
+        }
     }
 
-    private void deleteUser(String username) {
-        jdbcTemplate.update(DELETE_QUERY, username);
+    private void deleteUser(String username) throws SQLException {
+        try (PreparedStatement statement = connection.prepareStatement(DELETE_QUERY)) {
+            statement.setString(1, username);
+            statement.executeUpdate();
+        }
     }
 
     private String generateRandomPassword() {
@@ -143,7 +160,7 @@ public class V1_1_0__CreateDefaultUsers extends BaseSpringJdbcMigration {
         return new BCryptPasswordEncoder();
     }
 
-    public void setJdbcTemplate(JdbcTemplate jdbcTemplate) {
-        this.jdbcTemplate = jdbcTemplate;
+    public void setConnection(Connection connection) {
+        this.connection = connection;
     }
 }

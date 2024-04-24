@@ -2,8 +2,9 @@ package mz.co.fgh.disaapi.core.viralload.integ;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import java.sql.SQLException;
+
 import javax.inject.Inject;
-import javax.persistence.EntityManagerFactory;
 
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -16,7 +17,7 @@ import org.springframework.test.context.ContextConfiguration;
 
 import br.com.six2six.fixturefactory.Fixture;
 import br.com.six2six.fixturefactory.loader.FixtureFactoryLoader;
-import br.com.six2six.fixturefactory.processor.HibernateProcessor;
+import jakarta.persistence.EntityManagerFactory;
 import mz.co.fgh.disaapi.core.config.AbstractIntegServiceTest;
 import mz.co.fgh.disaapi.core.fixturefactory.ViralLoadTemplate;
 import mz.co.msaude.boot.frameworks.exception.BusinessException;
@@ -39,8 +40,10 @@ public class LabResultServiceTest extends AbstractIntegServiceTest {
 	private LabResult viralLoad;
 
 	@BeforeClass
-	public static void setUp() {
+	public static void setUp() throws SQLException {
 		FixtureFactoryLoader.loadTemplates("mz.co.fgh.disaapi.core.fixturefactory");
+		// Server.createWebServer("-web", "-webAllowOthers", "-webPort",
+		// "8082").start();
 	}
 
 	@Before
@@ -50,11 +53,10 @@ public class LabResultServiceTest extends AbstractIntegServiceTest {
 
 			Transaction tx = session.beginTransaction();
 
-			HibernateProcessor hibernateProcessor = new HibernateProcessor(session);
-
 			viralLoad = Fixture.from(HIVVLLabResult.class)
-					.uses(hibernateProcessor)
 					.gimme(ViralLoadTemplate.VALID);
+
+			viralLoad = session.merge(viralLoad);
 
 			tx.commit();
 		}

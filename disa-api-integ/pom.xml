@@ -14,7 +14,6 @@
 	<artifactId>disa-api-integ</artifactId>
 
 	<properties>
-		<java.version>1.8</java.version>
 		<jar.deployment.dir>/opt/disa/data/</jar.deployment.dir>
 	</properties>
 
@@ -62,9 +61,15 @@
 		</dependency>
 
 		<dependency>
-			<groupId>org.apache.httpcomponents</groupId>
-			<artifactId>httpclient</artifactId>
-			<version>4.5.13</version>
+			<groupId>org.junit.vintage</groupId>
+			<artifactId>junit-vintage-engine</artifactId>
+			<scope>test</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>org.apache.httpcomponents.client5</groupId>
+			<artifactId>httpclient5</artifactId>
+			<version>5.2.1</version>
 		</dependency>
 
 	</dependencies>
@@ -96,11 +101,11 @@
 							<goal>run</goal>
 						</goals>
 						<configuration>
-							<tasks>
+							<target>
 								<delete file="${jar.deployment.dir}*.jar" />
 								<copy file="${project.basedir}/target/disa-api-integ.jar"
 									todir="${jar.deployment.dir}" />
-							</tasks>
+							</target>
 						</configuration>
 					</execution>
 				</executions>

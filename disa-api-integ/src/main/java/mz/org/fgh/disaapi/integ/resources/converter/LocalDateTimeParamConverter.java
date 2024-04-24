@@ -3,7 +3,7 @@ package mz.org.fgh.disaapi.integ.resources.converter;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
-import javax.ws.rs.ext.ParamConverter;
+import jakarta.ws.rs.ext.ParamConverter;
 
 public class LocalDateTimeParamConverter implements ParamConverter<LocalDateTime> {
 

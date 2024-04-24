@@ -1,6 +1,6 @@
 package mz.org.fgh.disaapi.core.hibernate;
 
-import javax.persistence.AttributeConverter;
+import jakarta.persistence.AttributeConverter;
 
 import mz.org.fgh.disaapi.core.result.model.SampleType;
 
