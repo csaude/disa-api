@@ -73,11 +73,11 @@ public class SyncMonitoringRepository {
                 "          COUNT(IF(VIRAL_LOAD_STATUS='PROCESSED', 1, NULL)) totalProcessed, " +
                 "          COUNT(IF(VIRAL_LOAD_STATUS='PENDING', 1, NULL)) totalPending, " +
                 "          COUNT(IF(NOT_PROCESSING_CAUSE='NID_NOT_FOUND' " +
-                "                   AND VIRAL_LOAD_STATUS<>'PROCESSED', 1, NULL)) totalNotProcessedNidNotFound, " +
+                "                   AND VIRAL_LOAD_STATUS='NOT_PROCESSED', 1, NULL)) totalNotProcessedNidNotFound, " +
                 "          COUNT(IF(NOT_PROCESSING_CAUSE='NO_RESULT' " +
-                "                   AND VIRAL_LOAD_STATUS<>'PROCESSED', 1, NULL)) totalNotProcessedNoResult, " +
+                "                   AND VIRAL_LOAD_STATUS='NOT_PROCESSED', 1, NULL)) totalNotProcessedNoResult, " +
                 "          COUNT(IF(NOT_PROCESSING_CAUSE='DUPLICATE_NID' " +
-                "                   AND VIRAL_LOAD_STATUS<>'PROCESSED', 1, NULL)) totalNidDuplicate, " +
+                "                   AND VIRAL_LOAD_STATUS='NOT_PROCESSED', 1, NULL)) totalNidDuplicate, " +
                 "          MAX(UPDATED_AT) as lastCommunication, " +
                 "          (to_days(cast(now() as date)) - to_days(cast(MAX(UPDATED_AT) as date))) AS daysWithoutCommunication, "
                 +
