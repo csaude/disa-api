@@ -7,12 +7,19 @@ import java.util.Map;
 import javax.inject.Inject;
 
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestBody;
 
+import io.swagger.v3.oas.annotations.Hidden;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.DELETE;
 import jakarta.ws.rs.GET;
@@ -38,6 +45,7 @@ import mz.org.fgh.disaapi.core.result.service.LabResultService;
 
 @Path("/lab-results")
 @Component
+@Tag(name = "Lab Results")
 public class LabResultResource {
 
     @Inject
@@ -46,9 +54,21 @@ public class LabResultResource {
     @Inject
     private LabResultService viralLoadService;
 
+    /**
+     * This class only serves for swagger to show a correct schema representation of
+     * paged lab results.
+     */
+    private class LabResultPage extends PageImpl<LabResult> {
+        public LabResultPage(List<LabResult> content) {
+            super(content);
+        }
+    }
+
     @GET
     @Path("/search")
     @Produces(MediaType.APPLICATION_JSON)
+    @Operation(summary = "Search lab results", description = "Search laboratory results for the given health facility codes returning paginated results")
+    @ApiResponse(content = @Content(schema = @Schema(implementation = LabResultPage.class)))
     public Response findViralLoadsByForm(
             @QueryParam("requestId") final String requestId,
             @QueryParam("nid") final String nid,
@@ -97,7 +117,8 @@ public class LabResultResource {
 
         PageRequest pageable = PageRequest.of(pageNumber, pageSize, Direction.fromString(direction), orderBy);
 
-        Page<LabResult> vls = this.viralLoadQueryService.findByForm(result, healthFacilityLabCode, startDate, endDate,
+        Page<LabResult> vls = this.viralLoadQueryService.findByForm(result, healthFacilityLabCode, startDate,
+                endDate,
                 pageable);
 
         return Response.ok(vls).build();
@@ -106,6 +127,8 @@ public class LabResultResource {
     @GET
     @Path("/export")
     @Produces(MediaType.APPLICATION_JSON)
+    @Operation(summary = "Export lab results", description = "Export laboratory results for the given health facility codes")
+    @ApiResponse(content = @Content(schema = @Schema(implementation = LabResult.class)))
     public Response exportViralLoads(
             @QueryParam("requestId") final String requestId,
             @QueryParam("nid") final String nid,
@@ -144,6 +167,7 @@ public class LabResultResource {
     @GET
     @Path("/{id}")
     @Produces(MediaType.APPLICATION_JSON)
+    @Hidden
     public Response get(@PathParam("id") Long id) {
 
         LabResult labResult = findById(id);
@@ -154,6 +178,7 @@ public class LabResultResource {
     @DELETE
     @Path("/{id}")
     @Produces(MediaType.APPLICATION_JSON)
+    @Hidden
     public Response delete(@PathParam("id") Long id) {
 
         LabResult labResult = findById(id);
@@ -168,6 +193,7 @@ public class LabResultResource {
     @Path("/{id}")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
+    @Hidden
     public Response update(@PathParam("id") Long id,
             @RequestBody Map<String, Object> propertyValues) throws BusinessException {
 

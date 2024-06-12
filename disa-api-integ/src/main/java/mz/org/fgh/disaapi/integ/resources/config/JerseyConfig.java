@@ -6,8 +6,10 @@ package mz.org.fgh.disaapi.integ.resources.config;
 import java.util.Collections;
 
 import org.glassfish.jersey.server.ResourceConfig;
-import org.springframework.stereotype.Service;
+import org.glassfish.jersey.server.ServerProperties;
+import org.springframework.context.annotation.Configuration;
 
+import io.swagger.v3.jaxrs2.integration.resources.OpenApiResource;
 import mz.org.fgh.disaapi.integ.resources.converter.LocalDateTimeParamConverterProvider;
 import mz.org.fgh.disaapi.integ.resources.monitoring.SyncMonitoringResource;
 import mz.org.fgh.disaapi.integ.resources.orgunit.OrgUnitResource;
@@ -17,7 +19,7 @@ import mz.org.fgh.disaapi.integ.resources.viralload.LabResultResource;
  * @author Stélio Moiane
  *
  */
-@Service
+@Configuration
 public class JerseyConfig extends ResourceConfig {
 
 	public JerseyConfig() {
@@ -25,8 +27,10 @@ public class JerseyConfig extends ResourceConfig {
 		this.register(OrgUnitResource.class);
 		this.register(SyncMonitoringResource.class);
 		this.register(LocalDateTimeParamConverterProvider.class);
+		this.register(OpenApiResource.class);
 		// Configure Jersey to use setStatus(int) rather sendError(int).
 		// https://docs.spring.io/spring-boot/docs/2.0.3.RELEASE/reference/html/howto-jersey.html#howto-jersey-spring-security
-		setProperties(Collections.singletonMap("jersey.config.server.response.setStatusOverSendError", true));
+		property(ServerProperties.RESPONSE_SET_STATUS_OVER_SEND_ERROR, true);
+		property(ServerProperties.WADL_FEATURE_DISABLE, true);
 	}
 }
