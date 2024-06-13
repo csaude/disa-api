@@ -3,8 +3,6 @@
  */
 package mz.org.fgh.disaapi.integ.resources.config;
 
-import java.util.Collections;
-
 import org.glassfish.jersey.server.ResourceConfig;
 import org.glassfish.jersey.server.ServerProperties;
 import org.springframework.context.annotation.Configuration;
