@@ -11,10 +11,12 @@ import jakarta.ws.rs.core.Response;
 
 import org.springframework.stereotype.Service;
 
+import io.swagger.v3.oas.annotations.Hidden;
 import mz.org.fgh.disaapi.core.orgunit.service.OrgUnitService;
 
 @Path("/orgunits")
 @Service
+@Hidden
 public class OrgUnitResource {
 
     @Inject

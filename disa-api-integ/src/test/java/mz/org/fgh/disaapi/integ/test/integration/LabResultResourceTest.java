@@ -8,7 +8,6 @@ import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Base64;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -55,11 +54,11 @@ import mz.org.fgh.disaapi.integ.DisaApiIntegApplication;
 @Sql("classpath:LabResultResourceTest.sql")
 public class LabResultResourceTest {
 
-	private static final String RESULT_URL = "/lab-results/{id}";
+	private static final String RESULT_URL = "/services/lab-results/{id}";
 
-	private static final String SEARCH_URL = "/lab-results/search";
+	private static final String SEARCH_URL = "/services/lab-results/search";
 
-	private static final String EXPORT_URL = "/lab-results/export";
+	private static final String EXPORT_URL = "/services/lab-results/export";
 
 	@Inject
 	protected TestRestTemplate restTemplate;
@@ -105,22 +104,22 @@ public class LabResultResourceTest {
 
 	@Test
 	public void deleteShouldReturnOk() {
-		HttpHeaders headers = createHttpContentTypeAndAuthorizationHeaders();
-		HttpEntity<String> httpEntity = new HttpEntity<>("", headers);
 		Map<String, Long> uriVariable = Collections.singletonMap("id", vls.get(0).getId());
-		ResponseEntity<String> response = restTemplate.exchange(RESULT_URL, HttpMethod.DELETE, httpEntity, String.class,
-				uriVariable);
+		ResponseEntity<String> response = restTemplate
+				.withBasicAuth("fgh", "fgh")
+				.exchange(RESULT_URL, HttpMethod.DELETE, null, String.class,
+						uriVariable);
 
 		assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
 	}
 
 	@Test
 	public void deleteShouldReturnNotFound() {
-		HttpHeaders headers = createHttpContentTypeAndAuthorizationHeaders();
-		HttpEntity<String> httpEntity = new HttpEntity<>("", headers);
 		Map<String, Long> uriVariable = Collections.singletonMap("id", 0l);
-		ResponseEntity<String> response = restTemplate.exchange(RESULT_URL, HttpMethod.DELETE, httpEntity, String.class,
-				uriVariable);
+		ResponseEntity<String> response = restTemplate
+				.withBasicAuth("fgh", "fgh")
+				.exchange(RESULT_URL, HttpMethod.DELETE, null, String.class,
+						uriVariable);
 
 		assertThat(response.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
 	}
@@ -131,8 +130,6 @@ public class LabResultResourceTest {
 		LocalDateTime todayMidnight = LocalDateTime.of(LocalDate.now(), LocalTime.MIDNIGHT);
 		LocalDateTime tomorrowMidnight = todayMidnight.plusDays(1);
 
-		HttpHeaders headers = createHttpContentTypeAndAuthorizationHeaders();
-		HttpEntity<String> httpEntity = new HttpEntity<String>(null, headers);
 		MultiValueMap<String, String> uriVariables = new LinkedMultiValueMap<>();
 		uriVariables.add("startDate", "2022-01-01 00:00:00");
 		uriVariables.add("endDate", tomorrowMidnight.format(ofPattern));
@@ -148,7 +145,8 @@ public class LabResultResourceTest {
 
 		// Get first page
 		ResponseEntity<String> response1 = restTemplate
-				.exchange(builder.build().toUri(), HttpMethod.GET, httpEntity, String.class);
+				.withBasicAuth("fgh", "fgh")
+				.exchange(builder.build().toUri(), HttpMethod.GET, null, String.class);
 		String page1 = response1.getBody();
 
 		assertThat(response1.getStatusCode().is2xxSuccessful()).isTrue();
@@ -158,8 +156,10 @@ public class LabResultResourceTest {
 
 		// Get second page
 		builder.replaceQueryParam("pageNumber", "1");
-		ResponseEntity<String> response2 = restTemplate.exchange(builder.build().toUri(), HttpMethod.GET, httpEntity,
-				String.class);
+		ResponseEntity<String> response2 = restTemplate
+				.withBasicAuth("fgh", "fgh")
+				.exchange(builder.build().toUri(), HttpMethod.GET, null,
+						String.class);
 
 		String page2 = response2.getBody();
 		String expected2 = "{\"content\": [{},{},{},{},{},{}], \"number\":1, \"size\":10, \"numberOfElements\": 6}";
@@ -168,12 +168,11 @@ public class LabResultResourceTest {
 
 	@Test
 	public void deleteShouldNotProceedForViralLoadsFromUnauthorizedOrgUnit() {
-
-		HttpHeaders headers = createHttpContentTypeAndAuthorizationHeaders();
-		HttpEntity<String> httpEntity = new HttpEntity<>("", headers);
 		Map<String, Long> uriVariable = Collections.singletonMap("id", fromUnauthorizedOrgUnit.getId());
-		ResponseEntity<String> response = restTemplate.exchange(RESULT_URL, HttpMethod.DELETE, httpEntity, String.class,
-				uriVariable);
+		ResponseEntity<String> response = restTemplate
+				.withBasicAuth("fgh", "fgh")
+				.exchange(RESULT_URL, HttpMethod.DELETE, null, String.class,
+						uriVariable);
 
 		assertThat(response.getStatusCode()).isEqualTo(HttpStatus.UNAUTHORIZED);
 	}
@@ -181,15 +180,18 @@ public class LabResultResourceTest {
 	@Test
 	public void updateShouldUpdateTheViralLoad() throws JSONException {
 
-		HttpHeaders headers = createHttpContentTypeAndAuthorizationHeaders();
+		HttpHeaders headers = new HttpHeaders();
+		headers.setContentType(MediaType.APPLICATION_JSON);
 		JSONObject vlJson = new JSONObject();
 		vlJson.put("labResultStatus", "PENDING");
 		HttpEntity<String> pendingVlEntity = new HttpEntity<String>(vlJson.toString(), headers);
 
 		Map<String, Long> uriVariable = Collections.singletonMap("id", 16l);
 
-		ResponseEntity<HIVVLLabResult> response = restTemplate.exchange(RESULT_URL, HttpMethod.PATCH, pendingVlEntity,
-				HIVVLLabResult.class, uriVariable);
+		ResponseEntity<HIVVLLabResult> response = restTemplate
+				.withBasicAuth("fgh", "fgh")
+				.exchange(RESULT_URL, HttpMethod.PATCH, pendingVlEntity,
+						HIVVLLabResult.class, uriVariable);
 
 		assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
 		assertThat(response.getBody().getLabResultStatus()).isEqualTo(LabResultStatus.PENDING);
@@ -198,15 +200,19 @@ public class LabResultResourceTest {
 	@Test
 	public void updateShouldNotProceedForViralLoadsFromUnauthorizedOrgUnit() throws JSONException {
 
-		HttpHeaders headers = createHttpContentTypeAndAuthorizationHeaders();
+		HttpHeaders headers = new HttpHeaders();
+		headers.setContentType(MediaType.APPLICATION_JSON);
+
 		JSONObject vlJson = new JSONObject();
 		vlJson.put("labResultStatus", "PENDING");
 		HttpEntity<String> pendingVlEntity = new HttpEntity<String>(vlJson.toString(), headers);
 
 		Map<String, Long> uriVariable = Collections.singletonMap("id", 18l);
 
-		ResponseEntity<String> response = restTemplate.exchange(RESULT_URL, HttpMethod.PATCH, pendingVlEntity,
-				String.class, uriVariable);
+		ResponseEntity<String> response = restTemplate
+				.withBasicAuth("fgh", "fgh")
+				.exchange(RESULT_URL, HttpMethod.PATCH, pendingVlEntity,
+						String.class, uriVariable);
 
 		assertThat(response.getStatusCode()).isEqualTo(HttpStatus.UNAUTHORIZED);
 	}
@@ -214,15 +220,19 @@ public class LabResultResourceTest {
 	@Test
 	public void updateShouldReturnNotFound() throws JSONException {
 
-		HttpHeaders headers = createHttpContentTypeAndAuthorizationHeaders();
+		HttpHeaders headers = new HttpHeaders();
+		headers.setContentType(MediaType.APPLICATION_JSON);
+
 		JSONObject vlJson = new JSONObject();
 		vlJson.put("labResultStatus", "PENDING");
 		HttpEntity<String> pendingVlEntity = new HttpEntity<String>(vlJson.toString(), headers);
 
 		Map<String, Long> uriVariable = Collections.singletonMap("id", inactiveVl.getId());
 
-		ResponseEntity<String> response = restTemplate.exchange(RESULT_URL, HttpMethod.PATCH, pendingVlEntity,
-				String.class, uriVariable);
+		ResponseEntity<String> response = restTemplate
+				.withBasicAuth("fgh", "fgh")
+				.exchange(RESULT_URL, HttpMethod.PATCH, pendingVlEntity,
+						String.class, uriVariable);
 
 		assertThat(response.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
 	}
@@ -232,9 +242,6 @@ public class LabResultResourceTest {
 		DateTimeFormatter ofPattern = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 		LocalDateTime todayMidnight = LocalDateTime.of(LocalDate.now(), LocalTime.MIDNIGHT);
 		LocalDateTime tomorrowMidnight = todayMidnight.plusDays(1);
-
-		HttpHeaders headers = createHttpContentTypeAndAuthorizationHeaders();
-		HttpEntity<String> httpEntity = new HttpEntity<String>(null, headers);
 
 		ArrayList<String> orgUnitCodes = new ArrayList<>(fgh.getOrgUnitCodes());
 		orgUnitCodes.add(fromUnauthorizedOrgUnit.getHealthFacilityLabCode());
@@ -254,7 +261,8 @@ public class LabResultResourceTest {
 
 		// Get first page
 		ResponseEntity<String> response1 = restTemplate
-				.exchange(builder.build().toUri(), HttpMethod.GET, httpEntity, String.class);
+				.withBasicAuth("fgh", "fgh")
+				.exchange(builder.build().toUri(), HttpMethod.GET, null, String.class);
 		assertThat(response1.getStatusCode()).isEqualTo(HttpStatus.FORBIDDEN);
 	}
 
@@ -264,8 +272,6 @@ public class LabResultResourceTest {
 		LocalDateTime todayMidnight = LocalDateTime.of(LocalDate.now(), LocalTime.MIDNIGHT);
 		LocalDateTime tomorrowMidnight = todayMidnight.plusDays(1);
 
-		HttpHeaders headers = createHttpContentTypeAndAuthorizationHeaders();
-		HttpEntity<String> httpEntity = new HttpEntity<String>(null, headers);
 		MultiValueMap<String, String> uriVariables = new LinkedMultiValueMap<>();
 		uriVariables.add("startDate", "2022-01-01 00:00:00");
 		uriVariables.add("endDate", tomorrowMidnight.format(ofPattern));
@@ -282,7 +288,8 @@ public class LabResultResourceTest {
 		};
 
 		ResponseEntity<List<HIVVLLabResult>> response = restTemplate
-				.exchange(builder.build().toUri(), HttpMethod.GET, httpEntity, responseType);
+				.withBasicAuth("fgh", "fgh")
+				.exchange(builder.build().toUri(), HttpMethod.GET, null, responseType);
 		List<HIVVLLabResult> viralLoads = response.getBody();
 		assertThat(response.getStatusCode().is2xxSuccessful()).isTrue();
 		assertThat(response.getHeaders().get("Content-Type").get(0)).isEqualTo("application/json");
@@ -294,9 +301,6 @@ public class LabResultResourceTest {
 		DateTimeFormatter ofPattern = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 		LocalDateTime todayMidnight = LocalDateTime.of(LocalDate.now(), LocalTime.MIDNIGHT);
 		LocalDateTime tomorrowMidnight = todayMidnight.plusDays(1);
-
-		HttpHeaders headers = createHttpContentTypeAndAuthorizationHeaders();
-		HttpEntity<String> httpEntity = new HttpEntity<String>(null, headers);
 
 		ArrayList<String> orgUnitCodes = new ArrayList<>(fgh.getOrgUnitCodes());
 		orgUnitCodes.add(fromUnauthorizedOrgUnit.getHealthFacilityLabCode());
@@ -314,21 +318,9 @@ public class LabResultResourceTest {
 		UriComponentsBuilder builder = UriComponentsBuilder.fromUriString(EXPORT_URL).queryParams(uriVariables);
 
 		ResponseEntity<String> response = restTemplate
-				.exchange(builder.build().toUri(), HttpMethod.GET, httpEntity, String.class);
+				.withBasicAuth("fgh", "fgh")
+				.exchange(builder.build().toUri(), HttpMethod.GET, null, String.class);
 		assertThat(response.getStatusCode()).isEqualTo(HttpStatus.FORBIDDEN);
-	}
-
-	private HttpHeaders createHttpContentTypeAndAuthorizationHeaders() {
-		HttpHeaders httpHeaders = new HttpHeaders();
-		httpHeaders.setContentType(MediaType.APPLICATION_JSON);
-		httpHeaders.add(HttpHeaders.AUTHORIZATION, "Basic " + performBasicAuthEncoding("fgh", "fgh"));
-		return httpHeaders;
-	}
-
-	private String performBasicAuthEncoding(String user, String password) {
-		String combined = user + ":" + password;
-		byte[] encodedBytes = Base64.getEncoder().encode(combined.getBytes());
-		return new String(encodedBytes);
 	}
 
 	private void JSONAssertEquals(String expected, String actual, boolean strict) {

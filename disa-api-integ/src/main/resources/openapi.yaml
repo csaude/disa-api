@@ -1,0 +1,17 @@
+resourcePackages:
+  - io.swagger.sample.resource
+prettyPrint: true
+cacheTTL: 0
+openAPI:
+  info:
+    version: "2.5.1-SNAPSHOT"
+    title: DISA API
+    description: DISA-SESP Interoperability API
+    termsOfService:
+    contact:
+      url: https://helpdeskmoz.sis.org.mz/portal/pt/signin
+    license:
+      name:
+      url:
+  servers:
+    - url: /services
