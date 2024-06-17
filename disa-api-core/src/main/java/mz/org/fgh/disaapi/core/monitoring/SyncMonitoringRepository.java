@@ -7,12 +7,11 @@ import java.time.temporal.ChronoField;
 import java.util.ArrayList;
 import java.util.List;
 
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.Query;
-
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.Query;
 import mz.org.fgh.disaapi.core.ip.ImplementingPartner;
 
 @Component
@@ -46,7 +45,7 @@ public class SyncMonitoringRepository {
 
         String query = "SELECT location.districtName, " +
                 "       location.facilityName, " +
-                "       indicators.facilityCode, " +
+                "       location.facilityCode, " +
                 "       indicators.totalReceived, " +
                 "       indicators.totalProcessed, " +
                 "       indicators.totalPending, " +
@@ -58,14 +57,14 @@ public class SyncMonitoringRepository {
                 "       indicators.lastResultLoad, " +
                 "       indicators.daysWithoutResultLoad " +
                 "FROM " +
-                "  (SELECT RequestingDistrictName as districtName, " +
-                "          RequestingFacilityName as facilityName, " +
-                "          RequestingFacilityCode as facilityCode " +
-                "   FROM VlData " +
-                "   WHERE RequestingFacilityCode in (:locationCodes) " +
-                "   GROUP BY RequestingDistrictName, " +
-                "            RequestingFacilityName, " +
-                "            RequestingFacilityCode " +
+                "  (SELECT district as districtName, " +
+                "          facility as facilityName, " +
+                "          code as facilityCode " +
+                "   FROM OrgUnit " +
+                "   WHERE code in (:locationCodes) " +
+                "   GROUP BY district, " +
+                "            facility, " +
+                "            code " +
                 "   ORDER BY 1, " +
                 "            2 ASC) location " +
                 "LEFT JOIN " +
@@ -74,11 +73,11 @@ public class SyncMonitoringRepository {
                 "          COUNT(IF(VIRAL_LOAD_STATUS='PROCESSED', 1, NULL)) totalProcessed, " +
                 "          COUNT(IF(VIRAL_LOAD_STATUS='PENDING', 1, NULL)) totalPending, " +
                 "          COUNT(IF(NOT_PROCESSING_CAUSE='NID_NOT_FOUND' " +
-                "                   AND VIRAL_LOAD_STATUS<>'PROCESSED', 1, NULL)) totalNotProcessedNidNotFound, " +
+                "                   AND VIRAL_LOAD_STATUS='NOT_PROCESSED', 1, NULL)) totalNotProcessedNidNotFound, " +
                 "          COUNT(IF(NOT_PROCESSING_CAUSE='NO_RESULT' " +
-                "                   AND VIRAL_LOAD_STATUS<>'PROCESSED', 1, NULL)) totalNotProcessedNoResult, " +
+                "                   AND VIRAL_LOAD_STATUS='NOT_PROCESSED', 1, NULL)) totalNotProcessedNoResult, " +
                 "          COUNT(IF(NOT_PROCESSING_CAUSE='DUPLICATE_NID' " +
-                "                   AND VIRAL_LOAD_STATUS<>'PROCESSED', 1, NULL)) totalNidDuplicate, " +
+                "                   AND VIRAL_LOAD_STATUS='NOT_PROCESSED', 1, NULL)) totalNidDuplicate, " +
                 "          MAX(UPDATED_AT) as lastCommunication, " +
                 "          (to_days(cast(now() as date)) - to_days(cast(MAX(UPDATED_AT) as date))) AS daysWithoutCommunication, "
                 +
@@ -103,16 +102,38 @@ public class SyncMonitoringRepository {
             s.setDistrictName(String.valueOf(result[DISTRICT_NAME]));
             s.setFacilityName(String.valueOf(result[FACILITY_NAME]));
             s.setFacilityCode(String.valueOf(result[FACILITY_CODE]));
-            s.setTotalReceived(Integer.parseInt(String.valueOf(result[RECEIVED])));
-            s.setTotalProcessed(Integer.parseInt(String.valueOf(result[PROCESSED])));
-            s.setTotalPending(Integer.parseInt(String.valueOf(result[PENDING])));
-            s.setTotalNotProcessedNidNotFound(Integer.parseInt(String.valueOf(result[NOT_PROCESED_NID_NOT_FOUND])));
-            s.setTotalNotProcessedNoResult(Integer.parseInt(String.valueOf(result[NOT_PROCESSED_NO_RESULT])));
-            s.setTotalNidDuplicate(Integer.parseInt(String.valueOf(result[DUPLICATE_NID])));
-            s.setLastCommunication(LocalDateTime.parse(String.valueOf(result[LAST_COMMUNICATION]), pattern));
-            s.setDaysWithoutCommunication(Integer.parseInt(String.valueOf(result[DAYS_WITHOUT_COMMUNICATION])));
-            s.setLastResult(LocalDateTime.parse(String.valueOf(result[LAST_RESULT]), pattern));
-            s.setDaysWithoutResult(Integer.parseInt(String.valueOf(result[DAYS_WITHOUT_RESULT])));
+
+            if (result[RECEIVED] != null) {
+                s.setTotalReceived(Integer.parseInt(String.valueOf(result[RECEIVED])));
+            }
+
+            if (result[PROCESSED] != null) {
+                s.setTotalProcessed(Integer.parseInt(String.valueOf(result[PROCESSED])));
+            }
+            if (result[PENDING] != null) {
+                s.setTotalPending(Integer.parseInt(String.valueOf(result[PENDING])));
+            }
+            if (result[NOT_PROCESED_NID_NOT_FOUND] != null) {
+                s.setTotalNotProcessedNidNotFound(Integer.parseInt(String.valueOf(result[NOT_PROCESED_NID_NOT_FOUND])));
+            }
+            if (result[NOT_PROCESSED_NO_RESULT] != null) {
+                s.setTotalNotProcessedNoResult(Integer.parseInt(String.valueOf(result[NOT_PROCESSED_NO_RESULT])));
+            }
+            if (result[DUPLICATE_NID] != null) {
+                s.setTotalNidDuplicate(Integer.parseInt(String.valueOf(result[DUPLICATE_NID])));
+            }
+            if (result[LAST_COMMUNICATION] != null) {
+                s.setLastCommunication(LocalDateTime.parse(String.valueOf(result[LAST_COMMUNICATION]), pattern));
+            }
+            if (result[DAYS_WITHOUT_COMMUNICATION] != null) {
+                s.setDaysWithoutCommunication(Integer.parseInt(String.valueOf(result[DAYS_WITHOUT_COMMUNICATION])));
+            }
+            if (result[LAST_RESULT] != null) {
+                s.setLastResult(LocalDateTime.parse(String.valueOf(result[LAST_RESULT]), pattern));
+            }
+            if (result[DAYS_WITHOUT_RESULT] != null) {
+                s.setDaysWithoutResult(Integer.parseInt(String.valueOf(result[DAYS_WITHOUT_RESULT])));
+            }
             monitoringList.add(s);
         }
 
