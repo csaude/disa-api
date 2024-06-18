@@ -9,5 +9,9 @@ public enum SampleType {
     // Plasma
     PL,
     // Plasma Seco
-    PSC;
+    PSC,
+    // Soro
+    SER,
+    // Liquido Cefalo raquidiano
+    LCR;
 }
