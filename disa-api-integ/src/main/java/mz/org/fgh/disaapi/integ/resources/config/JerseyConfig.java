@@ -8,6 +8,7 @@ import org.glassfish.jersey.server.ServerProperties;
 import org.springframework.context.annotation.Configuration;
 
 import io.swagger.v3.jaxrs2.integration.resources.OpenApiResource;
+import jakarta.ws.rs.ApplicationPath;
 import mz.org.fgh.disaapi.integ.resources.converter.LocalDateTimeParamConverterProvider;
 import mz.org.fgh.disaapi.integ.resources.monitoring.SyncMonitoringResource;
 import mz.org.fgh.disaapi.integ.resources.orgunit.OrgUnitResource;
@@ -18,6 +19,7 @@ import mz.org.fgh.disaapi.integ.resources.viralload.LabResultResource;
  *
  */
 @Configuration
+@ApplicationPath("/services")
 public class JerseyConfig extends ResourceConfig {
 
 	public JerseyConfig() {

@@ -13,5 +13,3 @@ openAPI:
     license:
       name:
       url:
-  servers:
-    - url: /services
