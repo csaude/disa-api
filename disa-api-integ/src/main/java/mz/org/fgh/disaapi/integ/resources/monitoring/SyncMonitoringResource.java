@@ -25,7 +25,10 @@ public class SyncMonitoringResource {
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    @Operation(summary = "Sync monitoring", description = "DISA-SESP interoperability monitoring")
+    @Operation(summary = "Sync monitoring", description = """
+            DISA-SESP interoperability monitoring -
+            Allows monitoring the interoperability of laboratory results at any time,
+            presenting aggregated data from the first day of interoperability until the current date.""")
     public List<SyncMonitoring> getSyncMonitoring() {
         return syncMonitoringRepository.getSyncMonitoring();
     }

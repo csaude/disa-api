@@ -2,20 +2,47 @@ package mz.org.fgh.disaapi.core.monitoring;
 
 import java.time.LocalDateTime;
 
+import io.swagger.v3.oas.annotations.media.Schema;
+
 public class SyncMonitoring {
 
+    @Schema(description = "District name")
     private String districtName;
+
+    @Schema(description = "HF name")
     private String facilityName;
+
+    @Schema(description = "HF code")
     private String facilityCode;
+
+    @Schema(description = "Total results received by the integration server")
     private int totalReceived;
+
+    @Schema(description = "Total results processed from the integration server to SESP")
     private int totalProcessed;
+
+    @Schema(description = "Total results pending synchronization from the integration server to SESP")
     private int totalPending;
+
+    @Schema(description = "Total results of not processed due to NID not found in SESP")
     private int totalNotProcessedNidNotFound;
+
+    @Schema(description = "Total results of not processed due to empty values")
     private int totalNotProcessedNoResult;
+
+    @Schema(description = "Total results of not processed due to duplicate NID in SESP")
     private int totalNidDuplicate;
+
+    @Schema(description = "Date of the last communication between SESP with the integration server")
     private LocalDateTime lastCommunication;
+
+    @Schema(description = "Number of days since last communication between SESP with the integration server to the current date")
     private int daysWithoutCommunication;
+
+    @Schema(description = "Date of the last result loaded into the Integration Server")
     private LocalDateTime lastResult;
+
+    @Schema(description = "Number of days since the last result loaded into the integration server to the current date")
     private int daysWithoutResult;
 
     public String getDistrictName() {
