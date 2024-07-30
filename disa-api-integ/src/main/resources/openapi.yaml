@@ -4,7 +4,11 @@ prettyPrint: true
 cacheTTL: 0
 openAPI:
   info:
+<<<<<<< HEAD
     version: "2.6.1-SNAPSHOP"
+=======
+    version: "2.6.1-SNAPSHOT"
+>>>>>>> 20789def3a16ffdcfb4ac5bc23eb156fd51814e6
     title: DISA API
     description: DISA-SESP Interoperability API
     termsOfService:
