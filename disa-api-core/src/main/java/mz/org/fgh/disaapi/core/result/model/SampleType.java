@@ -13,5 +13,9 @@ public enum SampleType {
     // Soro
     SER,
     // Liquido Cefalo raquidiano
-    LCR;
+    LCR,
+    // Sangue total
+    SA,
+    // Urina 
+    U;
 }
