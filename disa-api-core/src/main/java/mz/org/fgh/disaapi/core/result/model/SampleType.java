@@ -15,5 +15,7 @@ public enum SampleType {
     // Liquido Cefalo raquidiano
     LCR,
     // Sangue total
-    SA;
+    SA,
+    // Urina 
+    U;
 }
