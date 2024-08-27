@@ -17,7 +17,8 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.Inheritance;
 import jakarta.persistence.InheritanceType;
 import jakarta.persistence.Table;
-
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import mz.org.fgh.disaapi.core.hibernate.SampleTypeAttributeConverter;
 
 /**
@@ -29,14 +30,16 @@ import mz.org.fgh.disaapi.core.hibernate.SampleTypeAttributeConverter;
 @Table(name = "VlData")
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name = "TypeOfResult", discriminatorType = DiscriminatorType.STRING, length = 50)
-public abstract class LabResult extends GenericEntity {
+public class LabResult extends GenericEntity {
 
 	private static final long serialVersionUID = 1L;
 
 	@Column(name = "FinalResult")
+	@NotBlank(message = "FinalResult cannot be null or empty")
 	private String finalResult;
 
 	@Column(name = "UNIQUEID")
+	@NotBlank(message = "UNIQUEID cannot be null or empty")
 	private String nid;
 
 	@Column(name = "RequestID", unique = true)
@@ -97,6 +100,7 @@ public abstract class LabResult extends GenericEntity {
 	private LocalDateTime processingDate;
 
 	@Column(name = "LIMSSpecimenSourceCode")
+	@NotNull(message = "LIMSSpecimenSourceCode cannot be null")
 	@Convert(converter = SampleTypeAttributeConverter.class)
 	private SampleType sampleType;
 
