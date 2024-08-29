@@ -39,5 +39,7 @@ public interface LabResultService {
 	 *         {@link #updateLabResult(LabResult, Map)}.
 	 */
 	List<String> getAllowedPropertiesForUpdate();
-
+	
+	@PreAuthorize("principal.username=='aphl'") 
+	List<LabResult> saveLabResult(List<LabResult> labResultList); 
 }

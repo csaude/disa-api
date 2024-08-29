@@ -26,6 +26,7 @@ import jakarta.ws.rs.GET;
 import jakarta.ws.rs.NotAuthorizedException;
 import jakarta.ws.rs.NotFoundException;
 import jakarta.ws.rs.PATCH;
+import jakarta.ws.rs.POST;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.PathParam;
 import jakarta.ws.rs.Produces;
@@ -205,6 +206,18 @@ public class LabResultResource {
             throw new NotFoundException("Viral load not found");
         }
     }
+    
+	@POST
+	@Path("/upload")
+	@Consumes(MediaType.APPLICATION_JSON) 
+	public Response uploadData(@RequestBody List<LabResult> labResultList) {
+		try {
+			viralLoadService.saveLabResult(labResultList);
+			return Response.status(Status.CREATED).entity("Data inserted successfully").build();
+		} catch (Exception e) {
+			return Response.status(Status.INTERNAL_SERVER_ERROR).entity("Error inserting data: " + e.getMessage()).build();
+		}
+	}
 
     private void updateViralLoad(LabResult viralLoad) {
         try {

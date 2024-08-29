@@ -12,7 +12,6 @@ import jakarta.ws.rs.ApplicationPath;
 import mz.org.fgh.disaapi.integ.resources.converter.LocalDateTimeParamConverterProvider;
 import mz.org.fgh.disaapi.integ.resources.monitoring.SyncMonitoringResource;
 import mz.org.fgh.disaapi.integ.resources.orgunit.OrgUnitResource;
-import mz.org.fgh.disaapi.integ.resources.viralload.LabResultLoadResource;
 import mz.org.fgh.disaapi.integ.resources.viralload.LabResultResource;
 
 /**
@@ -29,7 +28,6 @@ public class JerseyConfig extends ResourceConfig {
 		this.register(SyncMonitoringResource.class);
 		this.register(LocalDateTimeParamConverterProvider.class);
 		this.register(OpenApiResource.class);
-		this.register(LabResultLoadResource.class);
 		// Configure Jersey to use setStatus(int) rather sendError(int).
 		// https://docs.spring.io/spring-boot/docs/2.0.3.RELEASE/reference/html/howto-jersey.html#howto-jersey-spring-security
 		property(ServerProperties.RESPONSE_SET_STATUS_OVER_SEND_ERROR, true);

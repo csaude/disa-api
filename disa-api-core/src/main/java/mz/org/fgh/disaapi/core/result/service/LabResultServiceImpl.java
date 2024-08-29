@@ -81,6 +81,11 @@ public class LabResultServiceImpl implements LabResultService {
                 "synchronizedBy");
     }
 
+    @Override
+    public List<LabResult> saveLabResult(List<LabResult> labResultList) {
+    	return viralLoadRepository.saveAll(labResultList); 
+    }
+    
     private void validateStatus(LabResult labResult, LabResult dbVl) throws BusinessException {
         if (LabResultStatus.PROCESSED == dbVl.getLabResultStatus()) {
             throw new BusinessException(
