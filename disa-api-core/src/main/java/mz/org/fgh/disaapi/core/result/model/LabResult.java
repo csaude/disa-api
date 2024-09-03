@@ -16,9 +16,10 @@ import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.Inheritance;
 import jakarta.persistence.InheritanceType;
+import jakarta.persistence.PrePersist;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
+import mz.co.msaude.boot.frameworks.model.EntityStatus;
 import mz.org.fgh.disaapi.core.hibernate.SampleTypeAttributeConverter;
 
 /**
@@ -100,7 +101,6 @@ public class LabResult extends GenericEntity {
 	private LocalDateTime processingDate;
 
 	@Column(name = "LIMSSpecimenSourceCode")
-	@NotNull(message = "LIMSSpecimenSourceCode cannot be null")
 	@Convert(converter = SampleTypeAttributeConverter.class)
 	private SampleType sampleType;
 
@@ -155,6 +155,13 @@ public class LabResult extends GenericEntity {
 
 	@Column(name = "RegisteredDateTime")
 	private LocalDateTime registeredDateTime;
+	
+	@PrePersist
+    protected void onPrePersist() {
+        if (labResultStatus == null) {
+            labResultStatus = LabResultStatus.PENDING;
+        }
+    }
 
 	public String getSynchronizedBy() {
 		return synchronizedBy;

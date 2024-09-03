@@ -44,6 +44,9 @@ public class GenericEntity implements Serializable {
 	
 	@PrePersist
     protected void onCreate() {
+		if (entityStatus == null) {
+            entityStatus = EntityStatus.ACTIVE; // Default value
+        }
         createdAt = LocalDateTime.now();
     }
 
