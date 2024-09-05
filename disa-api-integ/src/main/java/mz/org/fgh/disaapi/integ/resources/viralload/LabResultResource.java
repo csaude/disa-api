@@ -208,13 +208,17 @@ public class LabResultResource {
     }
     
 	@POST
-	@Consumes(MediaType.APPLICATION_JSON) 
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
 	public Response uploadData(@RequestBody List<LabResult> labResultList) {
+		if (labResultList == null || labResultList.isEmpty()) {
+            throw new RuntimeException("Input data is missing or invalid");
+        }
 		try {
-			viralLoadService.saveLabResult(labResultList);
-			return Response.status(Status.CREATED).entity("Data inserted successfully").build();
+			List<LabResult> saveLabResult = viralLoadService.saveLabResult(labResultList);
+			return Response.ok(saveLabResult).build();
 		} catch (Exception e) {
-			return Response.status(Status.INTERNAL_SERVER_ERROR).entity("Error inserting data: " + e.getMessage()).build();
+            throw new RuntimeException("An error occurred while processing the lab results"); 
 		}
 	}
 
