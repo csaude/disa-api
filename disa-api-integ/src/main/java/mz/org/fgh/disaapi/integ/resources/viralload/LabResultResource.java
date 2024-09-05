@@ -208,7 +208,6 @@ public class LabResultResource {
     }
     
 	@POST
-	@Path("/upload")
 	@Consumes(MediaType.APPLICATION_JSON) 
 	public Response uploadData(@RequestBody List<LabResult> labResultList) {
 		try {
