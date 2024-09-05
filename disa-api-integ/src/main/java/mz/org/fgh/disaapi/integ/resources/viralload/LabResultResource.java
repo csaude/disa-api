@@ -212,14 +212,10 @@ public class LabResultResource {
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response uploadData(@RequestBody List<LabResult> labResultList) {
 		if (labResultList == null || labResultList.isEmpty()) {
-            throw new RuntimeException("Input data is missing or invalid");
+            return Response.status(Response.Status.BAD_REQUEST).build();  
         }
-		try {
-			List<LabResult> saveLabResult = viralLoadService.saveLabResult(labResultList);
-			return Response.ok(saveLabResult).build();
-		} catch (Exception e) {
-            throw new RuntimeException("An error occurred while processing the lab results"); 
-		}
+		List<LabResult> saveLabResult = viralLoadService.saveLabResult(labResultList);
+		return Response.ok(saveLabResult).build();
 	}
 
     private void updateViralLoad(LabResult viralLoad) {
