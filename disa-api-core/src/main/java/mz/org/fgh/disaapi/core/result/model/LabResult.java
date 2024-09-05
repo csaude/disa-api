@@ -6,6 +6,9 @@ package mz.org.fgh.disaapi.core.result.model;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
+import com.fasterxml.jackson.annotation.JsonSubTypes;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
+
 import jakarta.persistence.Basic;
 import jakarta.persistence.Column;
 import jakarta.persistence.Convert;
@@ -19,7 +22,6 @@ import jakarta.persistence.InheritanceType;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
-import mz.co.msaude.boot.frameworks.model.EntityStatus;
 import mz.org.fgh.disaapi.core.hibernate.SampleTypeAttributeConverter;
 
 /**
@@ -31,7 +33,17 @@ import mz.org.fgh.disaapi.core.hibernate.SampleTypeAttributeConverter;
 @Table(name = "VlData")
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name = "TypeOfResult", discriminatorType = DiscriminatorType.STRING, length = 50)
-public class LabResult extends GenericEntity {
+@JsonTypeInfo(
+		use = JsonTypeInfo.Id.NAME,
+		include = JsonTypeInfo.As.PROPERTY,
+		property = "typeOfResult")
+@JsonSubTypes({
+	@JsonSubTypes.Type(value = HIVVLLabResult.class, name="HIVVL"),
+	@JsonSubTypes.Type(value = TBLamLabResult.class, name="TBLAM"),
+	@JsonSubTypes.Type(value = CRAGLabResult.class, name="CRAG"),
+	@JsonSubTypes.Type(value = CD4LabResult.class, name="CD4")
+})
+public abstract class LabResult extends GenericEntity {
 
 	private static final long serialVersionUID = 1L;
 
