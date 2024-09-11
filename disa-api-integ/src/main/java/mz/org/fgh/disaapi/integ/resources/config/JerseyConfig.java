@@ -28,6 +28,7 @@ public class JerseyConfig extends ResourceConfig {
 		this.register(SyncMonitoringResource.class);
 		this.register(LocalDateTimeParamConverterProvider.class);
 		this.register(OpenApiResource.class);
+		this.register(ConstraintViolationExceptionMapper.class);
 		// Configure Jersey to use setStatus(int) rather sendError(int).
 		// https://docs.spring.io/spring-boot/docs/2.0.3.RELEASE/reference/html/howto-jersey.html#howto-jersey-spring-security
 		property(ServerProperties.RESPONSE_SET_STATUS_OVER_SEND_ERROR, true);
