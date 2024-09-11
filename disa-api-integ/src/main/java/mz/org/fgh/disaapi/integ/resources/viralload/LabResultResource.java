@@ -20,12 +20,14 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.DELETE;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.NotAuthorizedException;
 import jakarta.ws.rs.NotFoundException;
 import jakarta.ws.rs.PATCH;
+import jakarta.ws.rs.POST;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.PathParam;
 import jakarta.ws.rs.Produces;
@@ -205,6 +207,17 @@ public class LabResultResource {
             throw new NotFoundException("Viral load not found");
         }
     }
+
+	@POST
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response uploadData(@Valid List<LabResult> labResults) {
+		if (labResults == null || labResults.isEmpty()) {
+            return Response.status(Response.Status.BAD_REQUEST).build();
+        }
+		List<LabResult> saveLabResult = viralLoadService.saveLabResult(labResults);
+		return Response.ok(saveLabResult).build();
+	}
 
     private void updateViralLoad(LabResult viralLoad) {
         try {

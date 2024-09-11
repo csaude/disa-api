@@ -10,6 +10,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.MappedSuperclass;
+import jakarta.persistence.PrePersist;
 import mz.co.msaude.boot.frameworks.model.EntityStatus;
 
 @MappedSuperclass
@@ -40,6 +41,14 @@ public class GenericEntity implements Serializable {
 	@Enumerated(EnumType.STRING)
 	@Column(name = "ENTITY_STATUS", nullable = false, length = 15)
 	private EntityStatus entityStatus;
+	
+	@PrePersist
+    protected void onCreate() {
+		if (entityStatus == null) {
+            entityStatus = EntityStatus.ACTIVE; // Default value
+        }
+        createdAt = LocalDateTime.now();
+    }
 
 	public Long getId() {
 		return this.id;
