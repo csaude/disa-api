@@ -4,11 +4,10 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-import jakarta.persistence.criteria.Predicate;
-
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.util.StringUtils;
 
+import jakarta.persistence.criteria.Predicate;
 import mz.org.fgh.disaapi.core.result.model.LabResult;
 
 public class LabResultSpecifications {
@@ -27,7 +26,8 @@ public class LabResultSpecifications {
             predicates.add(root.get("healthFacilityLabCode").in(healthFacilityLabCodes));
 
             if (startDate != null) {
-                predicates.add(builder.greaterThan(root.get("createdAt"), startDate));
+                predicates.add(
+                        builder.greaterThanOrEqualTo(root.get("createdAt"), startDate.toLocalDate().atStartOfDay()));
             }
 
             if (endDate != null) {
