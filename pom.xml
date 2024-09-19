@@ -26,7 +26,7 @@
 	</properties>
 
 	<scm>
-		<developerConnection>scm:git:git@github.com:ynurmahomed/disa-api.git</developerConnection>
+		<developerConnection>scm:git:git@github.com:csaude/disa.git</developerConnection>
 	</scm>
 
 	<repositories>
