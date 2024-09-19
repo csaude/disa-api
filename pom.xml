@@ -25,6 +25,10 @@
 		<java.version>17</java.version>
 	</properties>
 
+	<scm>
+		<developerConnection>scm:git:git@github.com:ynurmahomed/disa-api.git</developerConnection>
+	</scm>
+
 	<repositories>
 		<repository>
 			<id>jitpack.io</id>
@@ -44,4 +48,16 @@
 		<module>disa-api-core</module>
 		<module>disa-api-integ</module>
 	</modules>
+
+	<build>
+		<pluginManagement>
+			<plugins>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-release-plugin</artifactId>
+					<version>3.1.1</version>
+				</plugin>
+			</plugins>
+		</pluginManagement>
+	</build>
 </project>
