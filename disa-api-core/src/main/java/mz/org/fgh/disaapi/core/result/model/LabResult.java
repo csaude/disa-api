@@ -57,6 +57,9 @@ public abstract class LabResult extends GenericEntity {
 
 	@Column(name = "RequestID", unique = true)
 	private String requestId;
+	
+	@Column(name = "EncounterID")
+	private String encounterId;
 
 	@Column(name = "ReferringRequestID")
 	private String referringRequestID;
