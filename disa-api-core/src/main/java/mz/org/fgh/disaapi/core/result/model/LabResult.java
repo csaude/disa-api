@@ -249,6 +249,14 @@ public abstract class LabResult extends GenericEntity {
 	public void setRequestId(String requestId) {
 		this.requestId = requestId;
 	}
+	
+	public String getEncounterId() {
+		return encounterId;
+	}
+	
+	public void setEncounterId(String encounterId) {
+		this.encounterId = encounterId;
+	}
 
 	public String getNameOfTechnicianRequestingTest() {
 		return nameOfTechnicianRequestingTest;
