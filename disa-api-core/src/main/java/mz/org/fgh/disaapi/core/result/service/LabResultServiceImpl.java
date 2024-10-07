@@ -78,7 +78,8 @@ public class LabResultServiceImpl implements LabResultService {
                 "requestingDistrictName",
                 "requestingFacilityName",
                 "healthFacilityLabCode",
-                "synchronizedBy");
+                "synchronizedBy",
+                "encounterId"); 
     }
 
     @Override
