@@ -57,6 +57,9 @@ public abstract class LabResult extends GenericEntity {
 
 	@Column(name = "RequestID", unique = true)
 	private String requestId;
+	
+	@Column(name = "EncounterID")
+	private Integer encounterId;
 
 	@Column(name = "ReferringRequestID")
 	private String referringRequestID;
@@ -245,6 +248,14 @@ public abstract class LabResult extends GenericEntity {
 
 	public void setRequestId(String requestId) {
 		this.requestId = requestId;
+	}
+	
+	public Integer getEncounterId() {
+		return encounterId;
+	}
+	
+	public void setEncounterId(Integer encounterId) {
+		this.encounterId = encounterId;
 	}
 
 	public String getNameOfTechnicianRequestingTest() {
