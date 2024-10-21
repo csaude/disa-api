@@ -1,0 +1,1 @@
+ALTER TABLE VlData ADD COLUMN EncounterID INT AFTER RequestID;

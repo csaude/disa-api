@@ -59,7 +59,7 @@ public abstract class LabResult extends GenericEntity {
 	private String requestId;
 	
 	@Column(name = "EncounterID")
-	private String encounterId;
+	private Integer encounterId;
 
 	@Column(name = "ReferringRequestID")
 	private String referringRequestID;
@@ -250,11 +250,11 @@ public abstract class LabResult extends GenericEntity {
 		this.requestId = requestId;
 	}
 	
-	public String getEncounterId() {
+	public Integer getEncounterId() {
 		return encounterId;
 	}
 	
-	public void setEncounterId(String encounterId) {
+	public void setEncounterId(Integer encounterId) {
 		this.encounterId = encounterId;
 	}
 
