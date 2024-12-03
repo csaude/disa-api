@@ -41,7 +41,8 @@ import mz.org.fgh.disaapi.core.hibernate.SampleTypeAttributeConverter;
 	@JsonSubTypes.Type(value = HIVVLLabResult.class, name="HIVVL"),
 	@JsonSubTypes.Type(value = TBLamLabResult.class, name="TBLAM"),
 	@JsonSubTypes.Type(value = CRAGLabResult.class, name="CRAG"),
-	@JsonSubTypes.Type(value = CD4LabResult.class, name="CD4")
+	@JsonSubTypes.Type(value = CD4LabResult.class, name="CD4"),
+	@JsonSubTypes.Type(value = PcrEidLabResult.class, name="PCR_EID")
 })
 public abstract class LabResult extends GenericEntity {
 
