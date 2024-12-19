@@ -10,7 +10,6 @@ public class GlobalExceptionHandler {
 
 	@ExceptionHandler(ValidationException.class)
 	public ResponseEntity<String> handleValidationException(ValidationException ex) {
-		System.out.println("Are we here...");
 		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage()); 
 	}
 }

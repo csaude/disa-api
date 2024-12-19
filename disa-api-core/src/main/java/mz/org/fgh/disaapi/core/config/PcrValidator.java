@@ -10,8 +10,6 @@ public class PcrValidator implements ConstraintValidator<ValidNid, LabResult>{
 
 	@Override
 	public boolean isValid(LabResult labResult, ConstraintValidatorContext context) {
-		System.out.println("Validating LabResult: " + labResult);
-		System.out.println("Details: Type of result " + labResult.getTypeOfResult() + " Nid " + labResult.getNid()); 
 		// Validate only if typeOfResult is PCR_EID
 		if (labResult instanceof PcrEidLabResult) {
 			String nid = labResult.getNid();
