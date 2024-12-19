@@ -6,6 +6,7 @@ import java.util.Map;
 
 import javax.inject.Inject;
 
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
@@ -197,7 +198,7 @@ public class LabResultResource {
     @Produces(MediaType.APPLICATION_JSON)
     @Hidden
     public Response update(@PathParam("id") Long id,
-            @RequestBody Map<String, Object> propertyValues) throws BusinessException {
+    					   @RequestBody Map<String, Object> propertyValues) throws BusinessException {
 
         try {
             LabResult labResult = findById(id);
@@ -211,12 +212,22 @@ public class LabResultResource {
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response uploadData(@Valid List<LabResult> labResults) {
+	public Response uploadData(@Valid @RequestBody List<@Valid LabResult> labResults) {
 		if (labResults == null || labResults.isEmpty()) {
-            return Response.status(Response.Status.BAD_REQUEST).build();
+            return Response.status(Response.Status.BAD_REQUEST)
+            		.entity("The list of lab results is empty or null.")
+            		.build();
         }
-		List<LabResult> saveLabResult = viralLoadService.saveLabResult(labResults);
-		return Response.ok(saveLabResult).build();
+		
+		try {
+			List<LabResult> saveLabResult = viralLoadService.saveLabResult(labResults);
+			return Response.ok(saveLabResult).build();
+		} catch (DataIntegrityViolationException e) { 
+			String errorMessage = "Database integrity error: " + e.getMessage();
+			return Response.status(Response.Status.CONFLICT)
+					.entity(errorMessage)
+					.build();
+		}
 	}
 
     private void updateViralLoad(LabResult viralLoad) {
