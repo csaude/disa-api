@@ -22,6 +22,7 @@ import jakarta.persistence.InheritanceType;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
+import mz.org.fgh.disaapi.core.config.ValidNid;
 import mz.org.fgh.disaapi.core.hibernate.SampleTypeAttributeConverter;
 
 /**
@@ -29,6 +30,7 @@ import mz.org.fgh.disaapi.core.hibernate.SampleTypeAttributeConverter;
  * @author Hélio Machabane
  *
  */
+@ValidNid
 @Entity
 @Table(name = "VlData")
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
