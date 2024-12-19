@@ -22,6 +22,7 @@ import jakarta.persistence.InheritanceType;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
+import mz.org.fgh.disaapi.core.config.ValidNid;
 import mz.org.fgh.disaapi.core.hibernate.SampleTypeAttributeConverter;
 
 /**
@@ -29,6 +30,7 @@ import mz.org.fgh.disaapi.core.hibernate.SampleTypeAttributeConverter;
  * @author Hélio Machabane
  *
  */
+@ValidNid
 @Entity
 @Table(name = "VlData")
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
@@ -41,7 +43,8 @@ import mz.org.fgh.disaapi.core.hibernate.SampleTypeAttributeConverter;
 	@JsonSubTypes.Type(value = HIVVLLabResult.class, name="HIVVL"),
 	@JsonSubTypes.Type(value = TBLamLabResult.class, name="TBLAM"),
 	@JsonSubTypes.Type(value = CRAGLabResult.class, name="CRAG"),
-	@JsonSubTypes.Type(value = CD4LabResult.class, name="CD4")
+	@JsonSubTypes.Type(value = CD4LabResult.class, name="CD4"),
+	@JsonSubTypes.Type(value = PcrEidLabResult.class, name="PCR_EID")
 })
 public abstract class LabResult extends GenericEntity {
 
@@ -57,6 +60,9 @@ public abstract class LabResult extends GenericEntity {
 
 	@Column(name = "RequestID", unique = true)
 	private String requestId;
+	
+	@Column(name = "EncounterID")
+	private Integer encounterId;
 
 	@Column(name = "ReferringRequestID")
 	private String referringRequestID;
@@ -245,6 +251,14 @@ public abstract class LabResult extends GenericEntity {
 
 	public void setRequestId(String requestId) {
 		this.requestId = requestId;
+	}
+	
+	public Integer getEncounterId() {
+		return encounterId;
+	}
+	
+	public void setEncounterId(Integer encounterId) {
+		this.encounterId = encounterId;
 	}
 
 	public String getNameOfTechnicianRequestingTest() {
