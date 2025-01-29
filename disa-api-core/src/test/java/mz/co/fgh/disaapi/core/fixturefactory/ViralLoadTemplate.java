@@ -67,6 +67,7 @@ public class ViralLoadTemplate implements TemplateLoader {
 				this.add("entityStatus", EntityStatus.ACTIVE);
 				this.add("uuid", UUID.randomUUID().toString());
 				this.add("typeOfResult", TypeOfResult.HIVVL);
+				this.add("finalResult", "300"); 
 
 			}
 		});
