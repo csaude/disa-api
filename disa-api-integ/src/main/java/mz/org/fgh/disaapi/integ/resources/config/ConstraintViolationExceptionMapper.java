@@ -14,34 +14,6 @@ import jakarta.ws.rs.ext.Provider;
 @Provider
 public class ConstraintViolationExceptionMapper implements ExceptionMapper<ConstraintViolationException> {
 
-	/*@Override
-	public Response toResponse(ConstraintViolationException exception) {
-        List<ApiError.FieldError> fieldErrors = exception.getConstraintViolations()
-                .stream()
-                .map(violation -> {
-                    String field = extractField(violation.getPropertyPath());
-                    return new ApiError.FieldError(field, violation.getMessage());
-                })
-                .collect(Collectors.toList());
-
-            ApiError apiError = new ApiError("Erro de validação nos dados fornecidos",fieldErrors);
-
-            return Response
-                .status(Response.Status.BAD_REQUEST)
-                .entity(apiError)
-                .type(MediaType.APPLICATION_JSON)
-                .build();
-	}
-	
-	private String extractField(Path path) {
-        // Pega o último elemento do path que representa o nome do campo
-        Path.Node last = null;
-        for (Path.Node node : path) {
-            last = node;
-        }
-        return last != null ? last.toString() : "";
-    }*/
-
 	@Override
 	public Response toResponse(ConstraintViolationException exception) {
 		System.out.println("Estamos a entrar aqui?");
@@ -58,11 +30,4 @@ public class ConstraintViolationExceptionMapper implements ExceptionMapper<Const
 				.type(MediaType.APPLICATION_JSON)
 				.build();
 	}
-	
-	/*private String extractFieldName(String propertyPath) {
-        if (propertyPath.contains(".")) {
-            return propertyPath.substring(propertyPath.lastIndexOf(".") + 1);
-        }
-        return propertyPath;
-    }*/
 }

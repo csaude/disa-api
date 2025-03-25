@@ -213,6 +213,7 @@ public class LabResultResource {
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response uploadData(@Valid @RequestBody List<@Valid LabResult> labResults) {
+		
 		if (labResults == null || labResults.isEmpty()) {
 			Map<String, String> response = new HashMap<>();
 			response.put("error", "A lista de resultados de laboratório está vazia ou é nula.");
@@ -220,6 +221,7 @@ public class LabResultResource {
             		.entity(response) 
             		.build();
         }
+		
 			List<LabResult> saveLabResult = viralLoadService.saveLabResult(labResults);
 			return Response.ok(saveLabResult).build();
 	}
