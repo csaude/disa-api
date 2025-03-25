@@ -1,12 +1,12 @@
 package mz.org.fgh.disaapi.integ.resources.viralload;
 
 import java.time.LocalDateTime;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import javax.inject.Inject;
 
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
@@ -213,21 +213,17 @@ public class LabResultResource {
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response uploadData(@Valid @RequestBody List<@Valid LabResult> labResults) {
+		
 		if (labResults == null || labResults.isEmpty()) {
+			Map<String, String> response = new HashMap<>();
+			response.put("error", "A lista de resultados de laboratório está vazia ou é nula.");
             return Response.status(Response.Status.BAD_REQUEST)
-            		.entity("The list of lab results is empty or null.")
+            		.entity(response) 
             		.build();
         }
 		
-		try {
 			List<LabResult> saveLabResult = viralLoadService.saveLabResult(labResults);
 			return Response.ok(saveLabResult).build();
-		} catch (DataIntegrityViolationException e) { 
-			String errorMessage = "Database integrity error: " + e.getMessage();
-			return Response.status(Response.Status.CONFLICT)
-					.entity(errorMessage)
-					.build();
-		}
 	}
 
     private void updateViralLoad(LabResult viralLoad) {
