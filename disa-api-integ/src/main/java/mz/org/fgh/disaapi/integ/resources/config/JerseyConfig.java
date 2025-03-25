@@ -29,7 +29,11 @@ public class JerseyConfig extends ResourceConfig {
 		this.register(SyncMonitoringResource.class);
 		this.register(LocalDateTimeParamConverterProvider.class);
 		this.register(OpenApiResource.class);
+		this.register(DatabaseIntegrityExceptionMapper.class); 
 		this.register(ConstraintViolationExceptionMapper.class);
+		this.register(JsonMappingExceptionMapper.class);
+		this.register(InvalidTypeIdExceptionMapper.class);
+		this.register(MismatchedInputExceptionMapper.class); 
 		this.register(ValidationFeature.class);
 		// Configure Jersey to use setStatus(int) rather sendError(int).
 		// https://docs.spring.io/spring-boot/docs/2.0.3.RELEASE/reference/html/howto-jersey.html#howto-jersey-spring-security
