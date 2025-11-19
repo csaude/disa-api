@@ -13,6 +13,7 @@ import jakarta.ws.rs.Path;
 import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.core.MediaType;
 import mz.org.fgh.disaapi.core.monitoring.SyncMonitoring;
+import mz.org.fgh.disaapi.core.monitoring.SyncMonitoringDetail;
 import mz.org.fgh.disaapi.core.monitoring.SyncMonitoringRepository;
 
 @Path("/monitoring")
@@ -31,5 +32,17 @@ public class SyncMonitoringResource {
             presenting aggregated data from the first day of interoperability until the current date.""")
     public List<SyncMonitoring> getSyncMonitoring() {
         return syncMonitoringRepository.getSyncMonitoring();
+    }
+    
+    @GET
+    @Path("/detail")
+    @Produces(MediaType.APPLICATION_JSON)
+    @Operation(summary = "Sync monitoring detailed", description = """
+            DISA-SESP interoperability monitoring - Detailed view -
+            Returns disaggregated data showing individual viral load records with full details.
+            This endpoint provides record-level information instead of aggregated summaries,
+            allowing for detailed analysis of individual requests and their processing status.""")
+    public List<SyncMonitoringDetail> getSyncMonitoringDetail(){
+    	return syncMonitoringRepository.getSyncMonitoringDetail();
     }
 }
