@@ -135,7 +135,7 @@ public abstract class LabResult extends GenericEntity {
 	private String labComments;
 
 	@Basic(optional = false)
-	@Column(name = "VIRAL_LOAD_STATUS", columnDefinition = "enum('PENDING','PROCESSED','NOT_PROCESSED')")
+	@Column(name = "VIRAL_LOAD_STATUS", columnDefinition = "enum('PENDING','PROCESSED','NOT_PROCESSED','REJECTED')")
 	@Enumerated(EnumType.STRING)
 	private LabResultStatus labResultStatus;
 
