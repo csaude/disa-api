@@ -8,14 +8,6 @@ public class SyncMonitoringDetail {
     
     private String location;
     
-    private String nid;
-    
-    private String firstName;
-    
-    private String lastName;
-    
-    private String gender;
-    
     private LocalDateTime specimenDatetime;
     
     private LocalDateTime analysisDateTime;
@@ -32,10 +24,6 @@ public class SyncMonitoringDetail {
     
     private String limsSpecimenSourceCode;
     
-    private String hivVlViralLoadResult;
-    
-    private String hivVlViralLoadCapCtm;
-    
     private String entityStatus;
     
     private LocalDateTime createdAt;
@@ -50,20 +38,18 @@ public class SyncMonitoringDetail {
     
     private String typeOfResult;
     
+    private String attribuite1;
+    
     public SyncMonitoringDetail() {}
 
-	public SyncMonitoringDetail(String requestId, String location, String nid, String firstName, String lastName,
-			String gender, LocalDateTime specimenDatetime, LocalDateTime analysisDateTime,
-			LocalDateTime authorisedDateTime, String requestingFacilityCode, String requestingFacilityName,
-			String requestingProvinceName, String requestingDistrictName, String limsSpecimenSourceCode,
-			String hivVlViralLoadResult, String entityStatus, LocalDateTime createdAt, LocalDateTime updatedAt,
-			String viralLoadStatus, String notProcessingCause, String finalResult, String typeOfResult) {
+	public SyncMonitoringDetail(String requestId, String location, LocalDateTime specimenDatetime,
+			LocalDateTime analysisDateTime, LocalDateTime authorisedDateTime, String requestingFacilityCode,
+			String requestingFacilityName, String requestingProvinceName, String requestingDistrictName,
+			String limsSpecimenSourceCode, String entityStatus, LocalDateTime createdAt, 
+			LocalDateTime updatedAt, String viralLoadStatus, String notProcessingCause, String finalResult, 
+			String typeOfResult, String attribuite1) {
 		this.requestId = requestId;
 		this.location = location;
-		this.nid = nid;
-		this.firstName = firstName;
-		this.lastName = lastName;
-		this.gender = gender;
 		this.specimenDatetime = specimenDatetime;
 		this.analysisDateTime = analysisDateTime;
 		this.authorisedDateTime = authorisedDateTime;
@@ -72,7 +58,6 @@ public class SyncMonitoringDetail {
 		this.requestingProvinceName = requestingProvinceName;
 		this.requestingDistrictName = requestingDistrictName;
 		this.limsSpecimenSourceCode = limsSpecimenSourceCode;
-		this.hivVlViralLoadResult = hivVlViralLoadResult;
 		this.entityStatus = entityStatus;
 		this.createdAt = createdAt;
 		this.updatedAt = updatedAt;
@@ -80,6 +65,7 @@ public class SyncMonitoringDetail {
 		this.notProcessingCause = notProcessingCause;
 		this.finalResult = finalResult;
 		this.typeOfResult = typeOfResult;
+		this.attribuite1 = attribuite1;
 	}
 
 	public String getRequestId() {
@@ -96,38 +82,6 @@ public class SyncMonitoringDetail {
 	
 	public void setLocation(String location) {
 		this.location = location;
-	}
-	
-	public String getNid() {
-		return nid;
-	}
-	
-	public void setNid(String nid) {
-		this.nid = nid;
-	}
-	
-	public String getFirstName() {
-		return firstName;
-	}
-	
-	public void setFirstName(String firstName) {
-		this.firstName = firstName;
-	}
-	
-	public String getLastName() {
-		return lastName;
-	}
-	
-	public void setLastName(String lastName) {
-		this.lastName = lastName;
-	}
-	
-	public String getGender() {
-		return gender;
-	}
-	
-	public void setGender(String gender) {
-		this.gender = gender;
 	}
 
 	public LocalDateTime getSpecimenDatetime() {
@@ -194,22 +148,6 @@ public class SyncMonitoringDetail {
 		this.limsSpecimenSourceCode = limsSpecimenSourceCode;
 	}
 
-	public String getHivVlViralLoadResult() {
-		return hivVlViralLoadResult;
-	}
-
-	public void setHivVlViralLoadResult(String hivVlViralLoadResult) {
-		this.hivVlViralLoadResult = hivVlViralLoadResult;
-	}
-	
-	public String getHivVlViralLoadCapCtm() {
-		return hivVlViralLoadCapCtm;
-	}
-	
-	public void setHivVlViralLoadCapCtm(String hivVlViralLoadCapCtm) {
-		this.hivVlViralLoadCapCtm = hivVlViralLoadCapCtm;
-	}
-
 	public String getEntityStatus() {
 		return entityStatus;
 	}
@@ -264,5 +202,13 @@ public class SyncMonitoringDetail {
 
 	public void setTypeOfResult(String typeOfResult) {
 		this.typeOfResult = typeOfResult;
+	}
+	
+	public String getAttribuite1() {
+		return attribuite1;
+	}
+	
+	public void setAttribuite1(String attribuite1) {
+		this.attribuite1 = attribuite1;
 	}
 }

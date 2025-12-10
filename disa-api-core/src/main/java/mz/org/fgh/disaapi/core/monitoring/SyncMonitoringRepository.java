@@ -34,27 +34,22 @@ public class SyncMonitoringRepository {
     // constants for disaggregated data query
     private static final int DETAIL_REQUEST_ID = 0;
     private static final int DETAIL_LOCATION = 1;
-    private static final int DETAIL_NID = 2;
-    private static final int DETAIL_LASTNAME = 3;
-    private static final int DETAIL_FIRSTNAME = 4;
-    private static final int DETAIL_GENDER = 5;
-    private static final int DETAIL_SPECIMEN_DATE_TIME = 6;
-    private static final int DETAIL_ANALYSIS_DATETIME = 7;
-    private static final int DETAIL_AUTHORISED_DATETIME = 8;
-    private static final int DETAIL_REQUESTING_FACILITYCODE = 9;
-    private static final int DETAIL_REQUESTING_FACILITYNAME = 10;
-    private static final int DETAIL_REQUESTING_PROVINCENAME = 11;
-    private static final int DETAIL_REQUESTING_DISTRICTNAME = 12;
-    private static final int DETAIL_LIMSSPECIMEN_SOURCECODE = 13;
-    private static final int DETAIL_HIV_VL_VIRAL_LOAD_RESULT = 14;
-    private static final int DETAIL_HIVVLVIRALLOADCAPCTM = 15;
-    private static final int DETAIL_ENTITYSTATUS = 16;
-    private static final int DETAIL_CREATEDAT = 17;
-    private static final int DETAIL_UPDATEDAT = 18;
-    private static final int DETAIL_VIRALLOADSTATUS = 19;
-    private static final int DETAIL_NOTPROCESSINGCAUSE = 20;
-    private static final int DETAIL_FINALRESULT = 21;
-    private static final int DETAIL_TYPEOFRESULT = 22;
+    private static final int DETAIL_SPECIMEN_DATE_TIME = 2;
+    private static final int DETAIL_ANALYSIS_DATETIME = 3;
+    private static final int DETAIL_AUTHORISED_DATETIME = 4;
+    private static final int DETAIL_REQUESTING_FACILITYCODE = 5;
+    private static final int DETAIL_REQUESTING_FACILITYNAME = 6;
+    private static final int DETAIL_REQUESTING_PROVINCENAME = 7;
+    private static final int DETAIL_REQUESTING_DISTRICTNAME = 8;
+    private static final int DETAIL_LIMSSPECIMEN_SOURCECODE = 9;
+    private static final int DETAIL_ENTITYSTATUS = 10;
+    private static final int DETAIL_CREATEDAT = 11;
+    private static final int DETAIL_UPDATEDAT = 12;
+    private static final int DETAIL_VIRALLOADSTATUS = 13;
+    private static final int DETAIL_NOTPROCESSINGCAUSE = 14;
+    private static final int DETAIL_FINALRESULT = 15;
+    private static final int DETAIL_TYPEOFRESULT = 16;
+    private static final int DETAIL_ATTRIBUTE_1 = 17;
 
     private EntityManager entityManager;
 
@@ -166,17 +161,13 @@ public class SyncMonitoringRepository {
     }
     
     @SuppressWarnings("unchecked")
-	public List<SyncMonitoringDetail> getSyncMonitoringDetail() {
+	public List<SyncMonitoringDetail> getSyncMonitoringDetail(LocalDateTime dataInicio, LocalDateTime dataFim) {
     	
     	ImplementingPartner partner = (ImplementingPartner) SecurityContextHolder.getContext().getAuthentication()
                 .getPrincipal();
     	
     	String query = "SELECT vl.RequestID as requestId, " +
     			"vl.LOCATION as location, " +
-    			"vl.UNIQUEID as nid, " +
-    			"vl.SURNAME as surname, " +
-    			"vl.FIRSTNAME as firstname, " +
-    			"vl.HL7SexCode as gender, " +
     			"vl.SpecimenDatetime as specimenDatetime, " +
     			"vl.AnalysisDateTime as analysisDateTime, " +
     			"vl.AuthorisedDateTime as authorisedDateTime, " +
@@ -185,23 +176,26 @@ public class SyncMonitoringRepository {
     			"vl.RequestingProvinceName as requestingProvinceName, " +
     			"vl.RequestingDistrictName as requestingDistrictName, " +
     			"vl.LIMSSpecimenSourceCode as limsSpecimenSourceCode, "+
-    			"vl.HIVVL_ViralLoadResult as hivVlViralLoadResult, "+
-    			"vl.HIVVL_ViralLoadCAPCTM as hivVlViralLoadCapCtm, " +
     			"vl.ENTITY_STATUS as entityStatus, " +
     			"vl.CREATED_AT as createdAt, " +
     			"vl.UPDATED_AT as updatedAt, " +
     			"vl.VIRAL_LOAD_STATUS as viralLoadStatus, " +
     			"vl.NOT_PROCESSING_CAUSE as notProcessingCause, " +
     			"vl.FinalResult as finalResult, " +
-    			"vl.TypeOfResult as typeOfResult " +
+    			"vl.TypeOfResult as typeOfResult, " +
+    			"vl.Attribute1 as attribute1 " +
                 "FROM VlData vl " +
                 "INNER JOIN OrgUnit org ON vl.RequestingFacilityCode = org.code " +
                 "WHERE vl.RequestingFacilityCode in (:locationCodes) " +
                 "AND vl.ENTITY_STATUS = 'ACTIVE' " +
+                "AND vl.CREATED_AT >= :dataInicio " +
+                "AND vl.CREATED_AT <= :dataFim " +
                 "ORDER BY org.district, org.facility, vl.UPDATED_AT DESC";
     	
     	Query nativeQuery = entityManager.createNativeQuery(query);
         nativeQuery.setParameter("locationCodes", partner.getOrgUnitCodes());
+        nativeQuery.setParameter("dataInicio", dataInicio);
+        nativeQuery.setParameter("dataFim", dataFim);
 
         DateTimeFormatter pattern = new DateTimeFormatterBuilder()
                 .appendPattern("yyyy-MM-dd HH:mm:ss")
@@ -221,22 +215,6 @@ public class SyncMonitoringRepository {
 
         	if (result[DETAIL_LOCATION] != null) {
         		detail.setLocation(String.valueOf(result[DETAIL_LOCATION]));
-        	}
-
-        	if (result[DETAIL_NID] != null) {
-        		detail.setNid(String.valueOf(result[DETAIL_NID]));
-        	}
-
-        	if (result[DETAIL_LASTNAME] != null) {
-        		detail.setLastName(String.valueOf(result[DETAIL_LASTNAME]));
-        	}
-
-        	if (result[DETAIL_FIRSTNAME] != null) {
-        		detail.setFirstName(String.valueOf(result[DETAIL_FIRSTNAME]));
-        	}
-
-        	if (result[DETAIL_GENDER] != null) {
-        		detail.setGender(String.valueOf(result[DETAIL_GENDER]));
         	}
 
         	if (result[DETAIL_SPECIMEN_DATE_TIME] != null) {
@@ -271,14 +249,6 @@ public class SyncMonitoringRepository {
         		detail.setLimsSpecimenSourceCode(String.valueOf(result[DETAIL_LIMSSPECIMEN_SOURCECODE]));
         	}
         	
-        	if (result[DETAIL_HIV_VL_VIRAL_LOAD_RESULT] != null) {
-        		detail.setHivVlViralLoadResult(String.valueOf(result[DETAIL_HIV_VL_VIRAL_LOAD_RESULT]));
-        	}
-        	
-        	if(result[DETAIL_HIVVLVIRALLOADCAPCTM] != null) {
-        		detail.setHivVlViralLoadCapCtm(String.valueOf(result[DETAIL_HIVVLVIRALLOADCAPCTM]));
-        	}
-        	
         	if(result[DETAIL_ENTITYSTATUS] != null) {
         		detail.setEntityStatus(String.valueOf(result[DETAIL_ENTITYSTATUS]));  
         	}
@@ -305,6 +275,10 @@ public class SyncMonitoringRepository {
         	
         	if(result[DETAIL_TYPEOFRESULT] != null) {
         		detail.setTypeOfResult(String.valueOf(result[DETAIL_TYPEOFRESULT]));
+        	}
+        	
+        	if(result[DETAIL_ATTRIBUTE_1] != null) {
+        		detail.setAttribuite1(String.valueOf(result[DETAIL_ATTRIBUTE_1])); 
         	}
         	
         	detailList.add(detail);
