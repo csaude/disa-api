@@ -12,6 +12,7 @@ import mz.co.msaude.boot.frameworks.model.EntityStatus;
 import mz.org.fgh.disaapi.core.result.model.LabResult;
 import mz.org.fgh.disaapi.core.result.model.LabResultStatus;
 import mz.org.fgh.disaapi.core.result.model.NotProcessingCause;
+import mz.org.fgh.disaapi.core.result.model.TypeOfResult;
 
 public interface LabResultRepository extends JpaRepository<LabResult, Long>, JpaSpecificationExecutor<LabResult> {
 
@@ -41,4 +42,12 @@ public interface LabResultRepository extends JpaRepository<LabResult, Long>, Jpa
             @Param("notProcessingCause") NotProcessingCause notProcessingCause);
 
     LabResult findByIdAndEntityStatus(Long id, EntityStatus active);
+    
+    boolean existsByRequestIdAndTypeOfResultAndLabResultStatusAndEntityStatus(
+            String requestId,
+            TypeOfResult typeOfResult,
+            LabResultStatus labResultStatus,
+            EntityStatus entityStatus
+    );
+
 }
