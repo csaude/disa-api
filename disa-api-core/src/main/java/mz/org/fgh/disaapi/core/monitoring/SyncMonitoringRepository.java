@@ -30,6 +30,26 @@ public class SyncMonitoringRepository {
     private static final int DAYS_WITHOUT_COMMUNICATION = 10;
     private static final int LAST_RESULT = 11;
     private static final int DAYS_WITHOUT_RESULT = 12;
+    
+    // constants for disaggregated data query
+    private static final int DETAIL_REQUEST_ID = 0;
+    private static final int DETAIL_LOCATION = 1;
+    private static final int DETAIL_SPECIMEN_DATE_TIME = 2;
+    private static final int DETAIL_ANALYSIS_DATETIME = 3;
+    private static final int DETAIL_AUTHORISED_DATETIME = 4;
+    private static final int DETAIL_REQUESTING_FACILITYCODE = 5;
+    private static final int DETAIL_REQUESTING_FACILITYNAME = 6;
+    private static final int DETAIL_REQUESTING_PROVINCENAME = 7;
+    private static final int DETAIL_REQUESTING_DISTRICTNAME = 8;
+    private static final int DETAIL_LIMSSPECIMEN_SOURCECODE = 9;
+    private static final int DETAIL_ENTITYSTATUS = 10;
+    private static final int DETAIL_CREATEDAT = 11;
+    private static final int DETAIL_UPDATEDAT = 12;
+    private static final int DETAIL_VIRALLOADSTATUS = 13;
+    private static final int DETAIL_NOTPROCESSINGCAUSE = 14;
+    private static final int DETAIL_FINALRESULT = 15;
+    private static final int DETAIL_TYPEOFRESULT = 16;
+    private static final int DETAIL_ATTRIBUTE_1 = 17;
 
     private EntityManager entityManager;
 
@@ -138,5 +158,132 @@ public class SyncMonitoringRepository {
         }
 
         return monitoringList;
+    }
+    
+    @SuppressWarnings("unchecked")
+	public List<SyncMonitoringDetail> getSyncMonitoringDetail(LocalDateTime dataInicio, LocalDateTime dataFim) {
+    	
+    	ImplementingPartner partner = (ImplementingPartner) SecurityContextHolder.getContext().getAuthentication()
+                .getPrincipal();
+    	
+    	String query = "SELECT vl.RequestID as requestId, " +
+    			"vl.LOCATION as location, " +
+    			"vl.SpecimenDatetime as specimenDatetime, " +
+    			"vl.AnalysisDateTime as analysisDateTime, " +
+    			"vl.AuthorisedDateTime as authorisedDateTime, " +
+    			"vl.RequestingFacilityCode as requestingFacilityCode, " +
+    			"vl.RequestingFacilityName as requestingFacilityName, " +
+    			"vl.RequestingProvinceName as requestingProvinceName, " +
+    			"vl.RequestingDistrictName as requestingDistrictName, " +
+    			"vl.LIMSSpecimenSourceCode as limsSpecimenSourceCode, "+
+    			"vl.ENTITY_STATUS as entityStatus, " +
+    			"vl.CREATED_AT as createdAt, " +
+    			"vl.UPDATED_AT as updatedAt, " +
+    			"vl.VIRAL_LOAD_STATUS as viralLoadStatus, " +
+    			"vl.NOT_PROCESSING_CAUSE as notProcessingCause, " +
+    			"vl.FinalResult as finalResult, " +
+    			"vl.TypeOfResult as typeOfResult, " +
+    			"vl.Attribute1 as attribute1 " +
+                "FROM VlData vl " +
+                "INNER JOIN OrgUnit org ON vl.RequestingFacilityCode = org.code " +
+                "WHERE vl.RequestingFacilityCode in (:locationCodes) " +
+                "AND vl.ENTITY_STATUS = 'ACTIVE' " +
+                "AND vl.CREATED_AT >= :dataInicio " +
+                "AND vl.CREATED_AT <= :dataFim " +
+                "ORDER BY org.district, org.facility, vl.UPDATED_AT DESC";
+    	
+    	Query nativeQuery = entityManager.createNativeQuery(query);
+        nativeQuery.setParameter("locationCodes", partner.getOrgUnitCodes());
+        nativeQuery.setParameter("dataInicio", dataInicio);
+        nativeQuery.setParameter("dataFim", dataFim);
+
+        DateTimeFormatter pattern = new DateTimeFormatterBuilder()
+                .appendPattern("yyyy-MM-dd HH:mm:ss")
+                .appendFraction(ChronoField.NANO_OF_SECOND, 0, 9, true)
+                .toFormatter();
+        
+        List<Object[]> resultList = nativeQuery.getResultList();
+        
+        List<SyncMonitoringDetail> detailList = new ArrayList<>();
+        
+        for(Object[] result : resultList) {
+        	SyncMonitoringDetail detail = new SyncMonitoringDetail();
+        	
+        	if (result[DETAIL_REQUEST_ID] != null) {
+        		detail.setRequestId(String.valueOf(result[DETAIL_REQUEST_ID]));
+        	}
+
+        	if (result[DETAIL_LOCATION] != null) {
+        		detail.setLocation(String.valueOf(result[DETAIL_LOCATION]));
+        	}
+
+        	if (result[DETAIL_SPECIMEN_DATE_TIME] != null) {
+        		detail.setSpecimenDatetime(LocalDateTime.parse(String.valueOf(result[DETAIL_SPECIMEN_DATE_TIME]), pattern));
+        	}
+
+        	if (result[DETAIL_ANALYSIS_DATETIME] != null) {
+        		detail.setAnalysisDateTime(LocalDateTime.parse(String.valueOf(result[DETAIL_ANALYSIS_DATETIME]), pattern));
+        	}
+        	
+        	if (result[DETAIL_AUTHORISED_DATETIME] != null) {
+        		detail.setAuthorisedDateTime(LocalDateTime.parse(String.valueOf(result[DETAIL_AUTHORISED_DATETIME]), pattern));
+        	}
+        	
+        	if (result[DETAIL_REQUESTING_FACILITYCODE] != null) {
+        		detail.setRequestingFacilityCode(String.valueOf(result[DETAIL_REQUESTING_FACILITYCODE]));
+        	}
+        	
+        	if (result[DETAIL_REQUESTING_FACILITYNAME] != null) {
+        		detail.setRequestingFacilityName(String.valueOf(result[DETAIL_REQUESTING_FACILITYNAME]));
+        	}
+
+        	if (result[DETAIL_REQUESTING_PROVINCENAME] != null) {
+        		detail.setRequestingProvinceName(String.valueOf(result[DETAIL_REQUESTING_PROVINCENAME]));
+        	}
+        	
+        	if (result[DETAIL_REQUESTING_DISTRICTNAME] != null) {
+        		detail.setRequestingDistrictName(String.valueOf(result[DETAIL_REQUESTING_DISTRICTNAME]));
+        	}
+        	
+        	if (result[DETAIL_LIMSSPECIMEN_SOURCECODE] != null) {
+        		detail.setLimsSpecimenSourceCode(String.valueOf(result[DETAIL_LIMSSPECIMEN_SOURCECODE]));
+        	}
+        	
+        	if(result[DETAIL_ENTITYSTATUS] != null) {
+        		detail.setEntityStatus(String.valueOf(result[DETAIL_ENTITYSTATUS]));  
+        	}
+        	
+        	if(result[DETAIL_CREATEDAT] != null) {
+        		detail.setCreatedAt(LocalDateTime.parse(String.valueOf(result[DETAIL_CREATEDAT]), pattern));    
+        	}
+        	
+        	if(result[DETAIL_UPDATEDAT] != null) {
+        		detail.setUpdatedAt(LocalDateTime.parse(String.valueOf(result[DETAIL_UPDATEDAT]), pattern));  
+        	}
+        	
+        	if(result[DETAIL_VIRALLOADSTATUS] != null) {
+        		detail.setViralLoadStatus(String.valueOf(result[DETAIL_VIRALLOADSTATUS]));  
+        	}
+        	
+        	if(result[DETAIL_NOTPROCESSINGCAUSE] != null) {
+        		detail.setNotProcessingCause(String.valueOf(result[DETAIL_NOTPROCESSINGCAUSE])); 
+        	}
+        	
+        	if(result[DETAIL_FINALRESULT] != null) {
+        		detail.setFinalResult(String.valueOf(result[DETAIL_FINALRESULT]));   
+        	}
+        	
+        	if(result[DETAIL_TYPEOFRESULT] != null) {
+        		detail.setTypeOfResult(String.valueOf(result[DETAIL_TYPEOFRESULT]));
+        	}
+        	
+        	if(result[DETAIL_ATTRIBUTE_1] != null) {
+        		detail.setAttribuite1(String.valueOf(result[DETAIL_ATTRIBUTE_1])); 
+        	}
+        	
+        	detailList.add(detail);
+        }
+      
+        return detailList;        
     }
 }

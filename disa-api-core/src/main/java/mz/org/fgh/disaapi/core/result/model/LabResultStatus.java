@@ -5,5 +5,5 @@ package mz.org.fgh.disaapi.core.result.model;
  *
  */
 public enum LabResultStatus {
-	PENDING, PROCESSED, NOT_PROCESSED
+	PENDING, PROCESSED, NOT_PROCESSED, REJECTED
 }

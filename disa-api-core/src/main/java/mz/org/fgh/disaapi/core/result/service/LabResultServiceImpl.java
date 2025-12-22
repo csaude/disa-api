@@ -88,9 +88,22 @@ public class LabResultServiceImpl implements LabResultService {
     }
     
     private void validateStatus(LabResult labResult, LabResult dbVl) throws BusinessException {
-        if (LabResultStatus.PROCESSED == dbVl.getLabResultStatus()) {
+        boolean alreadyProcessedSameType =
+                viralLoadRepository.existsByRequestIdAndTypeOfResultAndLabResultStatusAndEntityStatus(
+                        labResult.getRequestId(),
+                        labResult.getTypeOfResult(),
+                        LabResultStatus.PROCESSED,
+                        EntityStatus.ACTIVE
+                );
+        
+        if (alreadyProcessedSameType) {
             throw new BusinessException(
-                    "Cannot reschedule viral load " + labResult.getRequestId() + ". It has already been processed.");
+                    String.format(
+                            "Cannot reschedule result %s (type: %s). It has already been processed.",
+                            labResult.getRequestId(),
+                            labResult.getTypeOfResult()
+                    )
+            );
         }
     }
 }
