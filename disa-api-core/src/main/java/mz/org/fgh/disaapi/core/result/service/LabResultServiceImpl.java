@@ -34,8 +34,10 @@ public class LabResultServiceImpl implements LabResultService {
         UserDetails user = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         labResult.setUpdatedBy(user.getUsername());
         labResult.setUpdatedAt(LocalDateTime.now());
-        if (LabResultStatus.NOT_PROCESSED == labResult.getLabResultStatus()
-                && NotProcessingCause.DUPLICATED_REQUEST_ID == labResult.getNotProcessingCause()) {
+        if ((LabResultStatus.NOT_PROCESSED == labResult.getLabResultStatus()
+                && NotProcessingCause.DUPLICATED_REQUEST_ID == labResult.getNotProcessingCause())
+                || (LabResultStatus.NOT_PROCESSED == labResult.getSisRmeStatus()
+                        && NotProcessingCause.DUPLICATED_REQUEST_ID == labResult.getSisRmeNotProcessingCause())) {
             labResult.inactive();
         }
         return viralLoadRepository.save(labResult);
@@ -52,7 +54,7 @@ public class LabResultServiceImpl implements LabResultService {
                     "Viral load " + labResult.getId() + " was not found.");
         }
 
-        validateStatus(labResult, dbResult);
+        validateStatus(dbResult, propertyValues);
 
         BeanWrapper bw = PropertyAccessorFactory.forBeanPropertyAccess(dbResult);
         for (Entry<String, Object> entry : propertyValues.entrySet()) {
@@ -74,12 +76,14 @@ public class LabResultServiceImpl implements LabResultService {
         return Arrays.asList(
                 "labResultStatus",
                 "notProcessingCause",
+                "sisRmeStatus",
+                "sisRmeNotProcessingCause",
                 "requestingProvinceName",
                 "requestingDistrictName",
                 "requestingFacilityName",
                 "healthFacilityLabCode",
                 "synchronizedBy",
-                "encounterId"); 
+                "encounterId");
     }
 
     @Override
@@ -87,23 +91,45 @@ public class LabResultServiceImpl implements LabResultService {
     	return viralLoadRepository.saveAll(labResultList); 
     }
     
-    private void validateStatus(LabResult labResult, LabResult dbVl) throws BusinessException {
-        boolean alreadyProcessedSameType =
-                viralLoadRepository.existsByRequestIdAndTypeOfResultAndLabResultStatusAndEntityStatus(
-                        labResult.getRequestId(),
-                        labResult.getTypeOfResult(),
-                        LabResultStatus.PROCESSED,
-                        EntityStatus.ACTIVE
+    private void validateStatus(LabResult dbVl, Map<String, Object> propertyValues) throws BusinessException {
+        if (propertyValues.containsKey("labResultStatus")) {
+            boolean alreadyProcessedSameType =
+                    viralLoadRepository.existsByRequestIdAndTypeOfResultAndLabResultStatusAndEntityStatus(
+                            dbVl.getRequestId(),
+                            dbVl.getTypeOfResult(),
+                            LabResultStatus.PROCESSED,
+                            EntityStatus.ACTIVE
+                    );
+
+            if (alreadyProcessedSameType) {
+                throw new BusinessException(
+                        String.format(
+                                "Cannot reschedule result %s (type: %s). It has already been processed.",
+                                dbVl.getRequestId(),
+                                dbVl.getTypeOfResult()
+                        )
                 );
-        
-        if (alreadyProcessedSameType) {
-            throw new BusinessException(
-                    String.format(
-                            "Cannot reschedule result %s (type: %s). It has already been processed.",
-                            labResult.getRequestId(),
-                            labResult.getTypeOfResult()
-                    )
-            );
+            }
+        }
+
+        if (propertyValues.containsKey("sisRmeStatus")) {
+            boolean alreadyProcessedSameType =
+                    viralLoadRepository.existsByRequestIdAndTypeOfResultAndSisRmeStatusAndEntityStatus(
+                            dbVl.getRequestId(),
+                            dbVl.getTypeOfResult(),
+                            LabResultStatus.PROCESSED,
+                            EntityStatus.ACTIVE
+                    );
+
+            if (alreadyProcessedSameType) {
+                throw new BusinessException(
+                        String.format(
+                                "Cannot reschedule result %s (type: %s). It has already been processed by SIS-RME.",
+                                dbVl.getRequestId(),
+                                dbVl.getTypeOfResult()
+                        )
+                );
+            }
         }
     }
 }

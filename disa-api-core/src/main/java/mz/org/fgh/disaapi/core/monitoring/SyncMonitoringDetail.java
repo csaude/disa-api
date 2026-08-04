@@ -31,9 +31,13 @@ public class SyncMonitoringDetail {
     private LocalDateTime updatedAt;
     
     private String viralLoadStatus;
-    
+
     private String notProcessingCause;
-    
+
+    private String sisRmeStatus;
+
+    private String sisRmeNotProcessingCause;
+
     private String finalResult;
     
     private String typeOfResult;
@@ -186,6 +190,22 @@ public class SyncMonitoringDetail {
 
 	public void setNotProcessingCause(String notProcessingCause) {
 		this.notProcessingCause = notProcessingCause;
+	}
+
+	public String getSisRmeStatus() {
+		return sisRmeStatus;
+	}
+
+	public void setSisRmeStatus(String sisRmeStatus) {
+		this.sisRmeStatus = sisRmeStatus;
+	}
+
+	public String getSisRmeNotProcessingCause() {
+		return sisRmeNotProcessingCause;
+	}
+
+	public void setSisRmeNotProcessingCause(String sisRmeNotProcessingCause) {
+		this.sisRmeNotProcessingCause = sisRmeNotProcessingCause;
 	}
 
 	public String getFinalResult() {

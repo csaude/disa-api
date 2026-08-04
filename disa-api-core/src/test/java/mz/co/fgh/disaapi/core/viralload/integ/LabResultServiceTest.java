@@ -3,6 +3,8 @@ package mz.co.fgh.disaapi.core.viralload.integ;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import java.sql.SQLException;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.inject.Inject;
 
@@ -86,5 +88,56 @@ public class LabResultServiceTest extends AbstractIntegServiceTest {
 
 		assertThat(viralLoad.getEntityStatus()).isEqualTo(EntityStatus.INACTIVE);
 
+	}
+
+	@Test
+	@WithMockUser
+	public void shouldUpdateSisRmeStatus() throws BusinessException {
+
+		assertThat(viralLoad.getSisRmeStatus()).isEqualTo(LabResultStatus.PENDING);
+
+		viralLoad.setSisRmeStatus(LabResultStatus.NOT_PROCESSED);
+
+		labResultService.updateLabResult(viralLoad);
+
+		assertThat(viralLoad.getSisRmeStatus()).isEqualTo(LabResultStatus.NOT_PROCESSED);
+		assertThat(viralLoad.getLabResultStatus()).isEqualTo(LabResultStatus.PENDING);
+
+	}
+
+	@Test
+	@WithMockUser
+	public void updateSisRmeDuplicateRequestIdShouldInactivate() throws BusinessException {
+		viralLoad.setSisRmeStatus(LabResultStatus.NOT_PROCESSED);
+		viralLoad.setSisRmeNotProcessingCause(NotProcessingCause.DUPLICATED_REQUEST_ID);
+
+		labResultService.updateLabResult(viralLoad);
+
+		assertThat(viralLoad.getEntityStatus()).isEqualTo(EntityStatus.INACTIVE);
+
+	}
+
+	@Test(expected = BusinessException.class)
+	@WithMockUser
+	public void updateShouldRejectSisRmeStatusWhenAlreadyProcessedBySisRme() throws BusinessException {
+		viralLoad.setSisRmeStatus(LabResultStatus.PROCESSED);
+		labResultService.updateLabResult(viralLoad);
+
+		Map<String, Object> propertyValues = new HashMap<>();
+		propertyValues.put("sisRmeStatus", "PENDING");
+		labResultService.updateLabResult(viralLoad, propertyValues);
+	}
+
+	@Test
+	@WithMockUser
+	public void updateShouldNotBlockLabResultStatusWhenSisRmeStatusAlreadyProcessed() throws BusinessException {
+		viralLoad.setSisRmeStatus(LabResultStatus.PROCESSED);
+		labResultService.updateLabResult(viralLoad);
+
+		Map<String, Object> propertyValues = new HashMap<>();
+		propertyValues.put("labResultStatus", "PROCESSED");
+		LabResult updated = labResultService.updateLabResult(viralLoad, propertyValues);
+
+		assertThat(updated.getLabResultStatus()).isEqualTo(LabResultStatus.PROCESSED);
 	}
 }

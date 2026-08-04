@@ -47,9 +47,11 @@ public class SyncMonitoringRepository {
     private static final int DETAIL_UPDATEDAT = 12;
     private static final int DETAIL_VIRALLOADSTATUS = 13;
     private static final int DETAIL_NOTPROCESSINGCAUSE = 14;
-    private static final int DETAIL_FINALRESULT = 15;
-    private static final int DETAIL_TYPEOFRESULT = 16;
-    private static final int DETAIL_ATTRIBUTE_1 = 17;
+    private static final int DETAIL_SISRMESTATUS = 15;
+    private static final int DETAIL_SISRMENOTPROCESSINGCAUSE = 16;
+    private static final int DETAIL_FINALRESULT = 17;
+    private static final int DETAIL_TYPEOFRESULT = 18;
+    private static final int DETAIL_ATTRIBUTE_1 = 19;
 
     private EntityManager entityManager;
 
@@ -181,6 +183,8 @@ public class SyncMonitoringRepository {
     			"vl.UPDATED_AT as updatedAt, " +
     			"vl.VIRAL_LOAD_STATUS as viralLoadStatus, " +
     			"vl.NOT_PROCESSING_CAUSE as notProcessingCause, " +
+    			"vl.SIS_RME_STATUS as sisRmeStatus, " +
+    			"vl.SIS_RME_NOT_PROCESSING_CAUSE as sisRmeNotProcessingCause, " +
     			"vl.FinalResult as finalResult, " +
     			"vl.TypeOfResult as typeOfResult, " +
     			"vl.Attribute1 as attribute1 " +
@@ -266,9 +270,17 @@ public class SyncMonitoringRepository {
         	}
         	
         	if(result[DETAIL_NOTPROCESSINGCAUSE] != null) {
-        		detail.setNotProcessingCause(String.valueOf(result[DETAIL_NOTPROCESSINGCAUSE])); 
+        		detail.setNotProcessingCause(String.valueOf(result[DETAIL_NOTPROCESSINGCAUSE]));
         	}
-        	
+
+        	if(result[DETAIL_SISRMESTATUS] != null) {
+        		detail.setSisRmeStatus(String.valueOf(result[DETAIL_SISRMESTATUS]));
+        	}
+
+        	if(result[DETAIL_SISRMENOTPROCESSINGCAUSE] != null) {
+        		detail.setSisRmeNotProcessingCause(String.valueOf(result[DETAIL_SISRMENOTPROCESSINGCAUSE]));
+        	}
+
         	if(result[DETAIL_FINALRESULT] != null) {
         		detail.setFinalResult(String.valueOf(result[DETAIL_FINALRESULT]));   
         	}

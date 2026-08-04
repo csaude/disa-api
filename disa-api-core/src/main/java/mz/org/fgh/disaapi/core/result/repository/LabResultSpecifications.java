@@ -50,6 +50,14 @@ public class LabResultSpecifications {
                 predicates.add(builder.equal(root.get("notProcessingCause"), example.getNotProcessingCause()));
             }
 
+            if (example.getSisRmeStatus() != null) {
+                predicates.add(builder.equal(root.get("sisRmeStatus"), example.getSisRmeStatus()));
+            }
+
+            if (example.getSisRmeNotProcessingCause() != null) {
+                predicates.add(builder.equal(root.get("sisRmeNotProcessingCause"), example.getSisRmeNotProcessingCause()));
+            }
+
             if (example.getTypeOfResult() != null) {
                 predicates.add(builder.equal(root.get("typeOfResult"), example.getTypeOfResult()));
             }

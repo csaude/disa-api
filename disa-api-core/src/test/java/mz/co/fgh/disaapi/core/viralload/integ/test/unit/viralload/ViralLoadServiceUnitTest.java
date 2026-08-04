@@ -23,6 +23,8 @@ import mz.co.msaude.boot.frameworks.model.EntityStatus;
 import mz.org.fgh.disaapi.core.result.model.HIVVLLabResult;
 import mz.org.fgh.disaapi.core.result.model.LabResult;
 import mz.org.fgh.disaapi.core.result.model.LabResultStatus;
+import mz.org.fgh.disaapi.core.result.model.NotProcessingCause;
+import mz.org.fgh.disaapi.core.result.model.TypeOfResult;
 import mz.org.fgh.disaapi.core.result.repository.LabResultRepository;
 import mz.org.fgh.disaapi.core.result.service.LabResultService;
 
@@ -79,5 +81,108 @@ public class ViralLoadServiceUnitTest extends AbstractUnitServiceTest {
 
         assertThat(viralLoad.getReasonForTest()).isEqualTo("Routine");
 
+    }
+
+    @Test
+    @WithMockUser
+    public void updateLabResultShouldUpdateSisRmePropertyValues() throws BusinessException {
+
+        LabResult viralLoad = EntityFactory.gimme(HIVVLLabResult.class, ViralLoadTemplate.NOT_PROCESSED);
+
+        Mockito.when(viralLoadRepository.findByIdAndEntityStatus(viralLoad.getId(), EntityStatus.ACTIVE))
+                .thenReturn(viralLoad);
+
+        Map<String, Object> propertyValues = new HashMap<>();
+        propertyValues.put("sisRmeStatus", "PROCESSED");
+        this.viralLoadService.updateLabResult(
+                viralLoad,
+                propertyValues);
+
+        assertThat(viralLoad.getSisRmeStatus()).isEqualTo(LabResultStatus.PROCESSED);
+        assertThat(viralLoad.getLabResultStatus()).isEqualTo(LabResultStatus.NOT_PROCESSED);
+
+    }
+
+    @Test(expected = BusinessException.class)
+    @WithMockUser
+    public void updateLabResultShouldRejectSisRmeStatusWhenAlreadyProcessedBySisRme() throws BusinessException {
+
+        LabResult viralLoad = EntityFactory.gimme(HIVVLLabResult.class, ViralLoadTemplate.NOT_PROCESSED);
+
+        Mockito.when(viralLoadRepository.findByIdAndEntityStatus(viralLoad.getId(), EntityStatus.ACTIVE))
+                .thenReturn(viralLoad);
+        Mockito.when(viralLoadRepository.existsByRequestIdAndTypeOfResultAndSisRmeStatusAndEntityStatus(
+                viralLoad.getRequestId(), TypeOfResult.HIVVL, LabResultStatus.PROCESSED, EntityStatus.ACTIVE))
+                .thenReturn(true);
+
+        Map<String, Object> propertyValues = new HashMap<>();
+        propertyValues.put("sisRmeStatus", "PROCESSED");
+        this.viralLoadService.updateLabResult(
+                viralLoad,
+                propertyValues);
+    }
+
+    @Test
+    @WithMockUser
+    public void updateLabResultShouldNotBlockSisRmeStatusWhenLabResultStatusAlreadyProcessed()
+            throws BusinessException {
+
+        LabResult viralLoad = EntityFactory.gimme(HIVVLLabResult.class, ViralLoadTemplate.NOT_PROCESSED);
+
+        Mockito.when(viralLoadRepository.findByIdAndEntityStatus(viralLoad.getId(), EntityStatus.ACTIVE))
+                .thenReturn(viralLoad);
+        Mockito.when(viralLoadRepository.existsByRequestIdAndTypeOfResultAndLabResultStatusAndEntityStatus(
+                viralLoad.getRequestId(), TypeOfResult.HIVVL, LabResultStatus.PROCESSED, EntityStatus.ACTIVE))
+                .thenReturn(true);
+
+        Map<String, Object> propertyValues = new HashMap<>();
+        propertyValues.put("sisRmeStatus", "PROCESSED");
+        this.viralLoadService.updateLabResult(
+                viralLoad,
+                propertyValues);
+
+        assertThat(viralLoad.getSisRmeStatus()).isEqualTo(LabResultStatus.PROCESSED);
+    }
+
+    @Test
+    @WithMockUser
+    public void updateLabResultShouldNotBlockLabResultStatusWhenSisRmeStatusAlreadyProcessed()
+            throws BusinessException {
+
+        LabResult viralLoad = EntityFactory.gimme(HIVVLLabResult.class, ViralLoadTemplate.NOT_PROCESSED);
+
+        Mockito.when(viralLoadRepository.findByIdAndEntityStatus(viralLoad.getId(), EntityStatus.ACTIVE))
+                .thenReturn(viralLoad);
+        Mockito.when(viralLoadRepository.existsByRequestIdAndTypeOfResultAndSisRmeStatusAndEntityStatus(
+                viralLoad.getRequestId(), TypeOfResult.HIVVL, LabResultStatus.PROCESSED, EntityStatus.ACTIVE))
+                .thenReturn(true);
+
+        Map<String, Object> propertyValues = new HashMap<>();
+        propertyValues.put("labResultStatus", "PROCESSED");
+        this.viralLoadService.updateLabResult(
+                viralLoad,
+                propertyValues);
+
+        assertThat(viralLoad.getLabResultStatus()).isEqualTo(LabResultStatus.PROCESSED);
+    }
+
+    @Test
+    @WithMockUser
+    public void updateLabResultShouldUpdateSisRmeNotProcessingCause() throws BusinessException {
+
+        LabResult viralLoad = EntityFactory.gimme(HIVVLLabResult.class, ViralLoadTemplate.NOT_PROCESSED);
+
+        Mockito.when(viralLoadRepository.findByIdAndEntityStatus(viralLoad.getId(), EntityStatus.ACTIVE))
+                .thenReturn(viralLoad);
+
+        Map<String, Object> propertyValues = new HashMap<>();
+        propertyValues.put("sisRmeStatus", "NOT_PROCESSED");
+        propertyValues.put("sisRmeNotProcessingCause", "NID_NOT_FOUND");
+        this.viralLoadService.updateLabResult(
+                viralLoad,
+                propertyValues);
+
+        assertThat(viralLoad.getSisRmeStatus()).isEqualTo(LabResultStatus.NOT_PROCESSED);
+        assertThat(viralLoad.getSisRmeNotProcessingCause()).isEqualTo(NotProcessingCause.NID_NOT_FOUND);
     }
 }
