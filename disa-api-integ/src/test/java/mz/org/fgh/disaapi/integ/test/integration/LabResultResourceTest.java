@@ -198,6 +198,27 @@ public class LabResultResourceTest {
 	}
 
 	@Test
+	public void updateShouldUpdateTheSisRmeStatus() throws JSONException {
+
+		HttpHeaders headers = new HttpHeaders();
+		headers.setContentType(MediaType.APPLICATION_JSON);
+		JSONObject vlJson = new JSONObject();
+		vlJson.put("sisRmeStatus", "PROCESSED");
+		HttpEntity<String> processedVlEntity = new HttpEntity<String>(vlJson.toString(), headers);
+
+		Map<String, Long> uriVariable = Collections.singletonMap("id", 16l);
+
+		ResponseEntity<HIVVLLabResult> response = restTemplate
+				.withBasicAuth("fgh", "fgh")
+				.exchange(RESULT_URL, HttpMethod.PATCH, processedVlEntity,
+						HIVVLLabResult.class, uriVariable);
+
+		assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+		assertThat(response.getBody().getSisRmeStatus()).isEqualTo(LabResultStatus.PROCESSED);
+		assertThat(response.getBody().getLabResultStatus()).isEqualTo(LabResultStatus.NOT_PROCESSED);
+	}
+
+	@Test
 	public void updateShouldNotProceedForViralLoadsFromUnauthorizedOrgUnit() throws JSONException {
 
 		HttpHeaders headers = new HttpHeaders();

@@ -143,6 +143,15 @@ public abstract class LabResult extends GenericEntity {
 	@Column(name = "NOT_PROCESSING_CAUSE")
 	private NotProcessingCause notProcessingCause;
 
+	@Basic(optional = false)
+	@Column(name = "SIS_RME_STATUS", columnDefinition = "enum('PENDING','PROCESSED','NOT_PROCESSED','REJECTED') default 'PENDING'")
+	@Enumerated(EnumType.STRING)
+	private LabResultStatus sisRmeStatus;
+
+	@Enumerated(EnumType.STRING)
+	@Column(name = "SIS_RME_NOT_PROCESSING_CAUSE")
+	private NotProcessingCause sisRmeNotProcessingCause;
+
 	@Column(name = "ARTRegimen")
 	private String artRegimen;
 
@@ -178,6 +187,9 @@ public abstract class LabResult extends GenericEntity {
     protected void onPrePersist() {
         if (labResultStatus == null) {
             labResultStatus = LabResultStatus.PENDING;
+        }
+        if (sisRmeStatus == null) {
+            sisRmeStatus = LabResultStatus.PENDING;
         }
     }
 
@@ -459,6 +471,22 @@ public abstract class LabResult extends GenericEntity {
 
 	public void setCauseInvalidResult() {
 		notProcessingCause = NotProcessingCause.INVALID_RESULT;
+	}
+
+	public LabResultStatus getSisRmeStatus() {
+		return sisRmeStatus;
+	}
+
+	public void setSisRmeStatus(LabResultStatus sisRmeStatus) {
+		this.sisRmeStatus = sisRmeStatus;
+	}
+
+	public NotProcessingCause getSisRmeNotProcessingCause() {
+		return sisRmeNotProcessingCause;
+	}
+
+	public void setSisRmeNotProcessingCause(NotProcessingCause sisRmeNotProcessingCause) {
+		this.sisRmeNotProcessingCause = sisRmeNotProcessingCause;
 	}
 
 	public String getLocation() {

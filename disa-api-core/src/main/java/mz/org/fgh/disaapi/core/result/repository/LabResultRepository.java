@@ -50,4 +50,11 @@ public interface LabResultRepository extends JpaRepository<LabResult, Long>, Jpa
             EntityStatus entityStatus
     );
 
+    boolean existsByRequestIdAndTypeOfResultAndSisRmeStatusAndEntityStatus(
+            String requestId,
+            TypeOfResult typeOfResult,
+            LabResultStatus sisRmeStatus,
+            EntityStatus entityStatus
+    );
+
 }

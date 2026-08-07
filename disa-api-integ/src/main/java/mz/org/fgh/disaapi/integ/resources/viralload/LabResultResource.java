@@ -79,6 +79,8 @@ public class LabResultResource {
             @QueryParam("referringRequestID") final String referringRequestID,
             @QueryParam("labResultStatus") final LabResultStatus labResultStatus,
             @QueryParam("notProcessingCause") NotProcessingCause notProcessingCause,
+            @QueryParam("sisRmeStatus") final LabResultStatus sisRmeStatus,
+            @QueryParam("sisRmeNotProcessingCause") NotProcessingCause sisRmeNotProcessingCause,
             @QueryParam("typeOfResult") TypeOfResult typeOfResult,
             @QueryParam("startDate") final LocalDateTime startDate,
             @QueryParam("endDate") final LocalDateTime endDate,
@@ -104,6 +106,8 @@ public class LabResultResource {
         result.setReferringRequestID(referringRequestID);
         result.setLabResultStatus(labResultStatus);
         result.setNotProcessingCause(notProcessingCause);
+        result.setSisRmeStatus(sisRmeStatus);
+        result.setSisRmeNotProcessingCause(sisRmeNotProcessingCause);
         result.active();
 
         if (pageSize == 0) {
@@ -139,6 +143,8 @@ public class LabResultResource {
             @QueryParam("referringRequestID") final String referringRequestID,
             @QueryParam("labResultStatus") final LabResultStatus labResultStatus,
             @QueryParam("notProcessingCause") NotProcessingCause notProcessingCause,
+            @QueryParam("sisRmeStatus") final LabResultStatus sisRmeStatus,
+            @QueryParam("sisRmeNotProcessingCause") NotProcessingCause sisRmeNotProcessingCause,
             @QueryParam("typeOfResult") TypeOfResult typeOfResult,
             @QueryParam("startDate") final LocalDateTime startDate,
             @QueryParam("endDate") final LocalDateTime endDate)
@@ -159,6 +165,8 @@ public class LabResultResource {
         result.setReferringRequestID(referringRequestID);
         result.setLabResultStatus(labResultStatus);
         result.setNotProcessingCause(notProcessingCause);
+        result.setSisRmeStatus(sisRmeStatus);
+        result.setSisRmeNotProcessingCause(sisRmeNotProcessingCause);
         result.active();
 
         List<LabResult> vls = this.viralLoadQueryService.findAllByForm(result, healthFacilityLabCode, startDate,
